@@ -24,3 +24,23 @@ class Person {
 
 
 }
+
+//now let's create our person instance
+const person1 = new Person ("Murat Can","Yüksel");
+if we called person1, the output would be
+person1;
+Person {firstName: "Murat Can", lastName: "Yüksel", hasJob: false}
+firstName: "Murat Can"
+hasJob: false
+lastName: "Yüksel"
+__proto__: Object
+//yeeeeyy
+if we called person1.firstName, it would give:
+"Murat Can"
+we could even change the name since we have the set methods;
+person1.setFirstName ("Mahmut");
+now we would have Mahmut Yüksel
+//so far it's like the same as object constructors, but we have something reeally cool in classes: 
+	STATIC METHODS
+	
+

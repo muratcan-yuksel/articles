@@ -121,8 +121,33 @@ Okay, if we're okay with this one, let's go to the final, and the handiest metho
 It's all cool now. We can write just one chunk of code and create many, many different instances of it. But, what if we're faced with a situation we wish to create another class that's almost the same as our Bird class? And obviously, we don't want to repeat ourselves, type another chunk of code over and over again. What would we do?
 
 Well, we'd use the extends keyword to overcome this annoying difficulty. 
+###extends and super keywords
+ Now, say that we want to create a new Penguin class. Since Penguins are birds, they'd share almost all properties with other birds. I say almost, because penguins can't fly, and I'm not goint go be fooled by BBC :) https://www.youtube.com/watch?v=9dfWzp7rYR4&ab_channel=BBC 
 
+Anyway, with the following code, our new Penguin class will take everything that Bird class has. You see the super keyword there? It takes the name and age methods from the original class. I also made sure that canFly points to "false" :) 
 
+```
+class Penguin extends Bird {
+  constructor (name,age){
+      super(name,age);
+      this.canFly=false;
+     
+  }
+}
+``` 
+Now, what happened? To see what's going on, let's create a new instance of the Penguin class, and call it coldFeet:
+
+`const coldFeet= new Penguin("ColdFeet",3);`
+
+So, our new Penguin, Coldfeet can access anything our birdLarry can! If we logged `coldFeet.age`, the output would be 3. If we wrote `coldFeet.canFly`, the output would be **false**. Why? Obviously, because we made it clear that penguins can't fly :) 
+
+Now, our Penguin instance shares everything with our Bird instance. But, what about the Penguin class itself? Will it share the same static methods with the Bird class? 
+
+As you can see from my choice of wording, it does :) 
+
+Say that we used static properties when defining our Bird class. If we wrote `Penguin.kingdom`, the output would be `"Animalia"`
+
+And if we wrote `Penguin.kingdomSentence`, the output would be `"Birds belong to the kingdom Animalia"` (because penguins are birds silly!)
 
 
 

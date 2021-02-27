@@ -121,3 +121,29 @@ Uncaught TypeError: person1.species is not a function
   }
 }
 
+EXTENDS AND SUPER KEYWORDS
+Now, like, all workers are persons. But not all persons are workers. Following that logic, if all workers are persons, every single worker in the world would have the same properties as a person.
+Like ,we can create our Worker class by copying everything we've put into the Person class, but that wouln't be really efficient, or DRY (Don't repeat yourself). SO, instead, we can use the extends keyword to inherit everything that the person class contains.
+lets create our worker class
+class Worker extends Person {
+  constructor(firstName, lastName, job) {
+    super(firstName, lastName);
+    this.job = job;
+    this.hasJob = true;
+  }
+}
+now, this super, when we call it, the super, inside of any method, that means it's gonna call the method from the class it extends from. Here we're calling super inside of a construuctor method, which means it's gonna call the constructor method of the person class. o all of this constructor in Person, will be extending to the worker consturctor
+but our worker has a job, so we're gonna overrid that ( we did above)
+
+let's put this method too
+ setJob(job) {
+    this.job = job;
+  }
+  
+  now let's create our worker
+  let worker1= new Worker ("Murat","Yüksel","webdev");
+  if we'd call worker1.hasjob;
+  this time we get true :)
+
+
+

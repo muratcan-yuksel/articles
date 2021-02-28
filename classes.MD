@@ -1,7 +1,9 @@
-For a coding newbie (such as myself), understanding classes in Javascript might prove to be quite difficult. There are many sources on the web, but most of them speak from the point of view of a senior developer, which assumes many pieces of knowledge that don't exist in the mind of a new developer. This is the reason why I'm writing this article: To present classes in Javascript in a way that's easy to understand.
+For a coding newbie (such as myself), understanding classes in Javascript may prove to be quite difficult. There are many sources on the web, but most of them speak from the point of view of a senior developer, which assumes many pieces of knowledge that don't exist in the mind of a new developer. This is the reason why I'm writing this article: To present classes in Javascript in a way that's easy to understand.
 
 
 Most of this knowledge is thanks to Stephen Mayeux. If it weren't for him, I'd still be having trouble understanding the concept.  So, if you like watching videos over reading, you can check his playlist on the subject, it's exceptional: https://www.youtube.com/playlist?list=PLtwj5TTsiP7uTKfTQbcmb59mWXosLP_7S
+
+In this post, I will first introduce classes, then talk about static methods and static properties, and I will conclude by briefly talking about extends and super keywords. 
 
 ### Classes
 Classes in Javascript are very, very similar to Object constructors. So if you're familiar with them, they're a piece of cake. They're still about creating a prototype of something so that we can use the same code over and over again instead of typing manually. They just present us with some new functionalities that didn't exist in the former. So, without further ado, let's create our first class:
@@ -121,7 +123,8 @@ Okay, if we're okay with this one, let's go to the final, and the handiest metho
 It's all cool now. We can write just one chunk of code and create many, many different instances of it. But, what if we're faced with a situation we wish to create another class that's almost the same as our Bird class? And obviously, we don't want to repeat ourselves, type another chunk of code over and over again. What would we do?
 
 Well, we'd use the extends keyword to overcome this annoying difficulty. 
-###extends and super keywords
+
+### extends and super keywords
  Now, say that we want to create a new Penguin class. Since Penguins are birds, they'd share almost all properties with other birds. I say almost, because penguins can't fly, and I'm not goint go be fooled by BBC :) https://www.youtube.com/watch?v=9dfWzp7rYR4&ab_channel=BBC 
 
 Anyway, with the following code, our new Penguin class will take everything that Bird class has. You see the super keyword there? It takes the name and age methods from the original class. I also made sure that canFly points to "false" :) 
@@ -139,7 +142,9 @@ Now, what happened? To see what's going on, let's create a new instance of the P
 
 `const coldFeet= new Penguin("ColdFeet",3);`
 
-So, our new Penguin, Coldfeet can access anything our birdLarry can! If we logged `coldFeet.age`, the output would be 3. If we wrote `coldFeet.canFly`, the output would be **false**. Why? Obviously, because we made it clear that penguins can't fly :) 
+So, our new Penguin, Coldfeet can access anything our birdLarry can! If we logged `coldFeet.age`, the output would be 3. If we wrote `coldFeet.canFly`, the output would be **false**. Why? Obviously, because we made it clear that penguins can't fly :) What about other methods? Like, what would happen if we logged `coldFeet.nameAge();`?
+
+That's right, the input would be: `"ColdFeet is 3 years old"` because, again, Penguin class shares everything with the Bird class!
 
 Now, our Penguin instance shares everything with our Bird instance. But, what about the Penguin class itself? Will it share the same static methods with the Bird class? 
 
@@ -148,6 +153,12 @@ As you can see from my choice of wording, it does :)
 Say that we used static properties when defining our Bird class. If we wrote `Penguin.kingdom`, the output would be `"Animalia"`
 
 And if we wrote `Penguin.kingdomSentence`, the output would be `"Birds belong to the kingdom Animalia"` (because penguins are birds silly!)
+
+### Conclusion
+
+All in all, this is how classes are used, as far as I'm concerned, in Javascript (ES6). They're cool and functional. I hope I was able to convey my thoughts as clearly as possible. And, for the more senior devs, if you find a mistake, please do not hesitate to inform me! I would love to see my mistakes!
+
+All the best, and happy coding :)
 
 
 

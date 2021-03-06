@@ -163,3 +163,5 @@ module: {
         }
     ]
 }
+now goes back to index.js file to update the main.css into main.scss
+and runs npm start

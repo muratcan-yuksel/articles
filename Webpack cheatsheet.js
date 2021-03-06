@@ -129,6 +129,7 @@ npm install --save-dev style-loader css-loader
 so we're gonna to to the index.js file and import the main.css file there
 like this:
 import "./main.css";
+import { toNamespacedPath } from "node:path"
 //then we say npm start on terminal
 with just css loader, we wouldn't see the effects of the css, i.e. the webpage wouldn't be styled
 for that, we also need the style loader
@@ -168,3 +169,9 @@ and runs npm start
 --------------------------------------------------------------------
 PART 2
 ----------------------------------------------------------------------------
+CACHE BUSTING AND PLUGINS
+don't think about that too much
+just go to your webpack.config.js file and
+change the filename in the output object into"main.[contenthash].js (dunno if "h" is upper or lowercase)
+now when you npm start
+it'll create a main.askfjasfj92832.js file in the dist folder (next to main.js file)

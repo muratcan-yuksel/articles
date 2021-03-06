@@ -124,7 +124,7 @@ like rules: [
     }
 ]
 - we install these loaders via the terminal like this:
-npm install --save-dev stlye-loader css-loader
+npm install --save-dev style-loader css-loader
 //now we need to make sure that webpack knows about that main.css file
 so we're gonna to to the index.js file and import the main.css file there
 like this:
@@ -165,3 +165,6 @@ module: {
 }
 now goes back to index.js file to update the main.css into main.scss
 and runs npm start
+--------------------------------------------------------------------
+PART 2
+----------------------------------------------------------------------------

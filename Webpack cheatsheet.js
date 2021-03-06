@@ -101,3 +101,65 @@ module.exports= {
 //LESSON 5=> LOADERS
 what if we wanted to bundle files other than javascript? like images, css, sass etc.?
 now, loaders are what we're looking for. They handle files different from javascript
+//He creates a main.css file in the src folder to show how we handle CSS files
+in the main.css file
+body{
+    background:purple;
+}
+-in order for webpack to process that we need to use 2 loaders:
+style loader and css loader
+for instance, in order to use the css loader (there are instructions), we go to our webpack.config.js
+and add a rules object under the module
+like rules: [
+    {
+        //this is a regex that's saying "if a file ends with .css..."
+        test: /\.css$/,
+        //if that's the case, use the following two loaders
+        //there's an order in here
+        //we have to use them in order
+        //the thing is: they're in reverse order
+        //so here the css loader comes first, and style loader comes later
+        //again, it's reversed
+        use: ['style-loader', 'css-loader'],
+    }
+]
+- we install these loaders via the terminal like this:
+npm install --save-dev stlye-loader css-loader
+//now we need to make sure that webpack knows about that main.css file
+so we're gonna to to the index.js file and import the main.css file there
+like this:
+import "./main.css";
+//then we say npm start on terminal
+with just css loader, we wouldn't see the effects of the css, i.e. the webpage wouldn't be styled
+for that, we also need the style loader
+these loaders take the file, the css file in our case, and parse it into the js file. So it's js at the end
+later, we'll see how to spit out css files too. But later.
+
+//NOW WE'RE GONNA INCORPORATE SASS
+he starts by installing bootstrap locally:
+npm install --save-dev bootstrap
+-he changes the main.css file like this:
+-deletes what's inside of it first
+-and changes the name into main.scss
+
+in the main.scss file he imports bootstrap:
+@import "~bootstrapt/scss/bootstrap";
+
+now we need a sass-loader
+-in the terminal: npm install sass-loader node-sass webpack --save-dev
+NOW let's update the config file
+we go to the webpack.config.js
+it should look like this:
+
+module: {
+    rules: [
+        {
+            test: /\.scss$/,
+            use:[
+                "style-loader", //3. injects styles into DOM
+                "css-loader", // 2. turns css into common js
+                "sass-loader" //1. turns sass into css
+            ]
+        }
+    ]
+}

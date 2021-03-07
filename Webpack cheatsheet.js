@@ -130,7 +130,8 @@ so we're gonna to to the index.js file and import the main.css file there
 like this:
 import "./main.css";
 import { toNamespacedPath } from "node:path"
-import { Template } from "webpack"
+import { Template, webpack } from "webpack"
+import { time } from "node:console"
 //then we say npm start on terminal
 with just css loader, we wouldn't see the effects of the css, i.e. the webpage wouldn't be styled
 for that, we also need the style loader
@@ -200,3 +201,113 @@ goes back to config file and changes the plugin as follows:
 plugins: [new HtmlWebpackPlugin({
     template: "./src/template.html"
 })],
+//SPLITTING DEV AND PRODUCTION
+we'll have 3 config files:
+1 for dev
+1 for production
+1 shared between the two
+he creates webpeck.dev.js and webpack.prod.js files
+copies the webpack.config file. The idea is to delete things selectively
+In production: changes mode to "production",
+deletes the entry point
+-renames the webpack.config into webpack.common
+in webpack common, deletes mode and output property
+IN webpack.dev.js filename is main.js and entry is deleted
+in production it's main.[contenthash].js
+deletes plugins from dev and prod
+in dev and prod, he deletest the module and rules
+he install a package called webpack merge
+npm install --save-dev webpack-merge
+this allows us to merge webpack config together easily
+in webpack.dev he adds the following:
+const common = require ("./wepack.common");
+then imports merge package as follows:
+const merge = require ("webpack-merge");
+then changes the module.exports as follows:
+//this common thingy means merge whatever is in common with whatever we have in this object
+module.exports = merge (common, {
+    mode:"development",
+    output: {
+        filename:"main.js",
+        path: path.resolve(__dirname, "dist")
+    }
+});
+he does the same merge thing with webpack.prod
+
+now he goes to package.json 
+in the scripts object, he changes the "start"
+it was originally like this:
+"scripts": {
+    "start": "webpack --config webpack.config.js"
+}, //TURNS INTO:
+"scripts": {
+    "start": "webpack --config webpack.dev.js"
+    "build": "webpack --config webpack.prod.js"
+},
+he tries it with npm start
+then to call webpack with our production file, he runs:
+npm run build
+
+Now he wants to setup a webpack dev server so that when he's in development he wouldn't have to do npm start all the time
+he writes this: npm install --save-dev webpack-dev-server
+then he goes to package.json file and changes the scripts as follows:
+"scripts": {
+    "start": "webpack-dev-server --config webpack.dev.js --open"
+    "build": "webpack --config webpack.prod.js"
+},
+//THIS PART IS IMPORTANT
+//Html-loader, File-loader, & Clean-webpack
+moves the assets folder into src
+we need 2 loaders: html loader & file loader
+npm install --save-dev html-loader
+goes to webpack.common.js and adds the following rules, Ok I'm gonna write the whole module:
+module : {
+    rules : [
+        {
+            test: /\.scss$/,
+            use: [
+                "style-loader", //3. injects styles into DOM
+                "css-loader", // 2. turns css into common js
+                "sass-loader" //1. turns sass into css
+            ]
+        },
+        //HE ADDS THIS PART
+        {
+            test: /\.html$/,
+            use: ["html-loader"]
+        }
+    ]
+}
+
+now we need the file loader
+npm install --save-dev file-loader
+now change the above module part as follows:
+module : {
+    rules : [
+        {
+            test: /\.scss$/,
+            use: [
+                "style-loader", //3. injects styles into DOM
+                "css-loader", // 2. turns css into common js
+                "sass-loader" //1. turns sass into css
+            ]
+        },
+       
+        {
+            test: /\.html$/,
+            use: ["html-loader"]
+        },
+         //HE ADDS THIS PART
+         test:/\.(svg|png|jpg|gif)$/,
+         use: {
+             loader: "file-loader",
+             options: {
+                 name: "[name].[hash].[ext]",
+                 outputPath:"imgs"
+             }
+         }
+    ]
+}
+
+now he talks about clean webpack plugin
+stopped at vide 8, minute 8. got really bored. 

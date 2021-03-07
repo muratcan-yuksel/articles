@@ -130,6 +130,7 @@ so we're gonna to to the index.js file and import the main.css file there
 like this:
 import "./main.css";
 import { toNamespacedPath } from "node:path"
+import { Template } from "webpack"
 //then we say npm start on terminal
 with just css loader, we wouldn't see the effects of the css, i.e. the webpage wouldn't be styled
 for that, we also need the style loader
@@ -175,3 +176,27 @@ just go to your webpack.config.js file and
 change the filename in the output object into"main.[contenthash].js (dunno if "h" is upper or lowercase)
 now when you npm start
 it'll create a main.askfjasfj92832.js file in the dist folder (next to main.js file)
+whenever I change the code, I'll get a new main.js file with those different names
+
+how are we gonna include those files?
+our index.html include only main.js??
+we don't need to do that, webpack will create a html file and include it for us
+BUt
+for that, we need to learn about plug-ins
+//PLUGINS
+we need htmlwebpackplugin to create those html files
+start by installing it:
+npm install --save-dev html-webpack-plugin
+in our config file, we add the following:
+var HtmlWebpackPlugin = require ('html-webpack-plugin');
+and under the module.exports, we open a plugins array as such:
+plugins: [new HtmlWebpackPlugin()], //don't forget your comma if it's not the last one
+if we do npm start, it'll create a new index.html file in the dist folder
+but this index.html file won't have any template in it
+to solve this problem, he creates a template.html in src folder
+copies his original index.html file 
+BUT deletes the bootstrap and script to main.js tags in there
+goes back to config file and changes the plugin as follows:
+plugins: [new HtmlWebpackPlugin({
+    template: "./src/template.html"
+})],

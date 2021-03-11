@@ -1,0 +1,7 @@
+Pour un débutant (comme moi), la comprehension de classes en Javascript peut-être un peu difficile. Il y a beaucoup des articles à propos du sujet, mais la plupart d'eux parlent d'une position avancée, et donc supposent divers informations qui n'existent pas dans l'esprit d'un/e developper/euse débutant/e. Et surtout, elles sont en anglais. Danc cet article-là, je vais essayer de remplir ce surface vide.
+
+Note: Le français n'esp pas ma langue maternelle comme vous pouvez comprendre, donc pardonnez-moi pour les erreurs. 
+
+Si vous pouvez lire en anglais, vous pouvez trouver cet article en anglais ici :  https://muratcanyuksel.hashnode.dev/classes-in-javascript-es6-simplified
+
+Dans cet article, je vais premièrement présenter les classes, après je vais parles à propos des propriétés statiques (static methods) et je vais finir par parler sur extends et super mots clés.

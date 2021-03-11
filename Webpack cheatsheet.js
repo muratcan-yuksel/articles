@@ -5,7 +5,7 @@ How to install webpack?
 ->in the terminal:
 -npm init -y (-y to make it faster)
 -create .gitignore and write node_modules into it
--> install webpacknpm install --save-dev  webpack webpack-cli
+-> install webpack npm install --save-dev  webpack webpack-cli
 
 ->go to package.json file 
 -Colt first deleted what's inside the "scripts" property 

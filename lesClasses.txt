@@ -4,4 +4,10 @@ Note: Le français n'esp pas ma langue maternelle comme vous pouvez comprendre, 
 
 Si vous pouvez lire en anglais, vous pouvez trouver cet article en anglais ici :  https://muratcanyuksel.hashnode.dev/classes-in-javascript-es6-simplified
 
-Dans cet article, je vais premièrement présenter les classes, après je vais parles à propos des propriétés statiques (static methods) et je vais finir par parler sur extends et super mots clés.
+Dans cet article, je vais premièrement présenter les classes, après je vais parler à propos des propriétés statiques (static methods) et je vais finir par parler sur extends et super mots clés.
+
+<h1>Les Classes</h1>
+Les classes en Javascript ressemblent Object constructors. Donc, si l'on est familiar avec eux, les classes seront vraiment facile à comprendre. Parce qu'ils toujours servent à la même fonction: créer des prototypes pour qu'on peut utiliser le même code encore et encore en lieu d'en frapper manuellement. Ils ne sont que nous presentent avec des nouveaux fonctionnalités qui n'existaient dans Object constructors. Alors, sans plus tarder, on va créer un class:
+
+FIRST CODE SNIPPET
+

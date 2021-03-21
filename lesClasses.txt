@@ -10,4 +10,24 @@ Dans cet article, je vais premièrement présenter les classes, après je vais p
 Les classes en Javascript ressemblent Object constructors. Donc, si l'on est familiar avec eux, les classes seront vraiment facile à comprendre. Parce qu'ils toujours servent à la même fonction: créer des prototypes pour qu'on peut utiliser le même code encore et encore en lieu d'en frapper manuellement. Ils ne sont que nous presentent avec des nouveaux fonctionnalités qui n'existaient dans Object constructors. Alors, sans plus tarder, on va créer un class:
 
 FIRST CODE SNIPPET
+Don, notre class des mots a une méthode constructor dedans. Les arguments aura le nom de notre oiseau, son âge, et s'il pourrait voler ou pas.
+La méthode  constructor sera immédiatement appelée dès que nous l'invoquons via le mot-clé "new". On utilise le mot-clé "new" pour créer un instance de class. Alors, Créons une instance appelée birdLarry:
+SECOND CODE SNIPPET
+On voit que pour créer une nouvelle instance de class, on définit une variable (birdLarry), et après la marque d'équation, on écrit le mot-clé "new" suivi du nom de la classe qu'on souhaite invoquer (Bird, dans notre cas).
+Alors, si l'on écrirait birdLarry.name; à la console, le résultat serait "Larry. Si l'on écrirait birdLarry.age; le résultat sérait le numéro 4. Et si l'on écrirait birdLarry.canFly, le résultat sérait "true".
+
+Jusqu'ici tout va bien.
+
+Ajoutons quelques méthodes supplémentaires à la classe Bird.
+3RD CODE SNIPPET
+On a fait quoi ici? La méthode nameAge donnera des informations sur l'instance Bird. Comme si l'on écrirait,
+birdLarry.nameAge(); le résultat sérait "Larry is 2 years old." Pourtant, super simple. Mais, si l'on voulait changer le nom de l'oiseau? Dis-donc, de Larry à Clumsy? et si l'on voulait changer le nom aussi? 
+Parce que j'ai l'impression qu'un oiseau nommé Clumsy (maladroit) doit être assez jeune. Ajoutons les méthodes.
+4th CODE SNIPPET
+Avec ce code nouvellement ajouté,on peut modifier le nom et l'âge de l'oiseau. Donc, si l'on écrirait birdLarry.setName("Clumsy"); et appellerait birdLarry.name; le résultat sérait "Clumsy" depuis qu'on a modifié le nom d'origine de l'instance de class. Aussi, depuis que Clumsy doit être un peu jeune, on voudrait modifier son âge aussi en écrivant birdLarry.setAge(2) dans la console.Maintenant, chaque fois que l'on appele birdLarry.age; le résultat serait 2.
+
+Puff, heureux que l'on ait eu fini avec ça, car ce qui vient ensuite est beaucoup plus intéressant que ces bases :)
+<h1>Les méthodes Static</h1>
+
+
 

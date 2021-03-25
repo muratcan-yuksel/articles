@@ -36,6 +36,31 @@ Alors, si l'on écrirait `birdLarry.kingdom()`, le résultat serait quelque chos
 
 Comme je l'ai mentionné dans la phrase d'ouverture de cette section, les méthodes statiques fonctionnent avec la classe elle-même, pas avec ses instances.Et `birdLarry` est une instance de classe Bird. Donc, la méthode statique ne fonctionnerait pas de tout.Par contre, la méthode statique ne fonctionnerait qu'avec la classe Bird. Comme ça: `Bird.kingdom()` retournerait "Animalia". Et si l'on écrirait `Bird.kingdomSentence() ` il retournerait "Birds belong to the kingdom Animalia". Assez chouette eh?
 Maintenant, il existe une autre façon d'écrire ces méthodes statiques. Ils sont appelés propriétés statiques. Voyons comment ils fonctionnent.
+<h2>Les propriétés statiques</h2>
+Les propriétés, au fond, sont tout sauf une fonction. Ils sont des strings, numbers, booleans etc. On peut écrire les méthodes statiques ci-dessus en tant que telles:
+6th CODE SNIPPET
+Vous voyez ce que l'on a fait là-bas? On a supprimé toutes sortes de crochets et le mot-clé return. On a également pris les crochets qui indiquent la function calling lors de l'utilisation de `this.kingdom`. Cette méthode fonctionne exactement comme ci-dessus, mais elle est plus propre. Maintenant, que se passerait-il si l'on écrirait `Bird.kingdom ()`?
+Eh bien, on aurait une erreur comme celle-ci: Uncaught TypeError: Bird.kingdom is not a function at <anonymous>:1:6, car maintenant ce sont des propriétés, pas des fonctions! Donc, on les appellerait comme: `Bird.kingdom`; qui renverrait `"Animalia"`, et Bird.kingdomSentence qui renverrait `"Birds belong to the kingdom Animalia"`.
+
+D'accord, si l'on est d'accord avec celui-ci, on va passer à la finale et à la méthode la plus pratique que entre eux.
+<h2>Extends et Super </h2>
+C'st tout bien maintenant. On peut écrire un seul morceau de code et en créer de très nombreuses instances différentes. Mais que se passe-t-il si l'on est confrontés à une situation dans laquelle on souhaite créer une autre classe presque identique à la classe Bird? Et évidemment, on ne veut pas se répéter, taper un autre morceau de code encore et encore. On ferait quoi?
+Eh bien, on utiliserait le mot-clé extend pour surmonter cette difficulté ennuyeuse.
+Alors, dit que on veut créer une nouvelle classe Penguin. Puisque les pingouins sont des oiseaux, ils partageraient presque toutes les propriétés avec d'autres oiseaux. Je dis presque, car less pingouins ne peuvent pas voler, et je vais pas me laisser BBC me tromper :) https://www.youtube.com/watch?v=9dfWzp7rYR4&ab_channel=BBC
+Alors, avec le code suivant, la nouvelle classe Penguin prendra tout ce que la classe Bird a. Regarde au mot-clé super là-bas: Il prend le nom et les méthodes d'âge de la classe d'origine. Je me suis éalement assuré que canFly pointe vers "false" :)
+7TH CODE SNIPPET
+Ce qui est arrivé là maintenant? Pour voir ce qui se passe, on var créer une nouvelle instance de la classe Penguin et l'appele coldFeet:
+`const coldFeet= new Penguin("ColdFeet", 3);`
+Le nouveau Penguin, Coldfeet peut accéder ą tout ce que birdLarry peut! Si l'on écrirait coldFeet.age, le résultat serait 3. Si l'on écrirait coldFeet.canFly, le résultat serait "false". Pourquoi? Evidemment, car on était d'accord que les pingouins ne peuvent pas voler, n'est-ce pas? :) Et lest autres méthodes? Par exemple, que se passerait-il si l'on écrirait `coldFeet.nameAge();`?
+Ouais, le résultat serait: "ColdFeet is 3 years old" car, encore une fois, la classe Penguin partage tout avec la classe Bird!
+L'instance Penguin partage tout avec l'instance Bird maintenant. Mais, qu'n est-il de la classe Penguin elle-même? Partagera-t-elle les mêmes méthodes statiques avec la classe Bird?
+Mais si!
+Dit que l'on a utilisé des propriétés statiques lors de la définitionde la classe Bird. Si l'on écrirait Penguin.kingdom, le résultat seriar "Animalia".
+Et si l'on écrirait `Penguin.kingdomSentence`, le résultat serait `"Birds belong to the kingdom Animalia"` (car les pingouins sont des oiseaux, mais vas-y là...)
+<h4> La Conclusion</h4>
+En conclusion, voici comment les classes sont utilisées, en ce qui me concerne, en Javascript (WS6). Ils sont cool et fonctionnels. J'espère avoir pur exprimer mes pensées aussi clairement que possible. Et, pour les développerus plus expérimentés, si vous trouvez une erreur, n'hésitez pas à m'en informer! J'aimerais bien voir mes erreurs! Si vous voulez, vous pouvez me montrer les erreurs grammaticales que j'ai fait dans cet article!
+Cordialement, et happy coding :)
+
 
 
 

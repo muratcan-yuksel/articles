@@ -27,7 +27,16 @@ Parce que j'ai l'impression qu'un oiseau nommé Clumsy (maladroit) doit être as
 Avec ce code nouvellement ajouté,on peut modifier le nom et l'âge de l'oiseau. Donc, si l'on écrirait birdLarry.setName("Clumsy"); et appellerait birdLarry.name; le résultat sérait "Clumsy" depuis qu'on a modifié le nom d'origine de l'instance de class. Aussi, depuis que Clumsy doit être un peu jeune, on voudrait modifier son âge aussi en écrivant birdLarry.setAge(2) dans la console.Maintenant, chaque fois que l'on appele birdLarry.age; le résultat serait 2.
 
 Puff, heureux que l'on ait eu fini avec ça, car ce qui vient ensuite est beaucoup plus intéressant que ces bases :)
-<h1>Les méthodes Static</h1>
+<h1>Les méthodes Statiques</h1>
+
+Et si on voudrait ajouter des méthodes non pas pour les instances mais pour la classe elle-même? Eh bien, avec avec la fonctionnalité des classes en ES6, ce sera hyper facile! Alors, on prends les class Bird et voit c'est quoi on peut faire avec lui en utilisant les méthodes statiques( j'écris pas les métdodes supplémentaires par souci de simplicité et d'espace(:
+5TH CODE SNIPPED
+Wowowowow, tranquille-toi mec, que se passe-t-il ici? ALors, ce qu'on a fait était d'ajouter deux méthodes statiques: La première renvoie à quel règne biologique appartiennent les oiseaux (Animalia, car ce sont bien des animaux), et le second renvoie une phrase utilisant le royaume. On voit que j'ai utilisé le mot-clé "this" ici. C'est une partie intéressante de la méthode statique: Alors que le mot-clé "this" ferait normalement référence à l'instance de classe s'il s'agissait d'une méthode ordinaire; à l'intérieur d'une méthode statique, il se réfère à la classe elle-même. Attends attends, qu'est-ce que ça veut dire? Supporte-moi un peu.
+Alors, si l'on écrirait `birdLarry.kingdom()`, le résultat serait quelque chose comme Uncaught TypeError: birdLarry.kingdom is not a function at <anonymous>:1:11 Uf. Mais pourquoi?
+
+Comme je l'ai mentionné dans la phrase d'ouverture de cette section, les méthodes statiques fonctionnent avec la classe elle-même, pas avec ses instances.Et `birdLarry` est une instance de classe Bird. Donc, la méthode statique ne fonctionnerait pas de tout.Par contre, la méthode statique ne fonctionnerait qu'avec la classe Bird. Comme ça: `Bird.kingdom()` retournerait "Animalia". Et si l'on écrirait `Bird.kingdomSentence() ` il retournerait "Birds belong to the kingdom Animalia". Assez chouette eh?
+Maintenant, il existe une autre façon d'écrire ces méthodes statiques. Ils sont appelés propriétés statiques. Voyons comment ils fonctionnent.
+
 
 
 

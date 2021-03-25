@@ -1,0 +1,48 @@
+TO start with ESLint
+create a folder
+maybe create a js file (app.js, index.js whatever)
+run npm init like: npm init -y
+(now we have a package.json file)
+then run this code in your peoject folder :  npm install eslint --save-dev
+now we have npm_ modules and package.lock.json too
+then we need to initiate it by pasting: npx eslint --init
+then, go to package.json file:
+there, you'll find sth like this:  
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    }
+after the test, paste this:
+"Lint": "npx eslint yourfile.js"
+so the outcome is like that:
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint app.js"
+  },
+  add some code using bad practices
+  now, if I write npm run lint in the terminal,
+  it will find the mistakes I made in my app.js
+  but instead of that, 
+  I downloaded the eslint VSCode extension
+  then, when I went to my app.js, I got a warning saying that Eslint was not enabled
+  if I would like to enable it or not etc.
+  I enabled it EVERYWHERE
+  so I wonder if it'll work on my other js files too
+  I chose AitBnb guide, and it doesn't want console.logs in the code
+  so to disable that:
+  go to your .eslintrc. file (use ls -a if you can't see it)
+  and under the rules:, write this:
+   "no-console": "off",
+   
+   TO ENABLE ESLINT ON AUTO-SAVE:
+   There are many stupid videos on the web, but this one works:
+   on Vscode, go to preferences-settings-extensions-eslint
+   there, on the right top of the page, you'll see an icon, and if you hover it'll read "open settings (json)". go there
+   turn the settings into this:
+   "settings": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": true
+		  }
+	}
+	
+	you see, the code is pasted inside the settings' brackets. 
+	Now, when you autosave, linting will work

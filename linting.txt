@@ -3,7 +3,7 @@ create a folder
 maybe create a js file (app.js, index.js whatever)
 run npm init like: npm init -y
 (now we have a package.json file)
-then run this code in your peoject folder :  npm install eslint --save-dev
+then run this code in your project folder :  npm install eslint --save-dev
 now we have npm_ modules and package.lock.json too
 then we need to initiate it by pasting: npx eslint --init
 then, go to package.json file:

@@ -1,0 +1,88 @@
+What's up y'all! Today I'm going to talk about something that made my life much, much easier: ESLint.
+Note: Most of the things I'm gonna write about comes from Colt Steele's explanation of ESLint, Colt is good, Colt is funny, Colt is a treasure. If you like watching over reading, you can find his video here https://www.youtube.com/watch?v=mfGkKlMDfwQ&ab_channel=ColtSteele , I will just give one extra information: How to set up VsCode ESLint on save. Anyway, let's get going.
+
+WHAT IS ESLINT?
+Wikipedia says that "ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code. It was created by Nicholas C. Zakas in 2013." (thanks Nicholas!) and I believe this explanation is quite sufficent. But to think about what ESLint actually does, like in action, man, it's quite cool. Say like you declared a function but never used it, BOOM! ESLint gives an error and points you to that direction. Or you wrote your arrow function in a very, very ugly, unreadable way (because you're a newbie and that's completely normal, talking to you, Murat) and what does ESLint do? BAM! It prettifies your code. 
+
+If I may to speak from personal experience, I've been seeing ESLint in many places for a while. Even in job requirements, and was thinking that maybe it's some dreadful feature like webpack (I'm going to write an article about it too I hope, it's actually not as dreadful as you think. It's still dreadful tho') and maybe I'd need more time to learn about it, I should wait and so on and so on. Classic procrastination. I'm telling you man, ESLint is great, super functional, and hyper easy to implement. So, let's see how can we use ESLint, shall we?
+
+INSTALLING ESLINT
+I suppose you have a folder on which you're working, like a project or something like that. Yea, go to that folder and run `npm init -y` in the terminal (for Linux, npm users obv) if you hadn't done so yet. You know now you have a package.json file. 
+Then run `npm install eslint --save-dev` in the terminal. Now you have npm_modules and a package.lock.json file too. Anyway, now you need to initiate ESLint in your folder. Write `npx eslint --init` in the terminal. Now you'll be prompted with various questions like "How would you like to use ESLint=" or "Which style guide do you want to follow?", I think this part is pretty self-explanatory and depends on personal choices, so I'm not talking about them. Just choose whatever suits you.
+CONFIGURING ESLINT
+After answering all the questions, go to your package.json file and on the scripts key, which is something like this:
+`"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    }`
+    
+    add the following code: `"Lint": "npx eslint yourfile.js"` Of course, in here `yourfile.js` is the Javascript file you'd wish to use ESLint in, so change that name accordingly. The outcome should be something like this:
+    `"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint app.js"
+  },`
+  It's done! Just to try, you can add some bad, bad code and run `npm run lint` in the terminal, there you'll see all the comments on the terminal. But, like, this is not so good or efficient, I want to see my mistakes on my text editor you say? Well, fear not, because there's an extension for that.
+  ESLINT WITH VSCODE 
+  You know how to add extension to VsCode, right? If you don't, a quick google search would clarify all the clouds in your mind in no time. 
+  So there's this ESLint extension in VsCode, by Dirk Baeumer, install it. That's all.
+  ESLINT ON SAVE
+  Now, I wanted to use ESLint on save, but somehow encountered with errors. And the web is full of outdated information. Now this one I'm gonna talk about, as of 26/02/2021, works like a charm. 
+  On VsCode, go to `preferences-settings-extensions-eslint` ( you can search for eslint once in the settings and do not forget to clikc on `Workspace` because that's where we're gonna change the settings) and there, on the right top of the page, you'll see an icon, and if you hover on it it'll read `Open Settings (JSON)`. This will take you to a file named `workspace.json`. There, add the following to the `settings` so it'll look something like this:
+  `  "settings": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": true
+		  }
+	}`
+And voilà! Now whenever you save your code, ESLint will run and do its magic. 
+
+Happy coding! 
+  --------
+  What's up y'all! Today I'm going to talk about something that made my life much, much easier: ESLint.
+Note: Most of the things I'm gonna write about comes from Colt Steele's explanation of ESLint, Colt is good, Colt is funny, Colt is a treasure. If you like watching over reading, you can find his video here https://www.youtube.com/watch?v=mfGkKlMDfwQ&ab_channel=ColtSteele , I will just give one extra information: How to set up VsCode ESLint on save. Anyway, let's get going.
+
+### What is ESLint?
+
+Wikipedia says that "ESLint is a static code analysis tool for identifying problematic patterns found in JavaScript code. It was created by Nicholas C. Zakas in 2013." (thanks Nicholas!) and I believe this explanation is quite sufficient. But to think about what ESLint actually does, like in action, man, it's quite cool. Say like you declared a function but never used it, BOOM! ESLint gives an error and points you in that direction. Or you wrote your arrow function in a very, very ugly, unreadable way (because you're a newbie and that's completely normal, talking to you, Murat) and what does ESLint do? BAM! It prettifies your code. 
+
+If I may speak from personal experience, I've been seeing ESLint in many places for a while. Even in job requirements, and was thinking that maybe it's some dreadful feature like webpack (I'm going to write an article about it too I hope, it's actually not as dreadful as you think. It's still dreadful tho') and maybe I'd need more time to learn about it, I should wait and so on and so on. Classic procrastination. I'm telling you man, ESLint is great, super functional, and hyper easy to implement. So, let's see how can we use ESLint, shall we?
+
+### Installing ESLint
+I suppose you have a folder on which you're working, like a project or something like that. Yea, go to that folder and run `npm init -y` in the terminal (for Linux, npm users obv) if you hadn't done so yet. You know now you have a package.json file. 
+
+Then run `npm install eslint --save-dev` in the terminal. Now you have npm_modules and a package.lock.json file too. Anyway, now you need to initiate ESLint in your folder. Write `npx eslint --init` in the terminal. Now you'll be prompted with various questions like "How would you like to use ESLint=" or "Which style guide do you want to follow?", I think this part is pretty self-explanatory and depends on personal choices, so I'm not talking about them. Just choose whatever suits you.
+
+### Configuring ESLint
+After answering all the questions, go to your package.json file and on the scripts key, which is something like this:
+
+```
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    }```
+   
+add the following code: `"Lint": "npx eslint yourfile.js"` Of course, in here `yourfile.js` is the Javascript file you'd wish to use ESLint in, so change that name accordingly. The outcome should be something like this:
+```
+    "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint app.js"
+  },```
+  It's done! Just to try, you can add some bad, bad code and run `npm run lint` in the terminal, there you'll see all the comments on the terminal. But, like, this is not so good or efficient, I want to see my mistakes on my text editor you say? Well, fear not, because there's an extension for that.
+
+###  ESLint with VsCode
+  You know how to add extensions to VsCode, right? If you don't, a quick google search would clarify all the clouds in your mind in no time. 
+  So there's this ESLint extension in VsCode, by Dirk Baeumer, install it. That's all.
+
+### ESLint on save
+  Now, I wanted to use ESLint on save, but somehow encountered errors. And the web is full of outdated information. Now this one I'm gonna talk about, as of 26/03/2021, works like a charm. 
+
+  On VsCode, go to `preferences-settings-extensions-eslint` ( you can search for ESLint once in the settings and do not forget to click on `Workspace` because that's where we're gonna change the settings) and there, on the right top of the page, you'll see an icon, and if you hover on it it'll read `Open Settings (JSON)`. This will take you to a file named `workspace.json`. There, add the following to the `settings` so it'll look something like this:
+  ```
+  "settings": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": true
+		  }
+	}```
+And voilà! Now whenever you save your code, ESLint will run and do its magic. 
+
+Happy coding! 
+  
+
+

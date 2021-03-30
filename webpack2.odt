@@ -1,0 +1,59 @@
+﻿From webpack-academy
+the problem is he uses yarn instead of npm
+
+- after installing webpack, goes to the package.json file
+-under “license”, adds the following:
+“scripts: {
+“build”: “webpack”
+}
+-the above “build” is called “script name”. Its name can be ANYTHING you want.
+
+Video 2----------
+-created webpack.config.js
+-creates the following:
+module.exports = {
+entry: “./src/index.js”
+output: {
+	filename: “bundle.js”
+	}
+}
+-the above “entry” specifies to first file that’ll kick start the dependency tree
+-output tells the webpack where to bundle everything. I guess this is what I know as “main.js”. I have to check tho’.
+
+-------video 3/ changing the bundle location---------
+-we’re still in the webpack.config.js
+-we change the code as follows:
+-we add the following to the top of the file
+const path= require(“path”);
+
+ module.exports = {
+entry: “./src/index.js”
+output: {
+	filename: “bundle.js”
+	path: path.joing(__dirname, “build”)
+	}
+};
+-says that webpack will always look for an absolute path
+-this will create a “build” folder. This folder is the one I know as “dist” folder.
+-because if we changed the name into “dist”, a “dist” folder would be created
+
+------Video 4/ dependency graph----------
+
+-he’s talking about how to import and export
+-to import: import fooString from “./foo.js” //you know this
+-also, you don’t even need to write “./foo.js”, you can just write “./foo” and webpack will read as if there was .js automatically
+
+-----video 5//watch mode-----
+
+-he goes back to package.json file
+-under scripts, and under “build”: “webpack”, he writes the watch function.
+-I’ll write how that “scripts” looks altogether:
+“scripts: {
+“build”: “webpack”,
+“watch”: “webpack --watch”
+}
+-then he runs “yarn watch” on terminal. Wonder what’s the npm equivalent of it.
+-probably npm or npx watch. Dunno.
+-he wrote node dist/bundle.js and got a dependency tree on the terminal. Interesting.
+
+-------video 6//Loaders and Rules_---------

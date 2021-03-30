@@ -56,4 +56,77 @@ output: {
 -probably npm or npx watch. Dunno.
 -he wrote node dist/bundle.js and got a dependency tree on the terminal. Interesting.
 
--------video 6//Loaders and Rules_---------
+-------video 6-7//Loaders and Rules_---------
+-first of all, he goes back to webpack.config.js
+-adds the following under output, so after output, not inside of it, this is a different thing:
+
+module: {
+	rules: [
+		{
+		test: /\.js$/,
+		use: “babel-loader”
+		},
+	{
+		test:/\.css$/,
+		use:[
+			“style-loader”,
+			“css-loader”,
+			“sass-loader”
+		    ]
+	
+	}
+	
+		]
+}
+
+-”test” says match this regex, and perform a transformation based on it
+-so the above code says this:
+-“whenever you come across a “js” file, USE “babel loader”. Simple, isn’t it?
+
+-for the second part, the .css file, he reminds that webpack reads from inside out. Like, Javascript reads from top to bottom, whereas in these cases with that “use”, webpack reads from bottom to top
+
+-----video 8 Loaders and Rules (continues) ------
+-let’s start with what we have from the previous lesson
+module: {
+	rules: [
+		{
+		test: /\.js$/,
+		use: “babel-loader”
+		},
+	{
+		test:/\.css$/,
+		use:[
+			{loader: “style-loader”},
+			{loader: “css-loader”},
+			“sass-loader”
+		    ]
+	
+	},
+		{
+			test: /\.jpeg$/,
+			use: [
+				{loader: “url-loader”, options: {
+									limit:10000
+										}
+				]
+
+		}
+	
+		]
+}
+
+-first, we can write the loaders as if they wre objects, check the style and css loader above
+-with the url loader, he’s limiting the image file size to 10000 bytes but I didn’t really get the reason for it tbh
+
+-----video 9/ loaders and rules continues---------------------
+
+-this video is about actually using the loaders
+- he does this in the terminal “yarn add file-loader –-dev”, so you’d do the same in npm form
+-now he has “file-loader”
+-he has a logo (a jpg file), let’s call it logo.jpg
+-he goes to index.js and imports it like this:
+import “logo.jpg”;
+-that’s all
+
+----- video 10 / Plugins --------
+

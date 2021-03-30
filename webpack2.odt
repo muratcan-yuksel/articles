@@ -130,3 +130,44 @@ import “logo.jpg”;
 
 ----- video 10 / Plugins --------
 
+-what’s the difference between loaders and plugins?
+-his basic answer is ” plugins do whatever the loaders can’t”
+----- video 11 / plugins------ 
+-he has created a very basic plugin
+-it’s a file named examplePlugin.js
+-inside of it, there’s this code:
+
+class examplePlugin {
+	apply(compiler){
+		compiler.plugin(“run”, (compiler, callback)=>{
+			console.log(“webpack is running);
+			callback();
+		})
+	
+	}
+
+
+} 
+
+module.exports= example.plugin
+
+-so what this does is, whenever it’s used, it’ll console log its message
+
+-now let’s see how to use these plugins
+-goes back to webpack.config.js
+-calls the plugin on the top of the page like this:
+
+const examplePlugin= require (“./examplePlugin.js”);
+
+-then creates a plugins array in the module, like this: (after the rules array)
+
+plugins: [
+	//since plugins are classes:
+	new examplePlugin()
+
+]
+-runs yarn build and gets the console log
+
+- so whenever you want to use a plugin, you add it to your file, and pass it in the plugins array as specified above
+
+

@@ -13,6 +13,11 @@ INTEGRATING ESLINT & PRETTIER
     "eslint.validate": ["javascript"]
 }
 
+-second
+npm init -y
+npm install eslint --save-dev
+npx eslint --init
+choose commonjs
 
 -Third
 -install the dependencies:

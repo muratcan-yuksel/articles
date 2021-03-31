@@ -1,0 +1,53 @@
+INTEGRATING ESLINT & PRETTIER
+
+-First: Settings should be similar to this:
+
+{
+    "liveServer.settings.CustomBrowser": "chrome",
+    "workbench.colorTheme": "Material Theme Darker High Contrast",
+    // "editor.formatOnSave": true,
+    // "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["javascript"]
+}
+
+
+-Third
+-install the dependencies:
+npm i -D eslint eslint-config-prettier eslint-plugin-prettier prettier
+
+-go into .eslintrc and change it into like this:
+
+
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": [
+        "airbnb-base",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": ["prettier"],
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {
+        "prettier/prettier": "error"
+    }
+}
+
+
+-THEN, create a .prettierrc file
+paste the following inside :
+
+
+{
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": false
+  }

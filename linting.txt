@@ -6,6 +6,7 @@ run npm init like: npm init -y
 then run this code in your project folder :  npm install eslint --save-dev
 now we have npm_ modules and package.lock.json too
 then we need to initiate it by pasting: npx eslint --init
+CHOOSE "COMMON JS " YA BASTARD
 then, go to package.json file:
 there, you'll find sth like this:  
 "scripts": {

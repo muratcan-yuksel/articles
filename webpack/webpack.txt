@@ -58,6 +58,8 @@ change the scripts property as such:
  
  }
  
+ TO START BUNDLING WRITE "npx webpack"
+ 
  //USING LOADERS
  choose a loader you need. Let's say we need style loader and css loader. Let's install them
  npm install --save-dev style-loader css-loader

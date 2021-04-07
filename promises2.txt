@@ -1,0 +1,68 @@
+A promise takes two parameters: Resolve (success) and reject. It's created as such, using the new keyword:
+
+let p= new Promise((resolve, reject ) =>{
+let a = 1 + 1;
+if (a==2) {
+resolve ("success mate")
+}else{
+reject("failed fam")
+}
+})
+
+//"then" only follows the resolve, and catch follows the error:
+-> that "message" we gave as parameters takes whatever is inside the resolve, or reject. In our case, it'll take "success mate" if resolve, and "failed fam" if reject.
+
+and of course, you can write anything you want instead of "message"
+
+p.then ((message)=>{
+console.log("this is in the then" + message)
+}).catch((message)=>{
+console.log("this is in the catch" + message)
+})
+
+-------------
+promise.all example
+so I have 3 promises, each of them records a video, and I want to go to the next step only after all of them are recorded.
+
+const recordVideoOne = new Promise ((resolve, reject)=>{
+resolve ("video 1 recorded")
+})
+
+const recordVideoTwo = new Promise ((resolve, reject)=>{
+resolve ("video 2 recorded")
+})
+
+const recordVideoThree = new Promise ((resolve, reject)=>{
+resolve ("video 3 recorded")
+})
+
+Promise.all([
+recordVideoOne,
+recordVideoTwo,
+recordVideoThree
+]).then((messages)=>{
+console.log(messages)
+}) 
+the above will return an array
+so I can write this too:
+.then((messages)=>{
+console.log(messages[1])
+})
+
+If we wanted to run as soon as one of the videos are loaded, we'd use Promise.race:
+
+Promise.Race([
+recordVideoOne,
+recordVideoTwo,
+recordVideoThree
+]).then((messages)=>{
+console.log(messages)
+}) 
+the above will return an array
+so I can write this too:
+.then((message)=>{
+console.log(message)
+})
+
+=> see now it's not messages, but message. Bcs Promise.race will return only 1 of them.
+

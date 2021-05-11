@@ -1,0 +1,12 @@
+An important thing to understand is async functions are just syntactical sugar for promises.
+
+Also, asynch keyword can be used with anything that is a function. Like, whatever you can do with functions, you can add async into it. 
+Even in built-in methods, such as forEach:
+
+anArray.forEach(async item => {
+   // do something asynchronously for each item in 'anArray'
+   // one could also use .map here to return an array of promises to use with 'Promise.all()'
+ });
+ 
+ The await keyword
+await is pretty simple: it tells javascript to wait for an asynchronous action to finish before continuing the function. It’s like a ‘pause until done’ keyword. The await keyword is used to get a value from a function where you would normally use .then(). Instead of calling .then() after the asynchronous function, you would simply assign a variable to the result using await, then you can use the result in your code as you would in your synchronous code.

@@ -1,6 +1,9 @@
 Send data from parent to child
 
-Have a parent component: 
+Say you want to pass data between React components. As I've seen, there are a couple of ways to do it. What I'm gonna show here is just one of them. It's not using anything external, so a good practice (IMO) to practice one's React skills. In my case, I needed to get the user input from one component to another. To do this, I learned how to pass data between those two using a third (parent) component. I will try to show you actually how easy to do so.
+
+Let's start by the easiest step: Sending data from parent to child. For heuristic purposes, I'll use a function component for the child. Let's say we have a parent component called App. And let'ss make it a class component because we're going to make use of state in this example.
+
 
 class App extends Component {
   constructor(props) {
@@ -18,15 +21,19 @@ class App extends Component {
   }
 }
 
-Have a child component: (a function component for heurictic purposes):
+As you can see, I already included a component called Child1 inside the render methode, with the props "parentData" that's using the "data" object in App component's state. 
+
+Step 2: Declare a function component called Child1 and pass the parentData props in it.
 
 function Child1(props) {
   return <div>The data we're getting is : {props.parentData}</div>;
 }
+
+That's all, actually. Here we send the data from parent to child and from child, we can use it in the render methode. I don't know if anyone feels weird how these things work in React, because I do, but once you get the hang of it, it feels much comfortable to play with React.
 --------------------------------
 FROM CHILD TO PARENT
 
-Have a parent component:
+Now, let's see how we can pass data from child to parent. Because the parent component will be the medium we'll pass data between children. Let's rewrite our App class component 
 
 class App extends Component {
   constructor(props) {
@@ -34,19 +41,28 @@ class App extends Component {
 
     this.state = { data: "some data here" };
   }
-  handleCallback = (x) => {
-    this.setState({ data: x });
+  handleCallback = (childData) => {
+    this.setState({ data: childData });
   };
   render() {
     return (
       <div>
-      
-     
-        <p>{this.state.data}</p>
+        <Child1 parentData={this.state.data} />
+        <Child2 fromChild={this.handleCallback} />
+
       </div>
     );
   }
 }
+
+We've added some new things into the App class component. 
+-a handleCallback function that sets the sate with the data taken with "fromChild" props. 
+-rendered a Child2 component with fromChild props called the handleCallback methode. 
+
+Now, we need to write the Child2 component. For heuristic purposes again, I'
+
+
+
 
 the output would be : some data here
 
@@ -92,3 +108,5 @@ class App extends Component {
     );
   }
 }
+
+

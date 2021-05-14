@@ -59,14 +59,9 @@ We've added some new things into the App class component.
 -a handleCallback function that sets the sate with the data taken with "fromChild" props. 
 -rendered a Child2 component with fromChild props called the handleCallback methode. 
 
-Now, we need to write the Child2 component. For heuristic purposes again, I'
+Now, we need to write the Child2 component. For heuristic purposes again, I'm going to write this one as a class component. This shows us that the children need not to be the same type of components, indeed, one can be a class component and the other can be a function component. Just so we know.
 
-
-
-
-the output would be : some data here
-
-HAVE a child component (class component for heuristic purposes)
+Here's is our Child2 component:
 
 class Child2 extends Component {
   constructor(props) {
@@ -75,7 +70,7 @@ class Child2 extends Component {
     this.state = {};
   }
   sendData = () => {
-    this.props.fromChild("yow mate sup?");
+    this.props.fromChild("data sent by the child");
   };
 
   render() {
@@ -87,26 +82,21 @@ class Child2 extends Component {
   }
 }
 
-ADD child component to the parent component
+What do we have here?
+-A sendData function with the props fromChild 
+-a button that calls that sendData function on click.
+What will happen now? Well, remember we put that fromChild props in Child2 component while rendering it inside the App parent component. That fromChild props, in turn, was calling the handleCallback function that updates the App component's state. And remember, what was our first child component doing? Exactly, it was getting data from the App component's state. Now, as a result of the above steps, the first child componeent will get the data given by the second child component, using the parent as a medium.
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+If you pass these code lines, you'll see a button, and when you click the button, the text (i.e. data) will change.
 
-    this.state = { data: "some data here" };
-  }
-  handleCallback = (x) => {
-    this.setState({ data: x });
-  };
-  render() {
-    return (
-      <div>
-        {/* <Child1 parentData={this.state.data} /> */}
-        <Child2 fromChild={this.handleCallback} />
-        <p>{this.state.data}</p>
-      </div>
-    );
-  }
-}
+I hope this explanation was clear. I realized, whilst writing, how weird React works. But again, once you get the hang of it, things start to become quite automatic. 
+
+Anyway, have fun & keep coding!
+
+
+
+
+
+
 
 

@@ -1,0 +1,94 @@
+Send data from parent to child
+
+Have a parent component: 
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { data: "some data here" };
+  }
+
+  render() {
+    return (
+      <div>
+        <Child1 parentData={this.state.data} />
+      </div>
+    );
+  }
+}
+
+Have a child component: (a function component for heurictic purposes):
+
+function Child1(props) {
+  return <div>The data we're getting is : {props.parentData}</div>;
+}
+--------------------------------
+FROM CHILD TO PARENT
+
+Have a parent component:
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { data: "some data here" };
+  }
+  handleCallback = (x) => {
+    this.setState({ data: x });
+  };
+  render() {
+    return (
+      <div>
+      
+     
+        <p>{this.state.data}</p>
+      </div>
+    );
+  }
+}
+
+the output would be : some data here
+
+HAVE a child component (class component for heuristic purposes)
+
+class Child2 extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+  sendData = () => {
+    this.props.fromChild("yow mate sup?");
+  };
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.sendData}>Send data</button>
+      </div>
+    );
+  }
+}
+
+ADD child component to the parent component
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { data: "some data here" };
+  }
+  handleCallback = (x) => {
+    this.setState({ data: x });
+  };
+  render() {
+    return (
+      <div>
+        {/* <Child1 parentData={this.state.data} /> */}
+        <Child2 fromChild={this.handleCallback} />
+        <p>{this.state.data}</p>
+      </div>
+    );
+  }
+}

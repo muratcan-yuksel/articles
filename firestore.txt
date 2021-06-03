@@ -1,0 +1,9 @@
+#Firebase Firestore by The Net Ninja
+
+-create a project
+-in the prject panel, choose firebase firestore. That's the new one.
+-you can choose the test mode. Dunno the difference exactly.
+-in the firestore, start a collection. Enter a name for the collection
+-fields are key-value pairs. Like title, city etc. write whatever you want
+-add a value to it. It's like creating objects. 
+-go to the main place of the project and click on </> add your web app. Follow the instructions

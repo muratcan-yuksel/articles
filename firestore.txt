@@ -7,3 +7,8 @@
 -fields are key-value pairs. Like title, city etc. write whatever you want
 -add a value to it. It's like creating objects. 
 -go to the main place of the project and click on </> add your web app. Follow the instructions
+=> after you say firebase init, you'll be prompted with lots of questions. They're pretty self explanatory.
+--------------------------------------------
+second attempt withhttps://firebase.google.com/codelabs/firestore-web#3
+after creating the files, install the dependencies: npm -g install firebase-tools
+-log in : firebase login

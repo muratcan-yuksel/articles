@@ -12,3 +12,18 @@
 second attempt withhttps://firebase.google.com/codelabs/firestore-web#3
 after creating the files, install the dependencies: npm -g install firebase-tools
 -log in : firebase login
+-associate app with firebase: firebase use --add
+-run the local server: firebase emulators:start --only hosting
+--------- third attempt and this one WORKS!!!!!!!!!
+-create a firebase app-firestore database
+-npm init -y
+-npm install firebase
+-add the SDK +     <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script> in your HTML
+-in app.js create this: const db = firebase.firestore();
+-now you can manipulate it like this: db.collection("cafes")
+  .get()
+  .then((snapshot) => {
+    console.log(snapshot.docs);
+  });
+
+

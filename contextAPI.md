@@ -101,4 +101,116 @@ export default App;
 
 Here I just import the components I wish to share state between, plus {DataProvider} from the provider component. See that the import is in curly brackets because there are more than one function to be imported in that component, and I only need the DataProvider function here.
 
-Then, I list all the components I want to share state between inside the <DataProvider>
+Then, I list all the components I want to share state between inside the <DataProvider> and I'm good to go. Now DataOne.js, DataTwo.js and Display.js will share data.
+
+Now let's create the other two components that'll send the data.
+
+### Send data between components
+
+Check this snippet from DataOne.j out:
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+// using curly brackets bcs we have more than one export
+
+export default function DataOne() {
+
+    const [state,setState]= useState("Data coming from DataOne.js")
+
+    const [data,setData]= useContext(DataContext)
+
+    const addDataOne = () =>{
+        setData([...data, state])
+    }
+
+    return (
+        <div>
+            <button onClick={addDataOne}>Click to add data from DataOne</button>
+            
+        </div>
+    )
+}
+
+```
+
+So, I import useState and useContext hooks from React. Attention!=> in DataProvider.js I imported the hook "createContext", here I import "useContext" because I already created my context, now I will use it. Then I declare the state and give it a string of "Data coming from DataOne.js". 
+
+The important part here is I declare a useContext hook in a similar manner to useState hook, and pass it the DataContext from the provider component. Note that DataContext in DataProvider.js was this one: 
+
+```
+export const DataContext= createContext([]);
+
+```
+In the following I create a button that will add the state into the context array with Javascript spread operator. Now, whenever I click into that button, the string "Data coming from DataOne.js" will be added to my context and will be available to any of the components the provider has access to.
+
+Now I do the same for DataTwo.js, except I change names accordingly:
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+// using curly brackets bcs we have more than one export
+
+export default function DataTwo() {
+
+    const [state,setState]= useState("Data coming from DataTwo.js")
+
+    const [data,setData]= useContext(DataContext)
+
+    const addDataTwo = () =>{
+        setData([...data, state])
+    }
+
+    return (
+        <div>
+            <button onClick={addDataTwo}>Click to add data from DataTwo</button>
+            
+        </div>
+    )
+}
+```
+### Using the data
+
+In the Display.js, I write the following code:
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+export default function Display() {
+    const [data,setData] = useContext(DataContext)
+  
+
+//here map is using regular brackects (), not curly brackets.
+    const mappedData= data.map((item=>(
+        <li>{item}</li>
+      
+    )))
+    console.log(mappedData)
+
+ 
+    return (
+        <div>
+            <ul>
+     {mappedData}
+
+         
+            </ul>
+        </div>
+    )
+}
+```
+I import {DataContext} in curly brackets from the provider, and {useState, useContext} hooks from React like I did in DataOne.js and DataTwo.js, declare the context with the useContext hook, then simply map the array into a list so that whenever I click on one of the buttons, their respective components will send their state to the global state stored in DataProvider.js, and in turn the provider will provide the data with all the components I specified. Therefore, with each click, a string item will be added to the array to be displayed on the page. Like so:
+
+ADD IMG HERE
+
+### Conclusion
+
+Context API is an easy and no hassle was for developers who wish to share data between components without using a third party library like Redux.
+
+I hope I was able to help someone out.
+
+Happy coding!
+

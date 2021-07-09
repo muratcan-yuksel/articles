@@ -70,3 +70,35 @@ In order for the provider to provide data with a certain component, that compone
 ```
 
 or you use {props.children} in the case that you need lots of components to share state. I'll show how to enable this <DataProvider> in the next section. But before that, I want to stress that the value given to <DataProvider> is the data that will be shared accross components. If I gave "Hello, world!" as value, like so `<DataContext.Provider value="Hello, world!">` all the components I specify would share this single string. In my case, I want the data to be dynamic, so I use a useState hook.
+
+### Wrapping components to share state with each other
+
+Check out this snippet of App.js:
+
+```
+import React from "react"
+import Display from "./Display"
+import DataOne from "./DataOne"
+import DataTwo from "./DataTwo"
+import {DataProvider} from "./DataProvider"
+
+function App() {
+  return (
+    <div>
+      <DataProvider>    
+        <DataOne />
+        <DataTwo />
+        <Display />
+      </DataProvider>
+
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Here I just import the components I wish to share state between, plus {DataProvider} from the provider component. See that the import is in curly brackets because there are more than one function to be imported in that component, and I only need the DataProvider function here.
+
+Then, I list all the components I want to share state between inside the <DataProvider>

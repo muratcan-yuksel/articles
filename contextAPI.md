@@ -53,4 +53,20 @@ What's going on here? I import useState and createContext hooks from React, as y
 
 I invoke the createContext hook in DataContext costant. Note that you can give whatever name you wish in lieu of DataContext. I specify that the context is an array for my future use. This is the context that I will be calling in other components with the useContext hook. We'll look at that in a minute.
 
-Next, I declare the provider in DataProvider. This function is the provider, which means that it will contain and provide the necessary data with other components. 
+Next, I declare the provider in DataProvider. This function is the provider, which means that it will contain and provide the necessary data with other components. It can be seen that I pass "props" inside brackets and use {props.children} in the return statement. I also declare a useState hook, and give it as the provider's value. What do all of these mean?
+
+In order for the provider to provide data with a certain component, that component must be introduced to the provider. There are two ways I know of how to do that: Either you list all the components you wish to share state in between <DataContext.Provider> like so :
+
+```
+<DataContext.Provider value={[data,setData]}>
+
+<Display.js/>
+<DataOne.js/>
+<DataTwo.js>
+
+</DataContext.Provider >
+            
+
+```
+
+or you use {props.children} in the case that you need lots of components to share state. I'll show how to enable this <DataProvider> in the next section. But before that, I want to stress that the value given to <DataProvider> is the data that will be shared accross components. If I gave "Hello, world!" as value, like so `<DataContext.Provider value="Hello, world!">` all the components I specify would share this single string. In my case, I want the data to be dynamic, so I use a useState hook.

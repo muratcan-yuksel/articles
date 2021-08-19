@@ -143,3 +143,10 @@ return res.end();
 });
 })
 .listen(8080);
+////////CREATE FILES
+THe following creates a new file called newFile1 and writes Hello content! in it
+const fs = require("fs");
+fs.appendFile("newFile1.txt", "Hello content!", (err) => {
+  if (err) throw err;
+  console.log("saved!");
+});

@@ -181,7 +181,7 @@ Now, the moment we click on the button displayed, our global store will take the
 
 You see we're not making use of the data variable, i.e. the data in our global store. I just put it there so that we can be sure that if we wanted to display the data, even in this same component that the data was given, we could do that very easily just by returning it, and that's how we'll get the global store's data anyway.
 
-###Components: SecondComp.js
+### Components: SecondComp.js
 
 Our second component is almost the same as the first one. The only difference being in the message it sends. Check it out:
 
@@ -230,3 +230,36 @@ export default ThirdComp;
 ```
 
 Note that we neither imported nor used dispatch. Because we don't need it. We're not going to change the state from this component, we're just going to display it. So we have our useSelector from react-redux, and use it on a data variable (again, the name can be anything we wanted)
+
+Now let's add our components in our App.js file.
+
+### App.js
+
+```
+import FirstComp from "./components/FirstComp";
+import SecondComp from "./components/SecondComp";
+import ThirdComp from "./components/ThirdComp";
+
+function App() {
+  return (
+    <div className="App">
+      <div style={{ border: "2px solid black" }}>
+        <FirstComp />
+      </div>
+      <div style={{ border: "2px solid red" }}>
+        <SecondComp />
+      </div>
+      <ThirdComp />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Now, if we did everything according to the book, we should see two buttons and whenever we click one of them, we should see their respective messages on our screen. Now, here I used a very basic structure and you might be wondering why the hell would you need Redux Toolkit to do something so basic, and I'd say you never know how complicated things can get be, and it's better to know how to handle the complicity than not.
+
+That's all for today folks!
+
+Happy coding!

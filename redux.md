@@ -154,15 +154,12 @@ import { getData } from "../features/myStore";
 
 const FirstComp = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.theStore.value);
+  //we're not using data in this component
+  //const data = useSelector((state) => state.theStore.value);
 
   const sendData = () => {
     dispatch(getData("Hello from the first component"));
-    // console.log("Hello from the first component");
-    console.log("hey" + data);
   };
-
-  // dispatch(getData(json.data));
 
   return (
     <div>
@@ -176,4 +173,60 @@ export default FirstComp;
 
 What's happening here is, as you can see, we're importing useSelector and useDispatch from react-redux, and our getData function from myStore.js. Inside the function, we create a dispatch variable. This dispatch variable is responsible of sending desired data to the store. And we create a data variable, which, by using useSelector, grabs the state from our store.
 
-In the terms of useState hook what we've done is quite similar to the following: `const [state, setState]= useState("")` => Here, state being the data variable, setState working similar to the dispatch variable, and the data in our myStore.js being the value in useState hook.
+In the terms of useState hook what we've done is quite similar to the following: `const [state, setState]= useState("")` => Here, state being the data variable, setState working similar to the dispatch variable, and the data managed in our myStore.js being the value in useState hook.
+
+In the sendData function, we use dispatch on the getData function to change it with our message ("Hello from the first component"). The button activates the sendData function on click.
+
+Now, the moment we click on the button displayed, our global store will take the value invoked by "dispatch".
+
+You see we're not making use of the data variable, i.e. the data in our global store. I just put it there so that we can be sure that if we wanted to display the data, even in this same component that the data was given, we could do that very easily just by returning it, and that's how we'll get the global store's data anyway.
+
+###Components: SecondComp.js
+
+Our second component is almost the same as the first one. The only difference being in the message it sends. Check it out:
+
+```
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getData } from "../features/myStore";
+
+const SecondComp = () => {
+  const dispatch = useDispatch();
+  //we're not using data in this component
+  //const data = useSelector((state) => state.theStore.value);
+
+  const sendData = () => {
+    dispatch(getData("Hello from the SECOND component"));
+  };
+
+  return (
+    <div>
+      <button onClick={sendData}>Send data</button>
+    </div>
+  );
+};
+
+export default SecondComp;
+```
+
+So, now, whenever I click this or that button, the global store's value will reflect the componant that the button was clicked on. Now we'd probably like to display the data we stored globally somewhere.
+
+### Components: ThirdComp.js
+
+In our ThirdComp.js file, let's write these lines:
+
+```
+import React from "react";
+import { useSelector } from "react-redux";
+
+const ThirdComp = () => {
+  const data = useSelector((state) => state.theStore.value);
+
+  return <div>{data}</div>;
+};
+
+export default ThirdComp;
+
+```
+
+Note that we neither imported nor used dispatch. Because we don't need it. We're not going to change the state from this component, we're just going to display it. So we have our useSelector from react-redux, and use it on a data variable (again, the name can be anything we wanted)

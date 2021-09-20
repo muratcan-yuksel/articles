@@ -16,6 +16,8 @@ echo $my_var;
 
 <!-- document.getElementByName("sth") equals to $_GET["sth"] -->
 
+array.length equals to echo count(array)
+
 # Concepts
 
 ## Variables
@@ -98,3 +100,26 @@ with post, the url doesn't show the user input
 with info gathering, generally post is used
 
 ### Arrays
+
+<?php
+ $myArr= array("Kevin", false, "Karen", 12, "47agent");
+?>
+
+## Associative arrays
+
+are basically objects with key/value pairs.
+e.g.
+
+<?php
+$grades=array("Jim" => "A+", "Pam" => "B-", );
+//to change a key's value:
+$grades ["Jim"] = "F";
+echo $grades["Jim"];
+?>
+
+## Functions
+
+<?php
+
+
+?>

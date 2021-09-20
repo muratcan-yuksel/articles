@@ -12,6 +12,10 @@ $name= "Yoshi";
 $my_var = 1;
 echo $my_var;
 
+////
+
+<!-- document.getElementByName("sth") equals to $_GET["sth"] -->
+
 # Concepts
 
 ## Variables
@@ -68,4 +72,29 @@ it's much easier to do than in JS
 $phrase = "Giraffe academy";
 echo str_replace ("Odin", "Project", $phrase);
 
-### Working with numbers
+### getting user input
+<form action ="index.php" method="get">
+Name: <input type="text" name="nameInput">
+<input type="submit">
+</form>
+
+<?php
+echo $_GET["nameInput"] => get's and writes the given name of the input.
+
+?>
+
+### URL parameters
+
+are used to get a state of information, like the saved user input. You could've used this logic in your CV app, to save and redisplay the user input.
+get is used for that
+
+### POST method
+
+<form  method="post">
+echo $_POST["theName of the input"]
+
+to get info securely
+with post, the url doesn't show the user input
+with info gathering, generally post is used
+
+### Arrays

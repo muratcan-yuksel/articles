@@ -123,3 +123,27 @@ echo $grades["Jim"];
 
 
 ?>
+
+## While loops
+
+<?php
+
+$index=1;
+
+while($index <= 5){
+echo "$index <br>";
+$index++;
+
+};
+
+?>
+
+## For loops
+
+<?php
+$nums= array(4,8,14,16,23,42);
+for ($i = 0; $i <= count($nums); $i++){
+    echo "$nums[$i] <br>";
+};
+
+?>

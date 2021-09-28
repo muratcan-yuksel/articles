@@ -21,3 +21,17 @@ class App extends Component {
   }
 }
 ```
+
+Comme on peut le voir, j'ai déjà inclus un composant Child1 dans la méthode render, avec les props "parentData" qui utilisent l'objet "data" dans l'état du composant App.
+
+Étape 2 : On déclare un function component Child1 et transmettez-y les props parentData.
+
+```
+function Child1(props) {
+  return <div>The data we're getting is : {props.parentData}</div>;
+}
+```
+
+C'est tout, en fait. Ici, l'on envoie les données du parent à l'enfant, et de l'enfant, on peut l'utiliser dans la méthode render. Je ne sais pas si quelqu'un se sent bizarre comment ces choses fonctionnent dans React, parce que je l'ai senti comme ça, mais une fois que l'on a compris, il est très confortable de jouer avec React.
+
+## Du composant enfant au parent (et de là à un autre enfant)

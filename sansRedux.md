@@ -45,3 +45,24 @@ export const DataProvider=(props)=>{
 
 }
 ```
+
+Que se passe t-il ici? J'importe les hooks useState et createContext de React, comme vous le voyez, ils sont intégrés de React.js. Comme je l'ai indiqué dans les commentaires, je n'utilise pas "export default" ici car il y a plus d'une fonction à exporter.
+
+J'invoque le hook createContext dans la constante DataContext. Notez que vous pouvez donner le nom que vous souhaitez à la place de DataContext. Je précise que le contexte est un array pour mon utilisation future. C'est le contexte que j'appellerai dans d'autres composants avec le hook useContext. Nous verrons cela dans une minute.
+
+Ensuite, je déclare le fournisseur dans DataProvider. Cette fonction est le fournisseur, ce qui signifie qu'elle contiendra et fournira les données nécessaires avec d'autres composants. On peut voir que je passe "props" entre parenthèses et que j'utilise {props.children} dans l'instruction return. Je déclare également un hook useState et le donne comme valeur du fournisseur. Qu'est-ce que tout cela signifie?
+
+Pour que le fournisseur fournisse des données avec un certain composant, ce composant doit être présenté au fournisseur. Il y a deux manières que je connais de faire cela : Soit vous listez tous les composants que vous souhaitez partager entre eux comme ceci :
+
+```
+<DataContext.Provider value={[data,setData]}>
+
+<Display.js/>
+<DataOne.js/>
+<DataTwo.js>
+
+</DataContext.Provider >
+```
+
+ou vous utilisez {props.children} dans le cas où vous avez besoin de nombreux composants pour partager l'état. Je vais montrer comment activer cela dans la section suivante. Mais avant cela, je tiens à souligner que la valeur donnée à est les données qui seront partagées entre les composants. Si je donnais "Hello, world!" comme valeur, comme
+`<DataContext.Provider value="Hello, world!">` tous les composants que je spécifie partageraient cette string unique. Dans mon cas, je veux que les données soient dynamiques, j'utilise donc un hook useState.

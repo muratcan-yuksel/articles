@@ -66,3 +66,63 @@ Pour que le fournisseur fournisse des données avec un certain composant, ce com
 
 ou vous utilisez {props.children} dans le cas où vous avez besoin de nombreux composants pour partager l'état. Je vais montrer comment activer cela dans la section suivante. Mais avant cela, je tiens à souligner que la valeur donnée à est les données qui seront partagées entre les composants. Si je donnais "Hello, world!" comme valeur, comme
 `<DataContext.Provider value="Hello, world!">` tous les composants que je spécifie partageraient cette string unique. Dans mon cas, je veux que les données soient dynamiques, j'utilise donc un hook useState.
+
+## Envelopper les composants pour partager l'état entre eux
+
+```
+import React from "react"
+import Display from "./Display"
+import DataOne from "./DataOne"
+import DataTwo from "./DataTwo"
+import {DataProvider} from "./DataProvider"
+
+function App() {
+  return (
+    <div>
+      <DataProvider>
+        <DataOne />
+        <DataTwo />
+        <Display />
+      </DataProvider>
+
+    </div>
+  );
+}
+
+export default App;
+```
+
+Ici, je viens d'importer les composants entre lesquels je souhaite partager l'état, plus {DataProvider} du composant fournisseur. Voyez que l'importation est entre curly brackets car il y a plus d'une fonction à importer dans ce composant, et j'ai seulement besoin de la fonction DataProvider ici.
+
+Ensuite, je liste tous les composants avec lesquels je souhaite partager l'état. Désormais, DataOne.js, DataTwo.js et Display.js partageront les données.
+
+Créons maintenant les deux autres composants qui enverront les données.
+
+## Envoyer des données entre les composants
+
+Découvrez cet extrait de DataOne.js :
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+// using curly brackets bcs we have more than one export
+
+export default function DataOne() {
+
+    const [state,setState]= useState("Data coming from DataOne.js")
+
+    const [data,setData]= useContext(DataContext)
+
+    const addDataOne = () =>{
+        setData([...data, state])
+    }
+
+    return (
+        <div>
+            <button onClick={addDataOne}>Click to add data from DataOne</button>
+
+        </div>
+    )
+}
+```

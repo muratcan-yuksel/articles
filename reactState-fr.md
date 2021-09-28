@@ -86,3 +86,11 @@ class Child2 extends Component {
   }
 }
 ```
+
+Qu'avons-nous ici ? -Une fonction sendData avec les props fromChild -un bouton qui appelle cette fonction sendData au clic. Ce qui va se passer maintenant? Eh bien, rappelez-vous que nous avons mis les props fromChild dans le composant Child2 tout en le rendrent dans le composant parent App. Les props fromChild, à leur tour, appelaient la fonction handleCallback qui met à jour l'état du composant App. Et rappelez-vous, que faisait notre premier composant enfant ? Exactement, il obtenait des données de l'état du composant App. Maintenant, à la suite des étapes ci-dessus, le premier composant enfant obtiendra les données fournies par le deuxième composant enfant, en utilisant le parent comme un moyen.
+
+Si vous écrivez ces lignes de code, vous verrez un bouton, et lorsque vous cliquez sur le bouton, le texte (c'est-à-dire les données) changera.
+
+J'espère que cette explication était claire. J'ai réalisé, en écrivant, à quel point React fonctionnait bizarrement. Mais encore une fois, une fois que vous l'avez comprendre, les choses commencent à devenir assez automatiques.
+
+Alors, amusez-vous et continuez à coder!

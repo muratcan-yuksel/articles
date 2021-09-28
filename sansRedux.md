@@ -198,3 +198,13 @@ export default function Display() {
 ```
 
 J'importe {DataContext} entre les curly brackets d'auprès du fournisseur et les hooks {useState, useContext} de React comme je l'ai fait dans DataOne.js et DataTwo.js, je déclare le contexte avec le hook useContext, puis mappe simplement l'array dans une liste afin que chaque fois que je clique sur l'un des boutons, leurs composants respectifs enverront leur état à l'état global stocké dans DataProvider.js, et à son tour, le fournisseur fournira les données avec tous les composants que j'ai spécifiés. Par conséquent, à chaque clic, un élément string sera ajouté au array à afficher sur la page. Comme ça:
+
+ENTER IMG HERE
+
+## Conclusion
+
+L'API de contexte est un moyen simple et sans tracas pour les développeurs qui souhaitent partager des données entre des composants sans utiliser une bibliothèque tierce comme Redux.
+
+J'espère avoir pu aider quelqu'un.
+
+Bon coding !

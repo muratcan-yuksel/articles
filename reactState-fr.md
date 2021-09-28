@@ -35,3 +35,54 @@ function Child1(props) {
 C'est tout, en fait. Ici, l'on envoie les données du parent à l'enfant, et de l'enfant, on peut l'utiliser dans la méthode render. Je ne sais pas si quelqu'un se sent bizarre comment ces choses fonctionnent dans React, parce que je l'ai senti comme ça, mais une fois que l'on a compris, il est très confortable de jouer avec React.
 
 ## Du composant enfant au parent (et de là à un autre enfant)
+
+Voyons maintenant comment nous pouvons transmettre des données de l'enfant au parent. Parce que le composant parent sera le moyen par où nous transmettrons les données entre les enfants. Réécrivons notre composant de classe App:
+
+```
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { data: "some data here" };
+  }
+  handleCallback = (childData) => {
+    this.setState({ data: childData });
+  };
+  render() {
+    return (
+      <div>
+        <Child1 parentData={this.state.data} />
+        <Child2 fromChild={this.handleCallback} />
+
+      </div>
+    );
+  }
+}
+```
+
+Nous avons fait de nouvelles choses avec le composant de classe App. On a ajouté d'une fonction handleCallback qui définit l'état avec les données prises par les props "fromChild". - On a rendu un composant Child2 avec les props fromChild qui appele la fonction handleCallback.
+
+Maintenant, nous devons écrire le composant Child2. Pour faciliter les choses encore une fois, je vais écrire celui-ci en tant que composant de classe. Cela nous montre que les enfants n'ont pas besoin d'être du même type de composants, en effet, l'un peut être un composant de classe et l'autre peut être un composant de fonction. Juste pour que nous le sachions.
+
+Voici notre composant Child2 :
+
+```
+class Child2 extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+  sendData = () => {
+    this.props.fromChild("data sent by the child");
+  };
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.sendData}>Send data</button>
+      </div>
+    );
+  }
+}
+```

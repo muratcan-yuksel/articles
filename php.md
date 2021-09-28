@@ -147,3 +147,55 @@ for ($i = 0; $i <= count($nums); $i++){
 };
 
 ?>
+
+## Include keyword
+
+basically its creating a component
+e.g.
+Say I have a header.html file
+in a php file, I can add it like so:
+
+<body>
+<?php include "header.html ?>
+<p> hello world </p>
+</body>
+
+## Classes & objects
+
+### classes
+
+<?php
+//blueprint of our Book class
+class Book{
+    var $title;
+    var $author;
+    var $pages;
+}
+//create a new Book object 
+$book1 = new Book;
+$book1->title= "Harry Potter";
+$book->author="JK ROwling";
+$book1->pages="400";
+
+echo $book1->author;
+
+?>
+
+class somehow doesn't work.
+
+### Constructors
+
+class Book {
+var $title;
+var $author;
+var $pages;
+//you have to name it like this. 2 underscores and so on.
+//for each and eveyr object created, this function gets executed.
+function \_\_construct($aTitle, $anAuthor, $aPages){
+$this->title = $aTitle;
+$this->author = $anAUthor;
+$this->pages= $aPages;
+}
+}
+
+$book1= new Book("Harry Potter", "JK Rowling", 400);

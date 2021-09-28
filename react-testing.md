@@ -1,6 +1,6 @@
 import {render, fireEvent} from "@testing-library/react";
 
-import Button from "./BUtton" => imported a component, any component
+import Button from "./Button" => imported a component, any component
 
 //checks whether a component is rendered or not
 it("checkButtonRender"), ()=> {

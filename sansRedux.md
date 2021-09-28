@@ -126,3 +126,11 @@ export default function DataOne() {
     )
 }
 ```
+
+Donc, j'importe les hooks useState et useContext de React. Attention !=> dans DataProvider.js j'ai importé le hook "createContext", ici j'importe "useContext" car j'ai déjà créé mon contexte, maintenant je vais l'utiliser. Ensuite, je déclare l'état et lui donne une string de "Data coming from DataOne.js".
+
+La partie importante ici est que je déclare un hook useContext de la même manière que le hook useState et que je lui passe le DataContext d'auprès du composant fournisseur. Notez que DataContext dans DataProvider.js était celui-ci :
+
+```
+export const DataContext= createContext([]);
+```

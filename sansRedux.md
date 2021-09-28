@@ -134,3 +134,67 @@ La partie importante ici est que je déclare un hook useContext de la même mani
 ```
 export const DataContext= createContext([]);
 ```
+
+Dans ce qui suit, je crée un bouton qui ajoutera l'état dans le tableau de contexte avec l'opérateur spread de Javascript. Désormais, chaque fois que je clique sur ce bouton, la string "Data coming from DataOne.js" sera ajoutée à mon contexte et sera disponible pour tous les composants auxquels le fournisseur a accès.
+
+Maintenant, je fais la même chose pour DataTwo.js, sauf que je change les noms selon lui :
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+// using curly brackets bcs we have more than one export
+
+export default function DataTwo() {
+
+    const [state,setState]= useState("Data coming from DataTwo.js")
+
+    const [data,setData]= useContext(DataContext)
+
+    const addDataTwo = () =>{
+        setData([...data, state])
+    }
+
+    return (
+        <div>
+            <button onClick={addDataTwo}>Click to add data from DataTwo</button>
+
+        </div>
+    )
+}
+```
+
+## Utilisation des données
+
+Dans Display.js, j'écris le code suivant :
+
+```
+import React, {useState, useContext} from 'react'
+import { DataContext } from './DataProvider'
+
+export default function Display() {
+    const [data,setData] = useContext(DataContext)
+
+
+//here map is using regular brackets (), not curly brackets.
+    const mappedData= data.map((item=>(
+        <li>{item}</li>
+
+    )))
+    console.log(mappedData)
+
+
+    return (
+        <div>
+            <ul>
+     {mappedData}
+
+
+            </ul>
+        </div>
+    )
+}
+
+```
+
+J'importe {DataContext} entre les curly brackets d'auprès du fournisseur et les hooks {useState, useContext} de React comme je l'ai fait dans DataOne.js et DataTwo.js, je déclare le contexte avec le hook useContext, puis mappe simplement l'array dans une liste afin que chaque fois que je clique sur l'un des boutons, leurs composants respectifs enverront leur état à l'état global stocké dans DataProvider.js, et à son tour, le fournisseur fournira les données avec tous les composants que j'ai spécifiés. Par conséquent, à chaque clic, un élément string sera ajouté au array à afficher sur la page. Comme ça:

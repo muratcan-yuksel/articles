@@ -69,3 +69,112 @@ Qu'est-ce qu'il se passe ici?
 Comme je l'ai mentionné, je ne pense pas que nous ayons besoin de savoir ce que chaque chose fait ici pour démarrer avec Redux Toolkit. Je ne me souviens même pas de ce que chaque chose faisait, et je m'en fiche vraiment.
 
 Maintenant, allons à notre index.js et assurez-vous que notre application peut utiliser ce store.
+
+## index.js
+
+Dans index.js, collons ce code :
+
+```
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+//add the following to use Redux
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import dataReducer from "./features/myStore";
+
+const store = configureStore({
+  reducer: {
+    theStore: dataReducer,
+  },
+});
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+Comme vous pouvez le voir, la différence avec un fichier index.js habituel est que nous avons importé les éléments suivants :
+
+```
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import dataReducer from "./features/myStore";
+```
+
+Configurer notre store avec le dataReducer que nous avons importé de myStore.js,
+
+```
+const store = configureStore({
+  reducer: {
+    theStore: dataReducer,
+  },
+});
+```
+
+(Notez que ce "dataReducer" aurait pu être nommé n'importe quoi. Son nom dépend entièrement de vous.)
+
+Et enfin, enveloppé notre application avec le fournisseur de store,
+
+```
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+```
+
+Avec ces changements, notre store devrait être prête et nous pouvons commencer à la définir ou à en obtenir des données. Commençons alors à travailler sur nos composants.
+
+## Composants : FirstComp.js
+
+Dans notre FirstComp.js, nous collons les lignes suivantes :
+
+```
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getData } from "../features/myStore";
+
+const FirstComp = () => {
+  const dispatch = useDispatch();
+  //we're not using data in this component
+  //const data = useSelector((state) => state.theStore.value);
+
+  const sendData = () => {
+    dispatch(getData("Hello from the first component"));
+  };
+
+  return (
+    <div>
+      <button onClick={sendData}>Send data</button>
+    </div>
+  );
+};
+
+export default FirstComp;
+```
+
+Ce qui se passe ici, comme vous pouvez le voir, c'est que nous importons useSelector et useDispatch de react-redux, et notre fonction getData de myStore.js. À l'intérieur de la fonction, nous créons une variable de dispatch. Cette variable de dispatch est responsable de l'envoi des données souhaitées au store. Et nous créons une variable de données qui, en utilisant useSelector, récupère l'état de notre store.
+
+Dans les termes du hook useState, ce que nous avons fait est assez similaire à ce qui suit : `const [state, setState]= useState("") ` => Ici, state étant la variable de données, setState fonctionnant de manière similaire à la variable de dispatch, et le les données gérées dans notre myStore.js étant la valeur dans le hook useState.
+
+Dans la fonction sendData, nous utilisons dispatch sur la fonction getData pour le modifier avec notre message ("Bonjour du premier composant"). Le bouton active la fonction sendData au clic.
+
+Maintenant, au moment où nous cliquons sur le bouton affiché, notre store global prendra la valeur invoquée par "dispatch".
+
+Vous voyez que nous n'utilisons pas la variable de données, c'est-à-dire les données de notre store global. Je l'ai juste mis là pour que nous puissions être sûrs que si nous voulions afficher les données, même dans ce même composant que les données ont été fournies, nous pourrions le faire très facilement simplement en le retournant, et c'est ainsi que nous obtiendrons le les données du store global de toute façon.

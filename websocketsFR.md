@@ -28,3 +28,91 @@ Maintenant, abonnez-vous à une chaîne. Je vais m'abonner au canal oder_book_v2
     data: { channel: "order_book_btcusd" },
   };
 ```
+
+L'étape suivante consiste à envoyer cet appel au serveur en l'ouvrant =>
+
+```
+  ws.onopen = (event) => {
+    ws.send(JSON.stringify(apiCall));
+  };
+```
+
+Maintenant, nous voulons faire quelque chose avec chaque donnée. Donc, chaque fois que nous recevons un message du serveur, nous ferons quelque chose. Écrivons un code asynchrone avec try/catch
+
+```
+
+ws.onmessage = function (event) {
+const json = JSON.parse(event.data);
+console.log(`[message] Data received from server: ${json}`);
+try {
+if ((json.event = "data")) {
+
+        console.log(json.data);
+      }
+    } catch (err) {
+      // whatever you wish to do with the err
+    }
+
+};
+```
+
+Si nous ouvrons la console, nous verrions une grande quantité de données provenant du serveur. C'est ça, en fait. Nous avons les données, elles arrivent dans un flux, et nous pouvons faire ce que nous voulons avec eux. C'est si facile.
+
+Cependant je veux afficher les données d'une manière particulière . Laissez-moi coller le code et je vous expliquerai immédiatement après :
+
+```
+import React, { useState } from "react";
+
+function  App() {
+  //give an initial state so that the data won't be undefined at start
+  const [bids, setBids] = useState([0]);
+
+  const ws = new WebSocket("wss://ws.bitstamp.net");
+
+  const apiCall = {
+    event: "bts:subscribe",
+    data: { channel: "order_book_btcusd" },
+  };
+
+  ws.onopen = (event) => {
+    ws.send(JSON.stringify(apiCall));
+  };
+
+  ws.onmessage = function (event) {
+    const json = JSON.parse(event.data);
+    try {
+      if ((json.event = "data")) {
+        setBids(json.data.bids.slice(0, 5));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  //map the first 5 bids
+  const firstBids = bids.map((item) => {
+    return (
+      <div>
+        <p> {item}</p>
+      </div>
+    );
+  });
+
+  return <div>{firstBids}</div>;
+}
+
+export default  App;
+```
+
+Alors, que se passe-t-il ici ? Comme vous pouvez le voir, il s'agit d'un composant très basique de l'application React.js. J'utilise useState hook donc je l'importe aussi avec react.
+
+Je définis l'état et lui donne une valeur initiale.
+
+Je procède comme indiqué précédemment, sauf que je définis l'état à json.data.bids (les offres étant une propriété du canal de live order et indiquées sur la page de bitstamp) et limite la quantité de données que je recevrai à 5, pour faciliter les choses.
+
+Je mappe les données que je reçois, enregistrées dans l'état (comme vous le savez, React demande une clé pour chaque élément. Je ne l'utiliserai pas ici. J'utilise généralement uniqid pour cela, vous pouvez le faire vous-même.)
+
+Je retourne les données mappées et voilà ! Si vous faites de même, vous devriez voir exactement 5 lignes de données en constante évolution à l'écran.
+
+J'espère que cet article aidera quelqu'un.
+
+Cordialement et continuez à coder!

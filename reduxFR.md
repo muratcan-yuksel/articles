@@ -178,3 +178,84 @@ Dans la fonction sendData, nous utilisons dispatch sur la fonction getData pour 
 Maintenant, au moment où nous cliquons sur le bouton affiché, notre store global prendra la valeur invoquée par "dispatch".
 
 Vous voyez que nous n'utilisons pas la variable de données, c'est-à-dire les données de notre store global. Je l'ai juste mis là pour que nous puissions être sûrs que si nous voulions afficher les données, même dans ce même composant que les données ont été fournies, nous pourrions le faire très facilement simplement en le retournant, et c'est ainsi que nous obtiendrons le les données du store global de toute façon.
+
+## Composants: SecondComp.js
+
+Notre deuxième composant est presque le même que le premier. La seule différence réside dans le message qu'il envoie. Regardez-le:
+
+```
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getData } from "../features/myStore";
+
+const SecondComp = () => {
+  const dispatch = useDispatch();
+  //we're not using data in this component
+  //const data = useSelector((state) => state.theStore.value);
+
+  const sendData = () => {
+    dispatch(getData("Hello from the SECOND component"));
+  };
+
+  return (
+    <div>
+      <button onClick={sendData}>Send data</button>
+    </div>
+  );
+};
+
+export default SecondComp;
+```
+
+Donc, maintenant, chaque fois que je clique sur tel ou tel bouton, la valeur du store global reflétera le composant sur lequel le bouton a été cliqué. Maintenant, nous aimerions probablement afficher les données que nous avons stockées globalement quelque part.
+
+## Composants: ThirdComp.js
+
+Dans notre fichier ThirdComp.js, écrivons ces lignes :
+
+```
+import React from "react";
+import { useSelector } from "react-redux";
+
+const ThirdComp = () => {
+  const data = useSelector((state) => state.theStore.value);
+
+  return <div>{data}</div>;
+};
+
+export default ThirdComp;
+```
+
+Notez que nous n'avons ni importé ni utilisé dispatch. Parce que nous n'en avons pas besoin. Nous n'allons pas changer l'état de ce composant, nous allons juste l'afficher. Nous avons donc notre useSelector de react-redux, et l'utilisons sur une variable de données (encore une fois, le nom peut être tout ce que nous voulions)
+
+Ajoutons maintenant nos composants dans notre fichier App.js.
+
+## App.js
+
+```
+import FirstComp from "./components/FirstComp";
+import SecondComp from "./components/SecondComp";
+import ThirdComp from "./components/ThirdComp";
+
+function App() {
+  return (
+    <div className="App">
+      <div style={{ border: "2px solid black" }}>
+        <FirstComp />
+      </div>
+      <div style={{ border: "2px solid red" }}>
+        <SecondComp />
+      </div>
+      <ThirdComp />
+    </div>
+  );
+}
+
+export default App;
+```
+
+Maintenant, si nous avons tout fait correctement, nous devrions voir deux boutons et chaque fois que nous cliquons sur l'un d'eux, nous devrions voir leurs messages respectifs sur notre écran. Maintenant, ici, j'ai utilisé une structure très basique et vous vous demandez peut-être pourquoi auriez-vous besoin de Redux Toolkit pour faire quelque chose d'aussi basique, et je dirais que vous ne savez jamais à quel point les choses peuvent devenir compliquées, et il vaut mieux savoir comment gérer la complexité que non.
+
+C'est tout pour aujourd'hui mes ami/e/s !
+
+Bon codage !

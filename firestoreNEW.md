@@ -153,3 +153,5 @@ I need to reference the individual document that I wish to update
 db.collection("cafes").doc("323kzpPQ3liSafQ2yoLE").update({
 name:"Wario World"
 })
+
+there's also a set method, that looks the same as the update method. The difference is: set method completely overrides the document. That's all.

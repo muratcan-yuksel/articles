@@ -79,3 +79,77 @@ That's all.
 
 Simply: ` db.collection("cafes").doc(id).delete();`
 Here, the "id" in "doc" is the id of the document I want to delete. That's all.
+
+## Making queries
+
+Before getting the documents, we add a `where()` method. It takes 3 parameters. Check this out:
+
+```
+db.collection("cafes")
+  //takes 3 parameters
+  .where("city", "==", "Manchester")
+  .get()
+  .then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      renderCafe(doc);
+    });
+  });
+```
+
+Instead of the equal sign, you can use "<" or ">" too, it's especially handy with numbers.
+
+## Ordering data
+
+before getting the documents, we add an `orderBy()` method.
+Check this out:
+
+```
+db.collection("cafes")
+.orderBy("city")
+  .get()
+  .then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      renderCafe(doc);
+    });
+  });
+```
+
+We can chan this with where method too. Like:
+
+```
+db.collection("cafes")
+.where("city", "==", "Manchester")
+.orderBy("city")
+.get()
+
+```
+
+## Realtime data
+
+For real time data, we have this onSnapshot() listener. Each document has a type: either "added", or "removed". These types are intrinsic to Firebase firestore.
+Check this out:
+
+```
+db.collection("cafes").onSnapshot((snapshot) => {
+  let changes = snapshot.docChanges();
+  // console.log(changes);
+  changes.forEach((change) => {
+    // console.log(change.doc.data());
+    if (change.type === "added") {
+      renderCafe(change.doc);
+      //to delete the elements in real time
+    } else if (change.type === "removed") {
+      let li = cafeList.querySelector("[data-id=" + change.doc.id + "]");
+      cafeList.removeChild(li);
+    }
+  });
+});
+```
+
+## Updating data
+
+I need to reference the individual document that I wish to update
+//this is the ID of the document I wish to update
+db.collection("cafes").doc("323kzpPQ3liSafQ2yoLE").update({
+name:"Wario World"
+})

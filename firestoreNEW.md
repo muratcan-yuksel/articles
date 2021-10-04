@@ -76,3 +76,6 @@ In the example of the Net Ninja, we use a form to submit the data to firestore. 
 That's all.
 
 ## Deleting documents from firestore
+
+Simply: ` db.collection("cafes").doc(id).delete();`
+Here, the "id" in "doc" is the id of the document I want to delete. That's all.

@@ -4,7 +4,7 @@
 ---
 
 To create a server:
--add this to your package.json file after installing nodemon so that you woon't have to refresh the terminal all the time to see the changes=>
+-add this to your package.json file after installing nodemon so that you won't have to refresh the terminal all the time to see the changes=>
 "scripts": {
 "start": "node app",
 "dev": "nodemon app"
@@ -147,6 +147,6 @@ return res.end();
 THe following creates a new file called newFile1 and writes Hello content! in it
 const fs = require("fs");
 fs.appendFile("newFile1.txt", "Hello content!", (err) => {
-  if (err) throw err;
-  console.log("saved!");
+if (err) throw err;
+console.log("saved!");
 });

@@ -75,4 +75,8 @@ insert() method
 4. copy this random document
 5. db.documentName.insert(copied_document)
 
-## inserting docs with order
+## inserting docs with order (inserting multiple docs)
+
+e.g.
+after insert, we use an array to insert multiple docs
+db.documentName.insert([{"test":1},{"test":2},{"test":3}], {"ordered": false})=> see that, ordered key is added AFTER the array

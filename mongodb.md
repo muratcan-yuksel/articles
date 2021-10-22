@@ -60,7 +60,7 @@ would result on the display of the first 20 objects, unorgonized
 
 ## inserting documents
 
-every document must have a unique underscore + id like so => {"\_id":}
+every document must have a unique underscore + id like so => {`_id`:}
 there's this ObjectId() thing, dunno what's it exactly. Check this out => https://docs.mongodb.com/manual/reference/method/ObjectId/#objectid
 
 ## inserting documents via mongo shell
@@ -106,3 +106,29 @@ work in a similar way to update values.
 
 -show collections
 -db.collectionName.drop()
+
+# username and pass for the course at hand
+
+username: m001-student
+password: m001-mongodb-basics
+
+## query operators
+
+### comparison operators
+
+$eq=> equal to
+$ne => not equal to
+$gt=> greater than
+$lt => less than
+$gte=> greater than or equal to
+$lte=> less than or equal to
+e.g. {"tripduration": {"$lte":70}}
+so it is => {field: {operator:value}}
+
+### a wholesome query example
+
+-use sample_training
+db.trips.find({"tripduration":{"$lte" : 70}, "usertype": {"$ne": "Subscriber"}})
+
+e.g. => db.trips.find({"birth year":{"$eq": 1998}}).count() => 12
+db.trips.find({"birth year":{"$gt": 1998}}).count()=> 18

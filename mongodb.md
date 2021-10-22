@@ -80,3 +80,29 @@ insert() method
 e.g.
 after insert, we use an array to insert multiple docs
 db.documentName.insert([{"test":1},{"test":2},{"test":3}], {"ordered": false})=> see that, ordered key is added AFTER the array
+this ordered key works in such a way: if there's a duplicate `_id` in the process of the array, the default behavior is that the insertion halts. With the ordered:false, everything else except the duplicate `_id` gets added.
+-to create a database or collection, just write the name of the new collection or database, it'll be automatically created
+
+## updating documents via mongo shell
+
+we call the Mongodb query language MQL
+-to update one => updateOne()
+-to update many=> updateMany()
+we use "$inc" command, I have a SS for it. ıt's long to write
+that increments. But we can use another method too: we can use "$set" method which sets the value as we've specified.
+"$push" operator will add a section to the array.
+
+- $inc e.g. => db.zips.updateMany({ "city": "HUDSON" }, { "$inc": { "pop": 10 } })
+
+-$set e.g.=> db.zips.updateOne({ "zip": "12534" }, { "$set": { "pop": 17630 } })
+
+## deleting documents
+
+-deleteOne()
+-deleteMany()
+work in a similar way to update values.
+
+## delete collection
+
+-show collections
+-db.collectionName.drop()

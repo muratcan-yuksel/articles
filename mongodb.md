@@ -151,3 +151,50 @@ $and is used as the default operator when an operator is not specified
 
 is used when you need to include the same operator more than once
 {"$and": [{queries divided by a comma}]}
+
+### through example with explicit $and operator
+
+db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
+{ "src_airport": "KZN" }
+] },
+{ "$or" :[ { "airplane": "CR2" },
+{ "airplane": "A81" } ] }
+]}).pretty()
+
+## expressive $expr operator
+
+$expr allows the use of aggreation expressions within the query language
+the syntax=> {$expr:{expressions}}
+can be used to compare stuff.
+
+### $ sign
+
+-can denote the use of an operator
+-can address the field value, like $end station. It directly takes the value of that field.
+
+#### continuing with $expr
+
+e.g. db.trips.find({ "$expr": { "$eq": [ "$end station id", "$start station id"] }
+}).count()
+
+another e.g.
+db.trips.find({ "$expr": { "$and": [ { "$gt": [ "$tripduration", 1200 ]},
+{ "$eq": [ "$end station id", "$start station id" ]}
+]}}).count()
+
+## array operators
+
+we already know `$push`operator
+-now we have `$all`
+-and `$size` . it retuns a cursor with all docs where the specified array field is exactly the given length
+e.g.
+db.listingsAndReviews.find({ "amenities": {
+"$size": 20,
+                                  "$all": [ "Internet", "Wifi", "Kitchen",
+"Heating", "Family/kid friendly",
+"Washer", "Dryer", "Essentials",
+"Shampoo", "Hangers",
+"Hair dryer", "Iron",
+"Laptop friendly workspace" ]
+}
+}).pretty()

@@ -132,3 +132,22 @@ db.trips.find({"tripduration":{"$lte" : 70}, "usertype": {"$ne": "Subscriber"}})
 
 e.g. => db.trips.find({"birth year":{"$eq": 1998}}).count() => 12
 db.trips.find({"birth year":{"$gt": 1998}}).count()=> 18
+
+## logic operators
+
+$and => math ALL of the specified query clauses
+$or at least one of the query clauses is matched
+$nor fail to match both given clauses
+=>=> template=> {poperator: [{statement1}, {statement2}, ...]}
+$not negates the query requirement
+//$not is a bit different than the others in terms of its template
+=>=> template=> {$not: {statement}}
+
+## implicit $and operator
+
+$and is used as the default operator when an operator is not specified
+
+## explicit $and operator
+
+is used when you need to include the same operator more than once
+{"$and": [{queries divided by a comma}]}

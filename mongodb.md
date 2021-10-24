@@ -198,3 +198,28 @@ db.listingsAndReviews.find({ "amenities": {
 "Laptop friendly workspace" ]
 }
 }).pretty()
+
+## array operators and projection
+
+In the case of a data having many fields, I can specify exactly wich fields I want to see with projection.
+The syntax=> db.collection.find({query}, {projection})
+
+1- includes the field
+0- excludes the field
+you cannot mix 0s and 1s. i.e. use only 1s or 0s in a query
+
+---
+
+e.g. db.listingsAndReviews.find({ "amenities":
+{ "$size": 20, "$all": [ "Internet", "Wifi", "Kitchen", "Heating",
+"Family/kid friendly", "Washer", "Dryer",
+"Essentials", "Shampoo", "Hangers",
+"Hair dryer", "Iron",
+"Laptop friendly workspace" ] } },
+{"price": 1, "address": 1}).pretty()
+
+---
+
+another e.g.
+db.listingsAndReviews.find({ "amenities": "Wifi" },
+{ "price": 1, "address": 1, "\_id": 0 }).pretty()

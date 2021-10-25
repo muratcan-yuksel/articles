@@ -256,3 +256,28 @@ db.listingsAndReviews.aggregate([ { "$project": { "address": 1, "_id": 0 }},
 { "$group": { "_id": "$address.country" }}])
 
 ## sort() and limit()
+
+e.g.
+db.zips.find().sort({"pop":-1}).limit(10).pretty()
+means => sort the ones with the most population and get the first 10 items (with limit)
+see that we use a negative 1. That reverses the order.
+Normal order is an ascending one.
+
+## indexes
+
+db.trips.createIndex({ "birth year": 1 })
+
+db.trips.createIndex({ "start station id": 1, "birth year": 1 })
+
+## data modeling
+
+rule: data is stored in the way that it is used.
+
+## upsert
+
+everything in MQL that is used to LOCATE a document in a collection can also be used to modify this document.
+db.collection.updateOne({query to locate}, {update})
+=> upsert = update + insert
+upsert's value is default to false, you can change it to true
+if there's a match, it'll update
+if not, it'll insert

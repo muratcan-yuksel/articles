@@ -223,3 +223,36 @@ e.g. db.listingsAndReviews.find({ "amenities":
 another e.g.
 db.listingsAndReviews.find({ "amenities": "Wifi" },
 { "price": 1, "address": 1, "\_id": 0 }).pretty()
+
+### $elemMatch
+
+is used to get elements from an array.
+e.g.
+db.grades.find({ "scores": { "$elemMatch": { "type": "extra credit" } }
+}).pretty()
+
+## querying arrays and subdocuments
+
+we use a dot notation. Very basic, like getting a key in JS objects.
+e.g.
+db.trips.findOne({ "start station location.type": "Point" })
+
+## aggregation framework
+
+is an another way to query data in mongodb
+there's $match and $group and $sum
+THERE'S A WHOLE MONGODB UNI COURSE ON THIS. IT'S SUPER COOL.
+e.g.
+Using the aggregation framework find all documents that have Wifi as one of the amenities``*. Only include* ``price and address in the resulting cursor.
+db.listingsAndReviews.aggregate([
+                                  { "$match": { "amenities": "Wifi" } },
+{ "$project": { "price": 1,
+"address": 1,
+"\_id": 0 }}]).pretty()
+
+another e.g.
+Project only the address field value for each document, then group all documents into one document per address.country value.
+db.listingsAndReviews.aggregate([ { "$project": { "address": 1, "_id": 0 }},
+{ "$group": { "_id": "$address.country" }}])
+
+## sort() and limit()

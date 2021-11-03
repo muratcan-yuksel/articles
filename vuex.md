@@ -142,3 +142,34 @@ and for the function itself, we will define a METHOD, not a computed property:
 ```
 
 That's it!
+
+## Actions
+
+Since mutations get difficult to debug when used with async code, we revert to Actions when working with asynchronous JS.
+
+following the previous tutorial, add this to your store:
+
+```
+ actions: {
+    reducePrice: (context) => {
+      setTimeout(function () {
+        context.commit("reducePrice");
+      }, 2000);
+    },
+  },
+```
+
+here, context is like the store, state, but not exactly. And not important to know ATM it seems.
+
+now, in our component, instead of mutating the state, we'll dispatch it like so:
+
+```
+  methods: {
+  reducePrice: function () {
+    //actions/dispatching
+    this.$store.dispatch("reducePrice");
+  },
+},
+```
+
+that's it.

@@ -4,12 +4,12 @@ Let's say we used Vue CLI to create a store for us. This is our store for this e
 
 ```
 export default new Vuex.Store({
-  state: { products: [
-    { name: "Banana", price: 20 },
-    { name: "Apple", price: 10 },
-    { name: "Pear", price: 15 },
-    { name: "Lemon", price: 5 },
-  ],},
+  state: {    products: [
+      { name: "Banana", price: 20, id: 1 },
+      { name: "Apple", price: 10, id: 2 },
+      { name: "Pear", price: 15, id: 3 },
+      { name: "Lemon", price: 5, id: 4 },
+    ],},
   mutations: {},
   actions: {},
   modules: {},
@@ -43,12 +43,12 @@ Let's list the data we have:
 
 ```
 <ul>
-      <li v-for="product in products" v-bind:key="product.name">
-        <span class="name" :key="1">{{ product.name }} </span>
-        <span class="price" :key="1">{{ product.price }} </span>
+      <li v-for="product in products" v-bind:key="product.id">
+        <span class="name" >{{ product.name }} </span>
+        <span class="price" >{{ product.price }} </span>
       </li>
     </ul>
 
 ```
 
-NB! For key, I just gave this random thing. It's not a good practice. Use unique ID like React.
+## Getters

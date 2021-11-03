@@ -108,3 +108,37 @@ export default {
 ```
 
 That's all.
+
+## Mutations
+
+Are used to change the state directly. They allow us to find which function mutates the state, and this helps in debugging.
+
+So, let's go to our store and add the following mutation, which will reduce state prices 1 when fired:
+
+```
+  mutations: {
+    reducePrice: (state) => {
+      state.products.forEach((product) => {
+        product.price -= 1;
+      });
+    },
+  },
+```
+
+Then, let's go to our component and add a button for the function like usual:
+
+```<button @click="reducePrice">Reduce Price</button>
+
+```
+
+and for the function itself, we will define a METHOD, not a computed property:
+
+```
+  methods: {
+    reducePrice: function () {
+      this.$store.commit("reducePrice");
+    },
+  },
+```
+
+That's it!

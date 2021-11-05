@@ -23,3 +23,19 @@ app.listen(port, () => {
 ```
 
 - in the terminal, write `node app` and go to localhost 3000 to see your app
+
+## a way to create express project with ejs engine defined
+
+express project_name --view=ejs
+
+## to start the application
+
+npm start works too...
+
+## don't forget nodemon
+
+### although I installed it globally
+
+### so you don't really have to install it anymore
+
+npm install --save-dev nodemon

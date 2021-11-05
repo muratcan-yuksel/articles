@@ -13,6 +13,8 @@ export default {
 };
 ```
 
+NB! If you're using vue2, import this => import VueApexCharts from "vue-apexcharts";
+
 ---
 
 example chart:

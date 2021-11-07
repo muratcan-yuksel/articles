@@ -45,3 +45,7 @@ npm start works too...
 npm install --save-dev nodemon
 
 to start it => nodemon start
+
+## CRUD (create,read,update,delete)
+
+The CRUD operations roughly correlate to the HTTP methods that you can employ in an express app. This definition can be somewhat flexible, but in general create correlates to POST (or app.post() in an express app), read correlates to GET (app.get()), update to PUT (app.put()) and delete to DELETE (app.delete())

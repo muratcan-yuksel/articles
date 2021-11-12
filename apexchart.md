@@ -1,6 +1,6 @@
 for vue integration, visit here => https://apexcharts.com/docs/vue-charts/
 
-In Vue3, the docs are faulty. Global apex cahrt doens't work (the one they say to put it in main.js).
+In Vue3, the docs are faulty. Global apex chart doens't work (the one they say to put it in main.js).
 
 Instead, paste the following code to the component you wish to use the chart:
 

@@ -216,3 +216,33 @@ Using the to_s method, you can convert pretty much anything to a string. Here ar
 nil.to_s #=> ""
 
 :symbol.to_s #=> "symbol"
+
+# symbols
+
+Strings can be changed, so every time a string is used, Ruby has to store it in memory even if an existing string with the same value already exists. Symbols, on the other hand, are stored in memory only once, making them faster in certain situations.
+One common application where symbols are preferred over strings are the keys in hashes.
+
+## Create a Symbol
+
+To create a symbol, simply put a colon at the beginning of some text:
+
+:my_symbol
+
+# Getting Data from a User
+
+assign "gets" into a variable and that'll wait for user to write sth and press enter.
+Gets stands for get string.
+irb :001 > name = gets
+Bob
+=> "Bob\n"
+After the code, name = gets, the computer waited for us to type in some information. We typed "Bob" and then pressed enter and the program returned "Bob\n". The \n at the end is the "newline" character and represents the enter key. But we don't want that as part of our string. We'll use chomp chained to gets to get rid of that - you can put .chomp after any string to remove the carriage return characters at the end.
+
+irb :001 > name = gets.chomp
+Bob
+=> "Bob"
+
+# Method (function) scope
+
+DIFFERENT FROM JS
+
+In terms of variable scope, methods have self-contained scope. That means that you can't refer to or modify any variables that aren't initialized inside the method's body, and none of the variables initialized by the method are available outside the method's body.

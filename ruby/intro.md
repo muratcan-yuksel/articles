@@ -246,3 +246,55 @@ Bob
 DIFFERENT FROM JS
 
 In terms of variable scope, methods have self-contained scope. That means that you can't refer to or modify any variables that aren't initialized inside the method's body, and none of the variables initialized by the method are available outside the method's body.
+
+# blocks
+
+A block is a piece of code that follows a method's invocation, delimited by either curly braces {} or do/end:
+
+total= 0
+[1,2,3, 5].each {|number| total += number}
+puts total
+
+### or
+
+total = 0
+[1, 2, 3].each do |number|
+total += number
+end
+puts total # 6
+
+THEY ARE SIMILAR TO JS FUNCTIONS IN SCOPE SENSE
+. In both cases, the code can access and modify variables that are defined outside of the block. Thus, both blocks can access and modify total. However, any variables initialized inside the block (such as number) can't be accessed by the outer code.
+
+## for ...do/end
+
+arr = [1, 2, 3]
+
+for i in arr do
+a = 5 # a is initialized here
+end
+
+puts a # is it accessible here?
+The answer is yes. The reason is because the for...do/end code did not create a new inner scope, since for is part of Ruby language and not a method invocation. When we use each, times and other method invocations, followed by {} or do/end, that's when a new block is created.
+
+# variable type
+
+## constants
+
+MY_CONSTANT = 'I am available throughout your app.'
+
+## class variables
+
+@@instances = 0
+
+## globals
+
+`$var = 'I am also available throughout your app.'`
+
+## instance variables
+
+@var = 'I am available throughout the current instance of this class.'
+
+## local variables
+
+var = 'I must be passed around to cross scope boundaries.'

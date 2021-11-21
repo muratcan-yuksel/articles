@@ -28,3 +28,31 @@ contract WavePortal {
 ```
 
 ## build a script and run it
+
+```
+const main = async () => {
+    // This will actually compile our contract and generate the necessary files we need to work with our contract under the artifacts directory.
+    const waveContractFactory = await hre.ethers.getContractFactory('WavePortal');
+   //hardhat creates a local Ethereum network and destroys it after the completion of the script
+    const waveContract = await waveContractFactory.deploy();
+    // We'll wait until our contract is officially deployed to our local blockchain
+    await waveContract.deployed();
+      console.log("Contract deployed to:", waveContract.address);
+  };
+
+  const runMain = async () => {
+    try {
+      await main();
+      process.exit(0);
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
+
+  runMain();
+```
+
+- we'll run it with => npx hardhat run scripts/run.js
+
+## storing data

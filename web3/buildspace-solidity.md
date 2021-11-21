@@ -56,3 +56,9 @@ const main = async () => {
 - we'll run it with => npx hardhat run scripts/run.js
 
 ## storing data
+
+nope nope nope
+
+## writing a script to depoy locally
+
+-napx hardhat node

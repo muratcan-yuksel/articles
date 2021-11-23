@@ -56,3 +56,4 @@ now when we go to the /about, it'll look for the above file
 - and to install that, I needed to re-add the gme into Path again. Need to solve that shit, man.
 
 * this shit => export PATH="/home/sirius/.local/share/gem/ruby/3.0.0/bin:$PATH"
+* => now changed my .bashrc (last line) into this, maybe it'll work => export PATH="$PATH:/home/sirius/.local/bin"

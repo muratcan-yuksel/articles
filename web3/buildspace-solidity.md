@@ -61,4 +61,14 @@ nope nope nope
 
 ## writing a script to depoy locally
 
--napx hardhat node
+-napx hardhat node (keep this terminal window open)
+//creates 20 accounts with 10000 ETH inside them, woah.
+
+- to create a new block and get our smart contract on it:
+  -create a deploy.js inside scripts folder
+  -run this from another terminal => npx hardhat run scripts/deploy.js --network localhost
+
+## to really deploy to blockchain
+
+-opened an alchemy account => https://www.alchemy.com/
+-inside hardhat-config, I have the required and very important information. Do not push those info anywhere.

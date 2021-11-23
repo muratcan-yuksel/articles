@@ -13,7 +13,13 @@ rails server OR rails s on the terminal
 for GET for "/about" it says:
 I see you requested "/bout", we'll give that to the AboutController to handle
 
-##Models
+## Models
+
+Database wrapper
+User:
+
+- query for records
+- wrap individual records
 
 ## Views
 
@@ -29,3 +35,24 @@ this is what gets sent back to the browser and displayed
 ## Controllers
 
 Decide how to process a request and define a response
+Controllers decide where things should go.
+
+# Starting with the project
+
+## creating an about page
+
+- go to routes.rb in config folder
+- add the following inside the function => muratcan-yuksel/buffer-project
+
+- ==> then, go to app/controllers and create a filed named "about_controller.rb"
+
+now when we go to the /about, it'll look for the above file
+
+- now go to views/about and create "index.html.erb" file and write whatever you wish to write there
+
+### Error. Needed to install webpacker
+
+- bundle exec rails webpacker:install
+- and to install that, I needed to re-add the gme into Path again. Need to solve that shit, man.
+
+* this shit => export PATH="/home/sirius/.local/share/gem/ruby/3.0.0/bin:$PATH"

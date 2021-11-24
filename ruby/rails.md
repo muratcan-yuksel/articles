@@ -62,3 +62,16 @@ export PATH="/home/sirius/.local/share/gem/ruby/3.0.0/bin:$PATH"
 <!-- * => now changed my .bashrc (last line) into this, maybe it'll work => export PATH="$PATH:/home/sirius/.local/bin" --> It didn't work
 
 - added the path in bash, profile, and bash_profile... pff... will write a different article on it.
+
+## generate models
+
+- rails generate model User email:string password_digest:string
+- rails db:migrate
+
+### for creating users
+
+then, in rails console, something like this:
+
+- User.create({email: "chris@gorails.com", password_digest: "password" })
+
+password didn't work so I used password_digest myself

@@ -63,7 +63,9 @@ export PATH="/home/sirius/.local/share/gem/ruby/3.0.0/bin:$PATH"
 
 - added the path in bash, profile, and bash_profile... pff... will write a different article on it.
 
-## generate models
+## generate models7
+
+### this is also called active records in rails
 
 - rails generate model User email:string password_digest:string
 - rails db:migrate

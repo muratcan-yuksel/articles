@@ -16,7 +16,7 @@ e.g. created a `_header.html.erb` (notice the underscore) in app/views/home, and
 
 # CRUD operations
 
-## creatinga scaffold
+## creating a scaffold
 
 e.g.
 
@@ -32,3 +32,7 @@ As the first one threw error with db:migrate command
 then
 
 - rails db:migrate
+
+then,
+
+- delete the scaffolds.scss in app/assets as it conflicts with our bootstrap

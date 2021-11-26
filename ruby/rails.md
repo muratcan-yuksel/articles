@@ -53,7 +53,7 @@ now when we go to the /about, it'll look for the above file
 ### Error. Needed to install webpacker
 
 - bundle exec rails webpacker:install
-- and to install that, I needed to re-add the gme into Path again. Need to solve that shit, man.
+- and to install that, I needed to re-add the gem into Path again. Need to solve that shit, man.
 
 * this shit =>
 

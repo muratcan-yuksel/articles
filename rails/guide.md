@@ -36,3 +36,17 @@ then
 then,
 
 - delete the scaffolds.scss in app/assets as it conflicts with our bootstrap
+
+# devise (gem)
+
+- handles user managements
+  in order :
+- bundle install
+- (go here => https://github.com/heartcombo/devise)
+- rails generate devise:install
+- read through what it says in the terminal
+- - go to development.rb and paste this for instance `config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }` before the end of the function
+- - do the same for production but not for localhost, but for the real host when you choose one
+- rails g devise:views
+- rails generate devise `MODEL`(name for the model)
+- rails db:migrate

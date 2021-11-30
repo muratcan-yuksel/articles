@@ -50,3 +50,18 @@ then,
 - rails g devise:views
 - rails generate devise `MODEL`(name for the model)
 - rails db:migrate
+
+# Associations
+
+(getting every user to have their own friends list)
+
+- went to user.rb and added refactored it as =>
+
+```class User < ApplicationRecord
+  belongs_to :auth
+  end
+```
+
+- then, added this to auth.rb => has_many :users
+
+* then => rails g migration add_user_id_to_friends user_id:integer:index

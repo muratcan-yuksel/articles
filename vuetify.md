@@ -1,3 +1,7 @@
+## installation
+
+vue add vuetify
+
 ## colors
 
 In vuetify, you can add colors as classes :
@@ -25,8 +29,22 @@ Heres, color signifies background color, and for the color of the element itself
 
 ## visibility
 
-    <v-btn class="hidden-md-and-down">Click me</v-btn>
+` <v-btn class="hidden-md-and-down">Click me</v-btn>`
 
 means hide this button in medium and lower screens. Pretty cool.
 
 - we have only, and-down, and-up conditions
+
+```<v-btn class="hidden-sm-only">Hidden only on small screens</v-btn>
+
+```
+
+## navbar
+
+=> <v-toolbar> </v-toolbar>
+=> <v-toolbar flat app> </v-toolbar> // app here makes it sticky to the top
+
+## v-spacer
+
+      <!-- aligns whatever comes under it to the right -->
+      <v-spacer></v-spacer>

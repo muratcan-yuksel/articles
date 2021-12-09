@@ -48,3 +48,8 @@ means hide this button in medium and lower screens. Pretty cool.
 
       <!-- aligns whatever comes under it to the right -->
       <v-spacer></v-spacer>
+
+# wireframes on vuetify website
+
+are ready made frames. Lit af.
+e.g. https://vuetifyjs.com/en/getting-started/wireframes/#examples

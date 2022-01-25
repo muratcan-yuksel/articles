@@ -1,3 +1,7 @@
+### in html link to the main css file that our scss files will be compiled to.
+
+## Don't forget the above comment
+
 ## creating a sass variable
 
 => $varName : black;

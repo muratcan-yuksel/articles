@@ -1,6 +1,9 @@
-### in html link to the main css file that our scss files will be compiled to.
+# Starting a project
 
-## Don't forget the above comment
+-in html link to the main css file that our scss files will be compiled to.
+-then, in that css folder, create a sass file named main.scss
+-notice that we're creating a sass file in there, not a css file
+-to create the main.css file, just clikc on the watch sass button in your vscode (ofc you need the sass compiler extension for it)
 
 ## creating a sass variable
 
@@ -56,3 +59,25 @@ let's create a mixin named flexCenter:
 header{
 @include flexCenter(column); //or row, whatever you want.
 }
+
+# another lesson starts here
+
+## variables
+
+`$myColor: blue;`
+
+## maps
+
+are like JS objects
+
+e.g.=>
+$colors: (
+primary: #005dff,
+accent: #fff6bb,
+);
+
+- notice that the above are not curly brackets but regular brackets
+- to use them, we first start with `map-get` followed by the name of the mapping (say, key) and the value we want to use .
+  body {
+  background-color: map-get($colors, primary);
+  }

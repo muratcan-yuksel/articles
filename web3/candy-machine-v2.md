@@ -38,3 +38,14 @@ npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_toke
 ```
 
 - to see our wallet in phantom wallet, first change phantom wallet into devnet, than go to keypair.json and copy the contents inside. One that's done, add/connect wallet with "import private key" option. Your wallet with the airdropped sol inside will be imported.
+
+## creating the minting website
+
+- go to metaplex/js/packages/dandy-machine-ui
+- change .env.example into .env only
+- add public key there
+- specify the mainnet (if you're on devnet, don't change anything)
+- for the RPC_HOST too, if you were using the mainnet, you'd have to change it. But for devnet, don't touch these two
+- go to metaplex/js/packages/candy-machine-ui/ folder
+- run yarn install && yarn start
+- now you just need to style the application.

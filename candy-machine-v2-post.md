@@ -35,3 +35,5 @@ Do not share this information with anyone. I'm cool posting it as I'll delete is
 Still inside the same solana-nft folder, clone the Metaplex GitHub repo => `git clone git@github.com:metaplex-foundation/metaplex.git`
 
 Now you'll have a folder `metaplex` in your solana-nft directory. Next, cd into metaplex/js folder and run the following command `yarn install`
+
+Now we're going to set our application into devnet as we wouldn't like to spend any money for learning purposes. Mark that for real worl applications, we'd need use the mainnet. Anyway, go back to your solana-nft root folder and run the following command => ` solana config set --url https://api.devnet.solana.com` It should return confirmed.

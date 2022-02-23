@@ -55,3 +55,46 @@ We need to make some changes into it though.
 First, delete the value for `solTreasuryAccount` and add your solana wallet address we've come to create. You can find that address from the pubkey you've saved earlier, or you can just type `solana address` on your terminal and paste it there.
 
 Then, change the storage from arweave-sol to arweave, as we're on the devnet.
+
+Once you've done that, create an assets folder in the root directory (solana-nft). Now we need to put our assets (images and metadata and all) inside that assets folder. If you don't have any assets, no worries. You can download the sample assets from the Metaplex official docs => `https://docs.metaplex.com/candy-machine-v2/preparing-assets`
+
+The next step is to upload the candy machine.
+
+Before doing that, we need some fake Solana. Since we're in the devnet, you can easily get some sol by running `solana airdrop 2` in the terminal. If that fails, as it sometimes does, go to `https://solfaucet.com/` and add your wallet address there.
+
+Now let's return to uploading the candy machine we've just configured. To do that, run the following command =>
+
+````
+npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts upload \
+    -e devnet \
+    -k keypair.json \
+    -cp config.json \
+    ./assets
+    ```
+````
+
+This command might fail. Don't worry. Just run it until it uploads everythng successfully.
+
+Verify the upload with the following command =>
+
+```
+  npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts verify_upload \
+    -e devnet \
+    -k keypair.json
+```
+
+If everything goes alright, you'll get a "ready to deploy!" message.
+
+Now we can try to mint one token from the command line with the following command =>
+
+```
+npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_token \
+    -e devnet \
+    -k keypair.json
+```
+
+Now it's time to see this minted NFT in our wallet. Remember how I mentioned at the beginning that I have one main Phantom Wallet, let's go to that. We'll import this wallet into the main one. To do that, open the keypair.json file and copy the contents inside.
+
+Go to your Phantom Wallet, and change it into devnet. Once yoU've done that, click the menu button on the top left, and choose `Add/Connect Wallet`. Then choose `import private key/import an existing wallet` , name it whatever you wish and copy the contents of the keypair.json that you've copied.
+
+That's it. You can see the minted NFT in your wallet now.

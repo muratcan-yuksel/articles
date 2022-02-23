@@ -13,7 +13,7 @@ after installing everything (ts-node, solana-cli, metaplex and such. the easy pa
 - create a config.json file in the root folder and add configuration. You can find the configuration docs here => https://docs.metaplex.com/candy-machine-v2/configuration
 - once you do that, copy the wallet address you've created inside the config.json file
 - change the date. Also storage from arweave-sol to arweave as we'll be working on the devnet only.
-- create an assets file in the root directory and add the assets there (with the metadata and all). Note that assets in solana start with an index of zero (0)
+- create an assets folder in the root directory and add the assets there (with the metadata and all). Note that assets in solana start with an index of zero (0)
 - command to upload the candy machine =>
   ```
   npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts upload \

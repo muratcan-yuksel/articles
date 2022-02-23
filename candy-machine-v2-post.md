@@ -18,22 +18,40 @@ Now, create an empty folder with mkdir command in your terminal. I'll name this 
 
 Save the message you see in your terminal somewhere safe, as we'ell use the pubkey and seed phrase later on.
 
-Mine are as follows =>
-
-```
-Wrote new keypair to ./keypair.json
-==================================================================================
-pubkey: 91KURDG87M6NNhhyQ9gBfNe4N8ujidjorpwemq6NRHA9
-==================================================================================
-Save this seed phrase and your BIP39 passphrase to recover your new keypair:
-giant stock valid cry language decrease genre loop reduce december observe benefit
-==================================================================================
-```
-
-Do not share this information with anyone. I'm cool posting it as I'll delete is as soon as I'll finish with this guide.
-
 Still inside the same solana-nft folder, clone the Metaplex GitHub repo => `git clone git@github.com:metaplex-foundation/metaplex.git`
 
 Now you'll have a folder `metaplex` in your solana-nft directory. Next, cd into metaplex/js folder and run the following command `yarn install`
 
 Now we're going to set our application into devnet as we wouldn't like to spend any money for learning purposes. Mark that for real worl applications, we'd need use the mainnet. Anyway, go back to your solana-nft root folder and run the following command => ` solana config set --url https://api.devnet.solana.com` It should return confirmed.
+
+Next, run the following command => `solana config set --keypair keypair.json` This one should return confirmed also.
+
+Our next step is to configure the settings for the candy machine. To do that, create a config.json file in the root folder. To learn more about the configuration, check out the official docs => `https://docs.metaplex.com/candy-machine-v2/configuration` I will use the default configuration, which is seen as follows:
+
+```
+{
+  "price": 1.0,
+  "number": 10,
+  "gatekeeper": null,
+  "solTreasuryAccount": "<YOUR WALLET ADDRESS>",
+  "splTokenAccount": null,
+  "splToken": null,
+  "goLiveDate": "25 Dec 2021 00:00:00 GMT",
+  "endSettings": null,
+  "whitelistMintSettings": null,
+  "hiddenSettings": null,
+  "storage": "arweave-sol",
+  "ipfsInfuraProjectId": null,
+  "ipfsInfuraSecret": null,
+  "awsS3Bucket": null,
+  "noRetainAuthority": false,
+  "noMutable": false
+}
+
+```
+
+We need to make some changes into it though.
+
+First, delete the value for `solTreasuryAccount` and add your solana wallet address we've come to create. You can find that address from the pubkey you've saved earlier, or you can just type `solana address` on your terminal and paste it there.
+
+Then, change the storage from arweave-sol to arweave, as we're on the devnet.

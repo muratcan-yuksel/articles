@@ -98,3 +98,48 @@ Now it's time to see this minted NFT in our wallet. Remember how I mentioned at 
 Go to your Phantom Wallet, and change it into devnet. Once yoU've done that, click the menu button on the top left, and choose `Add/Connect Wallet`. Then choose `import private key/import an existing wallet` , name it whatever you wish and copy the contents of the keypair.json that you've copied.
 
 That's it. You can see the minted NFT in your wallet now.
+
+## creating the minting website
+
+Since we have our NFTs ready, we might want to showcase them on the internet, and let people mint them easily. The steps to do this are as follows:
+
+Go to `metaplex/js/packages/candy-machine-ui` . You'll see a file named `.env.example` . Delete the `.example` part so that the file would be named `.env` . Now, here, go to the `.cache` folder in the root directory and open the `devnet-temp.json` file. Just around the beginning of that JSON file, you'll see the value of your `candyMachine` .Copy that and past is your `REACT_APP_CANDY_MACHINE_ID` value.
+
+Since we're going to be on the devnet, we'll not change anything. If it was mainnet, we'd have to specify that.
+
+Now to go `metaplex/js/packages/candy-machine-ui/src ` and open the `index.tsx` file. You'll see the file contents as:
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+import './index.css';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root'),
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+For some reason, the minting process doesn't work with React.StrictMode, so we'll have to remove that. Change the contents of ReactDom.render as follows:
+
+```
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+Now go back to the `metaplex/js/packages/candy-machine-ui` folder, run the following commands =>
+
+`yarn install && yarn start`
+
+And that's it! Your NFTs are now ready to be minted.
+
+Enjoy!

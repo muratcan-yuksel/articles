@@ -41,11 +41,12 @@ npx ts-node ~/metaplex/js/packages/cli/src/candy-machine-v2-cli.ts mint_one_toke
 
 ## creating the minting website
 
-- go to metaplex/js/packages/dandy-machine-ui
+- go to metaplex/js/packages/candy-machine-ui
 - change .env.example into .env only
 - add public key there
 - specify the mainnet (if you're on devnet, don't change anything)
 - for the RPC_HOST too, if you were using the mainnet, you'd have to change it. But for devnet, don't touch these two
 - go to metaplex/js/packages/candy-machine-ui/ folder
 - run yarn install && yarn start
-- now you just need to style the application.
+- now you just need to style the application.Error: Invalid account discriminator
+    at AccountClient.fetchNullable (

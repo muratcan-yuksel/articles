@@ -59,3 +59,55 @@ instead of giving props as a parameter, directly call the props given like so =>
   );
 };```
 ````
+
+## can give functions as props too
+
+### parent
+
+````const App = () => {
+  const onClick = () => {
+    console.log("clicked");
+  };
+  return (
+    <div>
+      <Button color="green" text="Hello" onClick={onClick} />
+    </div>
+  );
+};```
+````
+
+### child
+
+````const Button = ({ text, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="btn"
+    >
+      {" "}
+      {text}{" "}
+    </button>
+  );
+};```
+````
+
+## mapping data
+
+say we have an array of objects called tasks (minuscule)
+
+```const Tasks = () => {
+  return <div>
+  {tasks.map(task=> ( <h3 key={task.id} > {task.text}  </h3>)  )}
+      </div>;
+};
+```
+
+## filter method example
+
+this method shows all the tasks that does not match with the id
+i.e. deletes the task with the id from the UI
+
+````const deleteTask=id=>{
+setState(state.filter(task=>task.id !== id))
+}```
+````

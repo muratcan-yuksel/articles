@@ -1,4 +1,4 @@
-## basic example with react
+## get request with react
 
 ```
 
@@ -22,3 +22,15 @@ const FirstRequest = () => {
 ```
 
 => it's that simple. just response will give us everything we can look for about the request, and response.data will only give us the data requested. We also use useEffect hook to recall th fetchData function everytime the component re-renders.
+
+## setting headers
+
+### if we're posting a get request:
+
+we'll pass a second argument like so:
+axios.get(url, {})
+
+### if we're using any other methods such as post
+
+we'll pass the data as second argument and headers in third argument like so:
+axios.post(url, {data}, {})

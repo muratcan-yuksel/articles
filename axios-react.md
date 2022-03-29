@@ -71,3 +71,22 @@ it is like the get request, but after the url, we'll need to provide the actual 
     console.log(name, email);
   };
 ```
+
+## global instance
+
+we can manually add some functionality to become global, that is, will be used with all our requests `by default`
+
+### steps
+
+- create a folder named axios in src directory
+- inside that axios folder, create a global.js file
+- write the following code inside that global.js file:
+
+```
+  import axios from "axios";
+
+axios.defaults.headers.common["Accept"] = "application/json";
+
+```
+
+- import global.js file in the app.js like so: `import "./axios/global"; `

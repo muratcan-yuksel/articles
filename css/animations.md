@@ -1,3 +1,7 @@
+# link
+
+=> https://codepen.io/SiriusWagner/pen/XWVqdma
+
 - when writing a transition, if we specify the property inside the transition selector, we'll only add transition effect to that property. e.g.
 
 consider this:
@@ -25,3 +29,23 @@ consider this:
 
 right now, the child (which is a rectangle inside of a parent rectangle) will change its color while transitioning. If we'd write it as such:
 `transition: transform 1s;` the transition would only target the transform directive, and the child rectangle wouldn't change its bacgkround color.
+
+## animations
+
+check this out :
+
+```
+.parent:hover .child {
+  background: green;
+  opacity: 100%;
+  /* animation first takes a custom made name */
+  animation: sag-sol 1s ease-in forwards;
+}
+@keyframes sag-sol {
+  100% {
+    transform: translateX(100%) translateY(50%);
+  }
+}
+```
+
+as you can see, keyframes selects the name we've given to the animation.

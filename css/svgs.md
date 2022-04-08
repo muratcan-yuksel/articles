@@ -1,0 +1,2 @@
+- group the elements you want together with ctrl+ g and give them a name.
+- then, when you export them as svg, click the ... sign on the right and choose `include "id" attribute`

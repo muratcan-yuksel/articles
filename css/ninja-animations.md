@@ -80,3 +80,72 @@ tells the CSS what to do with the animated element outside of the animation wind
 e.g. `animation-fill-mode:forwards;` in the element `el`
 
 ## repeating animations
+
+` animation-iteration-count: infinite;`
+
+for example, to have an infinite passing element, that moves in one direction and then after it goes above the scope of the X axis, starts from the beginning, we'd do something like this :
+
+````
+    .circle {
+        height: 150px;
+        width: 150px;
+        background: white;
+        border-radius: 50%;
+        animation-name: moves;
+        animation-duration: 3s;
+        animation-fill-mode: both;
+        animation-iteration-count: infinite;
+      }
+      @keyframes moves {
+        from {
+          transform: translateX(-20vw);
+        }
+        to {
+          transform: translateX(100vw);
+        }
+      }
+      ```
+````
+
+You see, we have a negative value to `from` in keyframes, so that it actually jumps back to the outer-left of the window, so that we can't see that clunky going bakc movement.
+
+## animation direction
+
+pretty self explanatory
+
+e.g. ` animation-direction: reverse;`
+
+This is the cool one => ` animation-direction: alternate;`
+
+with the one above, it goes forth and back.
+
+## animation timing functions
+
+like ease-in, cubic-bezier and such
+
+## ANIMATION SHORTHAND
+
+e.g. `animation: moves 8s linear infinite reverse;`
+
+## chaining animations
+
+- now, first of all, remember that in keyframes section, we've mentioned that we need a `from...to` pair of directives. Actually, we can add as much as we want by using percentages.
+
+  Like so =>
+
+````@keyframes jump {
+        /* starting point is as the same as the element's starting point */
+        0% {
+          top: 10rem;
+        }
+        50% {
+          top: 5rem;
+        }
+        100% {
+          top: 10rem;
+        }
+      }```
+````
+
+- and to chain 2 animations, we just add a comma after the 1st one and add the 2nd one directly afterwards. Like so =>
+  ` animation: moves 5s both infinite alternate, jump 0.3s 1.2s 1 ease;`

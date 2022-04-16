@@ -34,7 +34,8 @@ const layerConfigurations = [
       { name: "Bottom lid" },
       { name: "Top lid" },
     ],
-  },  {
+  },
+   {
     growEditionSizeTo: 20,
     layersOrder: [
       { name: "Background" },
@@ -43,6 +44,51 @@ const layerConfigurations = [
       { name: "Iris" },
       { name: "Shine" },
       { name: "Bottom lid" },
+      { name: "Top lid" },
+    ],
+  },
+];
+```
+
+If I added another layer, with bottom lid dark option, and wanted that layer to create, say, only 5 artworks, I'd have to give `growEditionSizeTo: 25` . This is because with each iteration, we add the new ones minus the old ones.
+
+Like so =>
+
+```
+const layerConfigurations = [
+  {
+    growEditionSizeTo: 10,
+    layersOrder: [
+      { name: "Background" },
+      { name: "Eyeball" },
+      { name: "Eye color" },
+      { name: "Iris" },
+      { name: "Shine" },
+      { name: "Bottom lid" },
+      { name: "Top lid" },
+    ],
+  },
+   {
+    growEditionSizeTo: 20,
+    layersOrder: [
+      { name: "Background" },
+      { name: "Eyeball" },
+      { name: "Eye color" },
+      { name: "Iris" },
+      { name: "Shine" },
+      { name: "Bottom lid gold" },
+      { name: "Top lid" },
+    ],
+  },
+  {
+    growEditionSizeTo: 25,
+    layersOrder: [
+      { name: "Background" },
+      { name: "Eyeball" },
+      { name: "Eye color" },
+      { name: "Iris" },
+      { name: "Shine" },
+      { name: "Bottom lid dark" },
       { name: "Top lid" },
     ],
   },

@@ -12,4 +12,8 @@
 - for the `_INITBASEURI`, we'll go to pinata again
 - then, we copy the url for our metadata, and add a `/` (forward slash) at the end of it. THIS IS REALLY IMPORTANT. And, we need to add `ipfs://` to the beginning of it. So, our content for the `_INITBASEURI` should be like this =>
   `ipfs://QmPNSjqVCgsKeXA8ubY8os5WV2kyLY5szxJwAhZh21kBpF/`
--
+- again, don't forget the forward slash at the end
+- I didn't add a hidden NFT so `_INITNOTREVEALEDURI` will be empty in this case
+- EXTREMELY IMPORTANT STEP=> before clicking anything like transact or sth like that, copy the contents of the contract `by clicking the copy symbol next to the transact button `
+- now since you've copied that thing, go to the root folder and create a folder named `info`
+- inside that `info` folder, create `ethereum-text.md` (or txt, doesn't really matter) and `polygon-test.md` (again, extension doesn't matter) and paste the contents so that you can save and access them whenever you need. This is needed when you need to verify your contract.

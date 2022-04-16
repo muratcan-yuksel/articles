@@ -1,0 +1,15 @@
+- go to hashlips_nft_contact folder
+- copy the contents of the `SimpleNft_flat.sol `file
+- open remix ide
+- create a new workspace
+- create a new contract (`myContract.sol`) and paste the contents of SimpleNft_flat.sol file
+- on line 1235, you'll find the contract NFT. Change its name to your own contract name
+- for test purposes, we choose `injected web3` as `environment`
+- use rinkeby or ropsten or sth like that
+- make sure your contract is selected on deployment
+- when you choose the correct address, under the deploy section, you'll find that you'll need to enter the contents of your constructor. such as \_NAME, \_SYMBOL and all. From where do we get these details?
+- the name and the sumbol, we give them
+- for the `_INITBASEURI`, we'll go to pinata again
+- then, we copy the url for our metadata, and add a `/` (forward slash) at the end of it. THIS IS REALLY IMPORTANT. And, we need to add `ipfs://` to the beginning of it. So, our content for the `_INITBASEURI` should be like this =>
+  `ipfs://QmPNSjqVCgsKeXA8ubY8os5WV2kyLY5szxJwAhZh21kBpF/`
+-

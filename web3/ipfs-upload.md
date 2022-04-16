@@ -1,0 +1,4 @@
+- go to pinata.cloud
+- upload the images folder you've created by running `node index.js` (you can find them in the build folder)
+  -copy the CID provided on the dashboard after the upload. It's something similar to this => `QmY9KquiY4gfyPi2Jgz8Z7hJGjGP8pixqk9as2X8r3zeV1`
+- Now go back to your config.js file inside the artwork collection, and change the baseUrl accordingly, like so => `const baseUri = "ipfs://QmY9KquiY4gfyPi2Jgz8Z7hJGjGP8pixqk9as2X8r3zeV1"; `

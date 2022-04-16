@@ -2,3 +2,5 @@
 - upload the images folder you've created by running `node index.js` (you can find them in the build folder)
   -copy the CID provided on the dashboard after the upload. It's something similar to this => `QmY9KquiY4gfyPi2Jgz8Z7hJGjGP8pixqk9as2X8r3zeV1`
 - Now go back to your config.js file inside the artwork collection, and change the baseUrl accordingly, like so => `const baseUri = "ipfs://QmY9KquiY4gfyPi2Jgz8Z7hJGjGP8pixqk9as2X8r3zeV1"; `
+- go to the terminal (in the artwork project folder) and run => `node utils/updateBaseUri.js` (note that it's not Url with an L, but Uri with an "i")
+- now go back to pinata and upload the json files.

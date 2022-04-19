@@ -27,3 +27,5 @@
 ````
 
 See? Now you'll only select after the part I've indicated with the second line of three backticks (```)
+
+- click verify and you're done.

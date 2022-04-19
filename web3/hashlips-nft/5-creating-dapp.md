@@ -29,3 +29,4 @@
 See? Now you'll only select after the part I've indicated with the second line of three backticks (```)
 
 - click verify and you're done.
+- NB ! In write contract section, at the end, you'll see a withdraw field. It's actually the same thing as the `value` field on remix. Daniel puts 0 there. This withdraws I guess.

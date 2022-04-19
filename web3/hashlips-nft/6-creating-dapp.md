@@ -1,0 +1,10 @@
+- go to hashlips_nft_minting_dapp
+- generally you'll want to replace the files in the `public` folder
+- in the config file, you can change the images
+- go to config.json in that build folder
+- you can modify them, they're pretty self-explanatory
+- also, you can change the whole styling using the app.jsx, check it out, it has all the functions.
+- except marketplace link, you'll need to paste your collections url from the opensea there
+- go to the abi.json, and paste the abi you've copied earlier.
+- change titles and so on the index.html file
+- modify manifest.json file according to your settings (just the name and stuff)

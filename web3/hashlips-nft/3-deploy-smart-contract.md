@@ -17,5 +17,4 @@
 - EXTREMELY IMPORTANT STEP=> before clicking anything like transact or sth like that, copy the contents of the contract `by clicking the copy symbol next to the transact button `
 - now since you've copied that thing, go to the root folder and create a folder named `info`
 - inside that `info` folder, create `ethereum-text.md` (or txt, doesn't really matter) and `polygon-test.md` (again, extension doesn't matter) and paste the contents so that you can save and access them whenever you need. This is needed when you need to verify your contract.
-
-STOPPED AT 1h33m
+- now you can go to `https://testnets.opensea.io/` to see your collection. Notice that we're on the test network, as we've deployed our contract on rinkeby test network. Opensea wouldn't show test networks normally.

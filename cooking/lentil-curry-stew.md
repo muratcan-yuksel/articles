@@ -1,0 +1,16 @@
+- add oil (optional)
+- 1 diced onion
+- 1 sliced garlic
+- seasoning
+- stir and fry for 1 minute
+- add 0.2 cups water
+- simmer for 30 secs
+- 2 diced carrots
+- 1 diced zuccini
+- stir and fry for 3 mins
+- add coconut milk (1.5 cups)
+- add lentils
+- mix well
+- boil lightly for 10 minutes
+- continuously add water so that it'll always be covered with water
+- add spinach (or whatever)

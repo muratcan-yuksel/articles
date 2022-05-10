@@ -33,10 +33,10 @@ module.exports = {
 
 - create a `.env` file and paste the necesssary infor there as such =>
 
-`````ALCHEMY_RINKEBY_URL=YOUR_ALCHEMY_RINKEBY_URL
-RINKEBY_PRIVATE_KEY=YOUR_PRIVATE_KEY````
+```ALCHEMY_RINKEBY_URL=YOUR_ALCHEMY_RINKEBY_URL
+RINKEBY_PRIVATE_KEY=YOUR_PRIVATE_KEY
 
-`````
+```
 
 ## deployment
 

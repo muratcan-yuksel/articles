@@ -23,3 +23,35 @@ function App() {
 
 export default App;
 ```
+
+---
+
+# When you want to render just a part inside the return statement
+
+- create state=>
+  `const [state, setState]= useState(true);`
+- define what'll be rendered conditionally
+
+```
+let message;
+if( state){
+  message= <div> show me </div>
+}else{
+  message= <div> I'm hidden </div>
+}
+```
+
+- render it in anywhere in the DOM
+
+```
+const myComponent = () => {
+  return (
+<div>  some things are going on here
+
+<div> {message}</div>
+
+</div>
+
+
+  )}
+```

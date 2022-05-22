@@ -50,3 +50,21 @@ width:200px;
 height:50px;
 `
 ```
+
+## adding animations, hover etc
+
+```
+import styled from "styled-components";
+
+export const Button = styled.button`
+    background-color: ${props => props.backgroundColor};
+width:200px;
+height:50px;
+//like this =>
+&:hover{
+    background-color: yellow;
+}
+`
+```
+
+`

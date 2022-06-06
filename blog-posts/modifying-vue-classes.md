@@ -47,3 +47,58 @@ onMounted(() => {
 ```
 
 Nothing fancy here. First, I import `ref` and `onMounted` from `vue`. Then, I define a `data` variable and an asynchronous `getData` function to fetch my local data. Then, I use `onMounted` to call the function. If you don't know VueJs much, refs are just a way to store data in a variable reactively, and onMounted hook is a way to call a function when the component is mounted.
+
+Now I have my data, and I can use it in my template.
+
+```
+<template>
+  <div class="app">
+    <div
+      v-for="(item, key) in changedData"
+      :key="key"
+      class="card"
+    >
+      <div class="para">{{ item.name }} {{ item.surName }}</div>
+    </div>
+  </div>
+</template>
+
+```
+
+If you'd just copy paste the code so far, you'll see the data displayed on the page as such:
+
+--------------ADD IMAGE HERE-------------------
+
+Also, if you'd like to really follow along, here's my complete CSS including all the classes I use and will use in forecoming steps.
+
+```
+<style scoped>
+.app {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding-top: 5rem;
+}
+.card {
+  margin-bottom: 1rem;
+  /* border: 5px solid green; */
+  text-align: center;
+  width: 250px;
+  height: 50px;
+  border-radius: 16px;
+}
+.para {
+  font-weight: 700;
+}
+.going {
+  border: 5px solid green;
+  text-decoration: none;
+  background-color: rgb(56, 219, 56);
+}
+.notGoing {
+  background-color: #ffe01b;
+}
+</style>
+
+```

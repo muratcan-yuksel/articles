@@ -131,4 +131,20 @@ There are a couple of different ways of creating dynamic classes in VueJS, but I
 </style>
 ```
 
-Note: `scoped` here is a nice feature of vue, which makes sure that the classnames you use in this component cannot interact with other components who use the same naming for those classes and use different styling, i.e. you can have a hundred components with the class of `.card` and every single one of them would only target the html in their respective components, so that you don't encounter unexpected breaks in your style.
+Note: `scoped` here is a nice feature of Vue, which makes sure that the classnames you use in this component cannot interact with other components who use the same naming for those classes and use different styling, i.e. you can have a hundred components with the class of `.card` and every single one of them would only target the html in their respective components, so that you don't encounter unexpected breaks in your style.
+
+This is pretty much it, actually. Now, with the code that's written, whenever I click one of the elements displayed on the UI, they'll change color as I've specified that the class `going` would have a background color of green, and the class `notGoing` would have a background color of yellow. And if I'd click on the element again, the color would change back to its original state. This logic is made sure by the following snipped:
+
+```
+const handleClick = (item) => {
+  item.isGoing = !item.isGoing;
+  console.log(item);
+};
+
+```
+
+The `handleClick` function, by taking the individual item as a parameter, makes sure that with each click `item.isGoing` will change into its opposite.
+
+-----ADD IMAGES HERE--------
+
+Now, let's go for a more complicated use case. Let's say this time we have a relatively complex UI that it deserves its own component. We'd have lots of child components to which we pass data via props in real world scenarios.

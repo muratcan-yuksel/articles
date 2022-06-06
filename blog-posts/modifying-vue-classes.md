@@ -148,3 +148,9 @@ The `handleClick` function, by taking the individual item as a parameter, makes 
 -----ADD IMAGES HERE--------
 
 Now, let's go for a more complicated use case. Let's say this time we have a relatively complex UI that it deserves its own component. We'd have lots of child components to which we pass data via props in real world scenarios.
+
+# Dynamic classes with props
+
+If you were attentive enough, you probably realized that I imported a component called `childComponent` from "`./components/childComponent.vue";` but failed to address it altogether. Now, we will play with that one.
+
+For the sake of simplicity, I'll just delete and reuse the code I've outlined above in this mysterious `childComponent`

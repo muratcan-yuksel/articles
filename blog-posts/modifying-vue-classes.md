@@ -19,4 +19,31 @@ To start with, I think I need my data to play with. I have a very basic JSON fil
 
 I'll use axios to fetch this piece of data. Of course, I'll need to install axios by entering this command in the root of my project via the terminal => `npm install axios` if I use npm, and `yarn add axios` if I use yarn.
 
-Now, I'll
+Now, check out the snippet below.
+
+```
+<script setup>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const data = ref();
+
+const getData = async () => {
+  try {
+    const res = await axios.get("../public/data/data.json");
+    data.value = res.data.items;
+    console.log(res.data.items);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+onMounted(() => {
+  getData();
+});
+</script>
+
+
+```
+
+Nothing fancy here. First, I import `ref` and `onMounted` from `vue`. Then, I define a `data` variable and an asynchronous `getData` function to fetch my local data. Then, I use `onMounted` to call the function. If you don't know VueJs much, refs are just a way to store data in a variable reactively, and onMounted hook is a way to call a function when the component is mounted.

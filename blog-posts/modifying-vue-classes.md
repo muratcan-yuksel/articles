@@ -1,6 +1,8 @@
+In this post, I'll show a way of manipulating UI list elements on click. I didn't know how to do it, I never had to before. I had troubles formulating what I need to do, and finding a onto-the-point example to it. So, I'll try to provide what I so direly needed at one point. I'm sure there are more efficient ways to do it. One thing about this approach is that even though I mention VueJs in the title, you can get the same results with any other big JS framework, like ReactJS.
+
 As it happens in the real world, I want to fetch data from somewhere and display it in the UI. But I want to do more than just to display it, I want to be able to manipulate it in the UI in this or that way. Say, I want to give each individual part displayed in the UI a different color on click, but again, as it happens, I don't have the necessary structure in the data itself. Like, say I've been given a set of names, and I was asked to arrange them as such that the user should be able to determine if one or some of them engages in an action: such as going to a party.
 
-As I've said, the data itself doesn't have anything for me to discern who will do what, it's just a collection of names like the one I've created and put in my public folder so that I can fetch it from there. Check this out =>
+As I've said, the data itself doesn't have anything for me to discern who will do what, it's just a collection of names like the one I've created and put in my public folder so that I can fetch it from there. Check it out =>
 
 ```
 {
@@ -13,7 +15,7 @@ As I've said, the data itself doesn't have anything for me to discern who will d
 
 ```
 
-Now, what I want to do is to display these in the UI, but in such a way that I will create a new array, and do whatever I want to do in that array so that the original array stays untouched, because the data might be coming from a database and I might have serious reasons to not to change it.
+Now, what I want to do is to display these in the UI. But before actually displaying it, I want to save the data somewhere and then inject a key/value pair to each item so that I can control the element in the UI by means of these key/value pairs. In order to do so, I will create an empty array, and map the original data + injected key/value pairs into it with the `map` method.
 
 So let me start with the script part. Mark that I'll use the script setup syntax of Vue3:
 
@@ -21,7 +23,6 @@ So let me start with the script part. Mark that I'll use the script setup syntax
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import childComponent from "./components/childComponent.vue";
 
 const data = ref();
 const changedData = ref();
@@ -58,7 +59,7 @@ Now, what do I do here? First, I start by importing ref and onMounted from vue. 
 
 I have two reactive variables, `data`, and `changedData`. I'll save the data I've fetched in the `getData` async function in the `data` variable, and then add some new key/value pair to each and every object in it and save this new object in the `changedData` variable. In this way, I'll both have not disturbed the original data, and will have the desired type of data with which I can develop my application as I wish.
 
-In `getData` async function I use try/catch syntax, as it is the best one I know and the simplest for my understanding. Look carefully to this snipped:
+In `getData` async function I use try/catch syntax, as it is the best one I know and the simplest for my understanding. Look carefully to this snippet:
 
 ```
  changedData.value = res.data.items.map((item) => ({
@@ -69,9 +70,9 @@ In `getData` async function I use try/catch syntax, as it is the best one I know
 
 ```
 
-Note: In Vue, refs are called with `.value` suffix. You can read the official documentation about the different usecases of ref and reactive, they are pretty much the same, but have different accepted use cases as far as I'm concerned.
+Note: In Vue, refs are called with `.value` suffix. You can read the official documentation about the different use cases of ref and reactive, they are pretty much the same, but have different accepted use cases as far as I'm concerned.
 
-Anyway, in the above snipped, I use the Javascript `map` function which creates a shallow copy of the target, without changing the original, iterates over each element in it, and does something with it before saving the new, modified datased into the `changedData` variable.
+Anyway, in the above snippet, I use the Javascript `map` function that creates a shallow copy of the target, without changing the original, iterates over each element in it, and does something with it before saving the new, modified dataset into the `changedData` variable.
 
 What it does to it is, by using the Javascript spread operator, adding the `isGoing:false` key/value pair to each and every element in the array of objects that I've fetched.
 
@@ -146,11 +147,3 @@ const handleClick = (item) => {
 The `handleClick` function, by taking the individual item as a parameter, makes sure that with each click `item.isGoing` will change into its opposite.
 
 -----ADD IMAGES HERE--------
-
-Now, let's go for a more complicated use case. Let's say this time we have a relatively complex UI that it deserves its own component. We'd have lots of child components to which we pass data via props in real world scenarios.
-
-# Dynamic classes with props
-
-If you were attentive enough, you probably realized that I imported a component called `childComponent` from "`./components/childComponent.vue";` but failed to address it altogether. Now, we will play with that one.
-
-For the sake of simplicity, I'll just delete and reuse the code I've outlined above in this mysterious `childComponent`

@@ -38,4 +38,10 @@ contract SimpleStorage {
 
 ```
 
-In this lesson, we'll create a contract that an contract new contracts. Yes, smart contracts can do that. "The ability for contracts to seamlessly interact with each other is known as `composability` "
+In this lesson, we'll create a contract that an contract new contracts. Yes, smart contracts can do that. "The ability for contracts to seamlessly interact with each other is known as `composability` ".
+
+## Using a contract in another contract file
+
+There are more than 1 way to do that. The first one is to manually copy-paste the contract inside another contract. To do this, you need to copy what comes after the pragma solidity... and paste it in the contract you wish to use the former.
+
+Say that we've copy-pasted the contract into your new factory contract. Let's see what we can do with it:

@@ -38,7 +38,7 @@ contract SimpleStorage {
 
 ```
 
-In this lesson, we'll create a contract that an contract new contracts. Yes, smart contracts can do that. "The ability for contracts to seamlessly interact with each other is known as `composability` ".
+In this lesson, we'll create a contract that creates new contracts. Yes, smart contracts can do that. "The ability for contracts to seamlessly interact with each other is known as `composability` ".
 
 ## Using a contract in another contract file
 

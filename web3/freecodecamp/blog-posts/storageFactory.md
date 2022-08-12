@@ -8,6 +8,8 @@ As this is the 3rd lesson, there are some fundamentals missing here. It also tak
 
 We will use Remix IDE for this post, so make sure you go to `https://remix.ethereum.org/` and be ready for hacking!
 
+Note: You can find the code for all the contracts here in Patrick's GitHub repo, here => https://github.com/PatrickAlphaC/storage-factory-fcc
+
 ## Simple storage smart contract
 
 Let's start by looking at the SimpleStorage smart contract .
@@ -73,3 +75,46 @@ The second line, ` nameToFavoriteNumber[_name] = _favoriteNumber;`, does the fol
 That's all for the SimpleStorage.sol contract. You can paste this contract to remix, deploy and play with it. You'll notice that so far we can only retrieve the favoriteNumber as we only created a getter function for that.
 
 ## StorageFactory smart contract
+
+For this part, we'll create a new contract in Remix IDE, named `StorageFactory.sol`. The idea in this one is to create a new contract that can create other smart contracts. Yes, smart contracts can do that. "The ability for contractsto seamlessly interact with each other is known as `composability`. "
+
+Let's check out the final version of StorageFactory smart contract:
+
+```
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "./SimpleStorage.sol";
+
+contract StorageFactory {
+
+    SimpleStorage[] public simpleStorageArray;
+
+    function createSimpleStorageContract() public {
+        SimpleStorage simpleStorage = new SimpleStorage();
+        simpleStorageArray.push(simpleStorage);
+    }
+
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+        // Address
+        // ABI
+        // SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).store(_simpleStorageNumber);
+        simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+        // return SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).retrieve();
+        return simpleStorageArray[_simpleStorageIndex].retrieve();
+    }
+}
+```
+
+As you can see, after our `pragma solidity` line, we have this import statement => `import "./SimpleStorage.sol";`. Importing works like Javascript. We can either copy paste the code, or import it like this to make it much more manageable.
+
+Now, with ` SimpleStorage[] public simpleStorageArray;` we create a public array named simpleStorage (minuscule) with the type of SimpleStorage (majuscule) contract that we've just imported. So, this array will contain only and only SimpleStorage contracts. Cool, right?
+
+The public function `createSimpleStorageCntract` does two things: In the first line, it creates a variable called `simpleStorage` (minuscule) with the type of `SimpleStorage` (majuscule) contract. It does this with the `new` keyword. When Solidity sees the 'new' keyword here in this context, it says "aha! We're going to deploy a new SimpleStorage contract." In the second line, it pushes this new contract into the `simpleStorageArray` array.
+
+The function `sfStore` ("sf" stands for "storageFactory") takes two uin256 parameters: the index of the contract just created and pushed into the array, and the favorite number that was in the `simpleStorage` contract.

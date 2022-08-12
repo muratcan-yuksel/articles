@@ -119,7 +119,7 @@ So there's this function in our SimpleStorage.sol file(s) (I use plural as we're
 
 ```
 function store(uint256 _favoriteNumber) public{
-favoriteNumber = \_favoriteNumber;
+favoriteNumber = _favoriteNumber;
 }
 ```
 

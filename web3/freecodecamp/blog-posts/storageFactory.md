@@ -118,3 +118,11 @@ Now, with ` SimpleStorage[] public simpleStorageArray;` we create a public array
 The public function `createSimpleStorageCntract` does two things: In the first line, it creates a variable called `simpleStorage` (minuscule) with the type of `SimpleStorage` (majuscule) contract. It does this with the `new` keyword. When Solidity sees the 'new' keyword here in this context, it says "aha! We're going to deploy a new SimpleStorage contract." In the second line, it pushes this new contract into the `simpleStorageArray` array.
 
 The function `sfStore` ("sf" stands for "storageFactory") takes two uin256 parameters: the index of the contract just created and pushed into the array, and the favorite number that was in the `simpleStorage` contract.
+
+Remember, the `store` function that stored the favorite number in `simpleStorage.sol` was as such:
+
+```
+function store(uint256 _favoriteNumber) public{
+favoriteNumber = _favoriteNumber;
+}
+```

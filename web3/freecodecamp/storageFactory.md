@@ -102,10 +102,48 @@ contract StorageFactory{
 
 
         function createSimpleStorageContract() public {
-          SimpleStorage  simpleStorage= new SimpleStorage();
+
+          SimpleStorage simpleStorage= new SimpleStorage();
           simpleStorageArray.push(simpleStorage);
         }
 
 
 }
+```
+
+## Interacting with other contracts
+
+So there's this function in our SimpleStorage.sol file(s) (I use plural as we're deploying as much as we want of them) and I want to interact with it in our StorageFactory.sol:
+
+//Function in SimpleStorage.sol
+
+```
+function store(uint256 _favoriteNumber) public{
+favoriteNumber = \_favoriteNumber;
+}
+```
+
+Now, in the function I'll create in StorageFactory.sol, I'll pass the index of the contract as they're stored in an array we've created, and the number from simple storage (as the function above stores the favoriteNumber)
+NB!: In order to interact with any contract, we're always going to need 2 things: The contract address and the contract abi (application binary interface)
+Also, I just want to remind here that in Solidity, if we compare it to Javascript, the declaration we put in lieu of let or const is the type declaration. i.e. it declares of the type that the variable that succeeds it is of. e.g. `struct someStruct` means someStruct is a struct. To go further, `someStruct anotherVariable` means that `anotherVariable` is of type `someStruct`.
+
+//Function for interacting (in storageFactory.sol)
+//sfStore here stands for StorageFactoryStore
+
+```
+function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public{
+// a variable named simpleStorage (minuscule) of type SimpleStorage(majuscule)
+SimpleStorage simpleStorage =  simpleStorageArray[_simpleStorageIndex];
+//now that we have the address, we can call the `store` functin from simpleStorage.sol
+simpleStorage.store(_simpleStorageNumber);
+}
+```
+
+now, elow that function, we need another function to get (view)
+
+```
+function sfGet(uint256 _simpleStorageIndex) public view returns (uint256){
+SimpleStorage simpleStorage =  simpleStorageArray[_simpleStorageIndex];
+return simpleStorage.retrieve();
+    }
 ```

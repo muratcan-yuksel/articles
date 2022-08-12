@@ -131,19 +131,112 @@ Also, I just want to remind here that in Solidity, if we compare it to Javascrip
 //sfStore here stands for StorageFactoryStore
 
 ```
-function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public{
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
 // a variable named simpleStorage (minuscule) of type SimpleStorage(majuscule)
-SimpleStorage simpleStorage =  simpleStorageArray[_simpleStorageIndex];
+SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
 //now that we have the address, we can call the `store` functin from simpleStorage.sol
 simpleStorage.store(_simpleStorageNumber);
+    }
+
+```
+
+now, below that function, let's create a getter function to get the favorite number from the simpleStorage contract we deploy (we'll use the index to get the deployed contract as you can see)
+
+```
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+  SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
+  return simpleStorage.retrieve();
+    }
+```
+
+//WORKING FULL CODE SO FAR
+
+```
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "./SimpleStorage.sol";
+
+contract StorageFactory {
+
+    SimpleStorage[] public simpleStorageArray;
+
+    function createSimpleStorageContract() public {
+        SimpleStorage simpleStorage = new SimpleStorage();
+        simpleStorageArray.push(simpleStorage);
+    }
+
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
+simpleStorage.store(_simpleStorageNumber);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+  SimpleStorage simpleStorage = simpleStorageArray[_simpleStorageIndex];
+  return simpleStorage.retrieve();
+    }
 }
 ```
 
-now, elow that function, we need another function to get (view)
+REFACTORED CODE ON THEIR GITHUB => https://github.com/PatrickAlphaC/storage-factory-fcc/blob/main/StorageFactory.sol
 
 ```
-function sfGet(uint256 _simpleStorageIndex) public view returns (uint256){
-SimpleStorage simpleStorage =  simpleStorageArray[_simpleStorageIndex];
-return simpleStorage.retrieve();
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "./SimpleStorage.sol";
+
+contract StorageFactory {
+
+    SimpleStorage[] public simpleStorageArray;
+
+    function createSimpleStorageContract() public {
+        SimpleStorage simpleStorage = new SimpleStorage();
+        simpleStorageArray.push(simpleStorage);
     }
+
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+        // Address
+        // ABI
+        // SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).store(_simpleStorageNumber);
+        simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+        // return SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).retrieve();
+        return simpleStorageArray[_simpleStorageIndex].retrieve();
+    }
+}
 ```
+
+## Inheritance
+
+Now, say that we want to add 5 to everyone's favorite number for some reason. Instead of copy-pasting everything in SimpleStorage.sol file, we can create a new contract called ExtraStorage.sol and inherit SimpleStorage in it like so:
+
+```
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.8;
+
+import "./SimpleStorage.sol";
+
+contract ExtraStorage is SimpleStorage {
+    function store(uint256 _favoriteNumber) public override {
+        favoriteNumber = _favoriteNumber + 5;
+    }
+}
+```
+
+NB! In order for `override` j-keyword to work, the function that we're going to override should be a `virtual` function. So, we go back to our SimpleStorage.sol contract, find the store function and change it as such:
+
+````
+    function store(uint256 _favoriteNumber) public virtual {
+        favoriteNumber = _favoriteNumber;
+    }
+
+    ```
+````

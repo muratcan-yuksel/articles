@@ -4,7 +4,7 @@ I'm following Freecodecamp's wonderful web3 course on Youtube (link here => http
 
 Please note that all the credit goes to Patrick Collins and incredible Freecodecamp team/community, I am just delivering what I've seen in written format so that I won't have to rewatch the tutorial in the future. I hope you too can benefit from it.
 
-As this is the 3rd lesson, there are some fundamentals missing here. It also takes the SimpleStorage smart contract introduced to us in Lesson 2 of the Freecodecamp course. You might want to check it out before reading this post, although I'll try to explain what's going on in the SimpleStorage contract. If I'm mistaken at some point, please please feel free to correct as it's been more than a week I've watched the Lesson 2, so I forgot some of the reasons why we're doing things as we do :)
+As this is the 3rd lesson, there are some fundamentals missing here. It also takes the SimpleStorage smart contract introduced to us in Lesson 2 of the Freecodecamp course. You might want to check it out before reading this post, although I'll try to explain what's going on in the SimpleStorage contract. If I'm mistaken at any point, please please feel free to correct as it's been more than a week I've watched the Lesson 2, so I forgot some of the reasons why we're doing things as we do :)
 
 We will use Remix IDE for this post, so make sure you go to `https://remix.ethereum.org/` and be ready for hacking!
 

@@ -167,3 +167,23 @@ contract ExtraStorage is SimpleStorage {
 }
 
 ```
+
+You see, we're overriding the `store` function in `SimpleStorage.sol` contract. This is done by the `override` keyword. We're just adding the number 5 to everyone's favorite number for heuristic purposes.
+
+But this can't work by itself. It wouldn't override like so. We need one more extra step so that it would work seamlessly. We need to go back to our original `SimpleStorage.sol` contract and add the `virtual` keyword to the function we want to override later on. In this case, it is the `store` function in `SimpleStorage.sol`.
+
+So, we open the `SimpleStorage.sol` contract, and change the `store` function to this:
+
+```
+
+    function store(uint256 _favoriteNumber) public virtual {
+        favoriteNumber = _favoriteNumber;
+    }
+
+```
+
+Now, this `store` function is "overrideable". We can create a copy of `SimpleStorage.sol` and override its `store` function as we please.
+
+That's all folks! I hope you enjoyed this post. I hope to continue publishing my notes if everything goes according to the plan. Yet I highly suggest that you check the original tutorial on Freecodecamp's Youtube channel, it is phenomenal.
+
+Keep calm & happy coding!

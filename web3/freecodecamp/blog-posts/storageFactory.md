@@ -98,14 +98,12 @@ contract StorageFactory {
     }
 
     function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
-        // Address
-        // ABI
-        // SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).store(_simpleStorageNumber);
+
         simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);
     }
 
     function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
-        // return SimpleStorage(address(simpleStorageArray[_simpleStorageIndex])).retrieve();
+
         return simpleStorageArray[_simpleStorageIndex].retrieve();
     }
 }
@@ -115,7 +113,7 @@ As you can see, after our `pragma solidity` line, we have this import statement 
 
 Now, with ` SimpleStorage[] public simpleStorageArray;` we create a public array named simpleStorage (minuscule) with the type of SimpleStorage (majuscule) contract that we've just imported. So, this array will contain only and only SimpleStorage contracts. Cool, right?
 
-The public function `createSimpleStorageCntract` does two things: In the first line, it creates a variable called `simpleStorage` (minuscule) with the type of `SimpleStorage` (majuscule) contract. It does this with the `new` keyword. When Solidity sees the 'new' keyword here in this context, it says "aha! We're going to deploy a new SimpleStorage contract." In the second line, it pushes this new contract into the `simpleStorageArray` array.
+The public function `createSimpleStorageContract` does two things: In the first line, it creates a variable called `simpleStorage` (minuscule) with the type of `SimpleStorage` (majuscule) contract. It does this with the `new` keyword. When Solidity sees the 'new' keyword here in this context, it says "aha! We're going to deploy a new SimpleStorage contract." In the second line, it pushes this new contract into the `simpleStorageArray` array.
 
 The function `sfStore` ("sf" stands for "storageFactory") takes two uin256 parameters: the index of the contract just created and pushed into the array, and the favorite number that was in the `simpleStorage` contract.
 
@@ -125,4 +123,47 @@ Remember, the `store` function that stored the favorite number in `simpleStorage
 function store(uint256 _favoriteNumber) public{
 favoriteNumber = _favoriteNumber;
 }
+```
+
+Then, with the line ` simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);` it stores the favorite number given in `uin256 _simpleStorageNumber` parameter to the `simpleStorageArray` at the index given in the parameter `_simpleStorageIndex`. It does so by calling the `store` function in `simpleStorage.sol` that I've shown above.
+
+I know it sounds complex, and maybe it is, it's just, we're writing a function so that we can choose whatever `SimpleStorage` we've created using the `createSimpleStorageContract` function using its index in the array so that we assign it a favorite number.
+
+The next and the last function in this contract, `sfGet` ("sf" standing for "storageFactory" again) is a public getter function and we know that it does not cost us any gas because it contains the `view` keyword in it. It takes the index of the simpleStorage contract we've created via `createSimpleStorageContract` function and returns the favorite number that was in that contract by callng the `retrieve` function in `simpleStorage.sol` contract. That `retrieve` function wsa as such:
+
+````
+//retrieve function in simpleStorage.sol
+    function retrieve() public view returns (uint256){
+        return favoriteNumber;
+    }
+
+    ```
+````
+
+Now say, if I opened the Remix IDE, compiled and deployed the `StorageFactory.sol` contract, and then I called the `sfGet` function, create a bunch of contracts using the `createSimpleStorageContract` function, and say, called the `sfStore` function with the parameters `0,22` and then called the `sfGet` function with the parameter `0`, I would get `22` as the favorite number. If I called the `sfStore` function with the parameters `2,378` and then subsequently call the `sfGet` function with the parameter `2`, I would get `378` as the favorite number.
+
+That's it. Now, we have one more thing to learn in this post, inheritance.
+
+## Inheritance
+
+In the tutorial Patrick shows us how we can create a coype of a contract and even overriding it in this or that way. For that, we need to create a new contract called `ExtraStorage.sol`. Now, if we import `SimpleStorage.sol` contract in this new `ExtraStorage.sol` contrat and define it as `contract ExtraStorage is SimpleStorage ` instead of just declaring `contract ExtraStorage` as we'd normally do, this new `ExtraStorage` contract will have all the logic the variables, the functions and all in `SimpleStorage` contract.
+
+But he goes even further. What if we wanted to change some things in our copy of `SimpleStorage` (which is our `ExtraStorage` contract) and we wanted to add some more functionality to it?
+
+Then we'd need to `override` it. Check this snippet out:
+
+```
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.8;
+
+import "./SimpleStorage.sol";
+
+contract ExtraStorage is SimpleStorage {
+    function store(uint256 _favoriteNumber) public override {
+        favoriteNumber = _favoriteNumber + 5;
+    }
+}
+
 ```

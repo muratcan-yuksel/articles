@@ -231,7 +231,7 @@ contract ExtraStorage is SimpleStorage {
 }
 ```
 
-NB! In order for `override` j-keyword to work, the function that we're going to override should be a `virtual` function. So, we go back to our SimpleStorage.sol contract, find the store function and change it as such:
+NB! In order for `override` keyword to work, the function that we're going to override should be a `virtual` function. So, we go back to our SimpleStorage.sol contract, find the store function and change it as such:
 
 ````
     function store(uint256 _favoriteNumber) public virtual {

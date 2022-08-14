@@ -73,3 +73,69 @@ Ensuite, nous avons une fonction `addPerson` qui est publique. Il prend deux par
 La deuxième ligne, ` nameToFavoriteNumber[_name] = _favoriteNumber;`, fait ce qui suit : elle prend les paramètres et crée une paire clé/valeur avec eux et place cette nouvelle paire clé/valeur dans le mapping nameToFavoriteNumber. Vous voyez, dans le mapping ` mapping(string => uint256) public nameToFavoriteNumber;` nous avons une string et uint256, donc le `_name` va comme string, et `_favoriteNumber` va comme uint256.
 
 C'est tout pour le contrat SimpleStorage.sol. Vous pouvez coller ce contrat pour le remixer, le déployer et jouer avec. Vous remarquerez que jusqu'à présent, nous ne pouvons récupérer que le favoriteNumber car nous n'avons créé qu'une fonction `getter` pour cela.
+
+## StorageFactory smart contract
+
+Pour cette partie, nous allons créer un nouveau contrat dans Remix IDE, nommé `StorageFactory.sol`. L'idée dans celui-ci est de créer un nouveau contrat qui peut créer d'autres smart contracts. Oui, les smart contracts peuvent le faire. "La possibilité pour les contrats d'interagir de manière transparente les uns avec les autres est connue sous le nom de" composabilité ". "
+
+Voyons la version finale du smart contract StorageFactory :
+
+```solidity
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "./SimpleStorage.sol";
+
+contract StorageFactory {
+
+    SimpleStorage[] public simpleStorageArray;
+
+    function createSimpleStorageContract() public {
+        SimpleStorage simpleStorage = new SimpleStorage();
+        simpleStorageArray.push(simpleStorage);
+    }
+
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+
+        simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+
+        return simpleStorageArray[_simpleStorageIndex].retrieve();
+    }
+}
+```
+
+Comme vous pouvez le voir, après notre ligne `pragma solidity`, nous avons cette déclaration d'importation => `import "./SimpleStorage.sol";`. L'importation fonctionne comme Javascript. Nous pouvons soit copier-coller le code, soit l'importer comme ceci pour le rendre beaucoup plus gérable.
+
+Maintenant, avec ` SimpleStorage[] public simpleStorageArray;` nous créons un array public nommé simpleStorage (minuscule) avec le type de contrat SimpleStorage (majuscule) que nous venons d'importer. Ainsi, cet array contiendra uniquement et uniquement des contrats SimpleStorage. Cool, non ?
+
+La fonction publique `createSimpleStorageContract` fait deux choses : dans la première ligne, elle crée une variable appelée `simpleStorage` (minuscule) avec le type de contrat `SimpleStorage` (majuscule). Il le fait avec le mot clé `new`. Lorsque Solidity voit le mot-clé "new" ici dans ce contexte, il dit "aha ! Nous allons déployer un nouveau contrat SimpleStorage". Dans la deuxième ligne, il pousse ce nouveau contrat dans l'array `simpleStorageArray`.
+
+La fonction `sfStore` ("sf" signifie "storageFactory") prend deux paramètres uin256 : l'index du contrat qui vient d'être créé et inséré dans l'array, et le numéro favori qui se trouvait dans le contrat `simpleStorage`.
+
+Rappelez-vous, la fonction `store` qui stockait le numéro favori dans `simpleStorage.sol` était ainsi :
+
+```solidity
+function store(uint256 _favoriteNumber) public{
+favoriteNumber = _favoriteNumber;
+}
+```
+
+Ensuite, avec la ligne ` simpleStorageArray[_simpleStorageIndex].store(_simpleStorageNumber);` il stocke le numéro favori donné dans le paramètre `uin256 _simpleStorageNumber` au `simpleStorageArray` à l'index donné dans le paramètre `_simpleStorageIndex`. Il le fait en appelant la fonction `store` dans `simpleStorage.sol` que j'ai montré ci-dessus.
+
+Je sais que cela semble complexe, et peut-être que c'est le cas, c'est juste, nous écrivons une fonction afin que nous puissions choisir n'importe quel `SimpleStorage` que nous avons créé en utilisant la fonction `createSimpleStorageContract`, en utilisant son index dans l'array afin que nous l'attribuions un numéro préféré.
+
+La prochaine et dernière fonction de ce contrat, `sfGet` ("sf" pour "storageFactory" à nouveau) est une fonction getter publique et nous savons qu'elle ne nous coûte pas d'essence car elle contient le mot clé `view` . Il prend l'index du contrat simpleStorage que nous avons créé via la fonction `createSimpleStorageContract` et renvoie le numéro favori qui était dans ce contrat en appelant la fonction `retrieve` dans le contrat `simpleStorage.sol`. Cette fonction "retrieve" était telle que :
+
+```solidity
+//retrieve function in simpleStorage.sol
+    function retrieve() public view returns (uint256){
+        return favoriteNumber;
+    }
+
+
+```

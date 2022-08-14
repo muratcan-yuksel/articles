@@ -1,4 +1,4 @@
-# Créer ub <<storage factory>> smart contract en Solidity et interagir avec lui (notes de Freecodecamp)
+# Créer un storage factory smart contract en Solidity et interagir avec lui (notes de Freecodecamp)
 
 Je suis le merveilleux cours web3 de Freecodecamp sur Youtube (lien ici => https://www.youtube.com/watch?v=gyMwXuJrbJQ&ab_channel=freeCodeCamp.org), et pour m'assurer de me souvenir de ce que j'ai appris, j'aime prendre des notes. Ici, je posterai mes notes de la leçon 3 : Remix Storage Factory. Je vais rendre mes notes désorganisées lisibles par l'homme afin qu'elles ressemblent à un tutoriel.
 
@@ -48,25 +48,25 @@ contract SimpleStorage {
 
 Tous les smart contrats Solidity commencent par un identifiant de licence SPDX. Il s'agit d'une licence sous laquelle se trouve le smart contract. Dans ce cas, c'est le MIT. Si je ne me trompe pas, cela signifie que c'est open source.
 
-Ensuite, nous devons définir la version du compilateur Solidity. ^ 0.8.0 signifie "tout ce qui est au-dessus de 0.8.0" passe.
+Ensuite, nous devons définir la version du compilateur Solidity. `^ 0.8.0 `signifie "tout ce qui est au-dessus de 0.8.0" passe.
 
-Ensuite, nous utilisons le mot-clé contract pour faire savoir au compilateur que nous créons un smart contract. Notre contrat s'appelle SimpleStorage.
+Ensuite, nous utilisons le mot-clé `contract` pour faire savoir au compilateur que nous créons un smart contract. Notre contrat s'appelle `SimpleStorage`.
 
 Puisque Solidity est un langage typé, nous devons définir le type de la variable que nous créons. Je suis normalement un développeur Javascript, donc mon esprit fonctionne en termes de JS. Voici comment je le vois : au lieu de dire `let favouriteNumber` ou `const favouriteNumber`, nous disons `uint256 favouriteNumber`. Si nous devions définir un string, nous devrions dire `string favoriteNumber`.
 
 Maintenant que nous avons notre variable favoriteNumber prête, nous créons un `struct` de People. Les structs sont comme des objets en Javascript. Ils prennent des paires clé/valeur. Dans ce cas, il s'agit de `uint256 favoriteNumber` et d'un `string name`.
 
-Ensuite, nous créons un array dynamique nommé people avec le type People struct. Je ne connais pas encore Typescript ou tout autre langage typé autre que Solidity, donc cette partie était (et est toujours) assez déroutante pour moi. C'est comme si ce array de people ne pouvait prendre que des structs People comme valeurs. Il ne peut pas prendre une seule string ou un array de strings ou d'uints ou quoi que ce soit d'autre que des structs People. Il ne peut pas prendre d'autres types de structs également si je ne me trompe pas; il ne peut prendre que des structs People comme valeurs et c'est tout.
+Ensuite, nous créons un array dynamique nommé `people` avec le type People struct. Je ne connais pas encore Typescript ou tout autre langage typé autre que Solidity, donc cette partie était (et est toujours) assez déroutante pour moi. C'est comme si ce array de people ne pouvait prendre que des structs People comme valeurs. Il ne peut pas prendre une seule string ou un array de strings ou d'uints ou quoi que ce soit d'autre que des structs People. Il ne peut pas prendre d'autres types de structs également si je ne me trompe pas; il ne peut prendre que des structs People comme valeurs et c'est tout.
 
-De plus, avec cette syntaxe People[] public people, nous disons au compilateur qu'il s'agit d'un array dynamique de structs People. C'est-à-dire que la longueur d'array n'est pas défini, car vous pouvez le faire dans Solidity, c'est-à-dire que vous pouvez avoir des arrays avec une longueur prédéfinie.
+De plus, avec cette syntaxe` People[] public people`, nous disons au compilateur qu'il s'agit d'un `array dynamique` de structs People. C'est-à-dire que la longueur d'array n'est pas défini, car vous pouvez le faire dans Solidity, c'est-à-dire que vous pouvez avoir des arrays avec une longueur prédéfinie.
 
 En plus sur l'array, vous remarquerez le mot-clé public ici. Cela signifie que cette variable est publique, c'est-à-dire qu'elle peut être vue et appelée en dehors du contrat. Si nous disions `private` au lieu de cela, vous ne pourriez pas y accéder depuis l'extérieur du contrat.
 
 Ensuite, nous avons un mapping de type string à uint256. Les mappings aussi m'ont beaucoup déconcerté dans Solidity. Ils sont comme des objets dans JS, mais au lieu de prendre plusieurs valeurs comme des structs, ils ne prennent qu'une seule paire clé/valeur et ils fonctionnent comme des arrays en Javascript. Ils sont cependant très pratiques, en particulier en travaillant avec les addresses.
 
-Notre première fonction, store est une fonction publique qui prend un seul paramètre _favoriteNumber de type uint256 et change la variable favoriteNumber à la valeur du paramètre \_favoriteNumber. Le trait de soulignement (_) n'est qu'une convention dans Solidity, c'est pour les paramètres.
+Notre première fonction, `store` est une fonction publique qui prend un seul paramètre `_favoriteNumber` de type uint256 et change la variable `favoriteNumber` à la valeur du paramètre `_favoriteNumber`. Le trait de soulignement (`_`) n'est qu'une convention dans Solidity, c'est pour les paramètres.
 
-Ensuite, nous avons une fonction "retrieve" qui est publique et visible. Cela signifie qu'il peut être vu et appelé depuis l'extérieur du contrat. Il renvoie une valeur "uint256" et ne coûte PAS d'essence. C'est parce que cela ne change pas l'état de l'EVM (Ethereum Virtual Machine). Puisqu'il n'y a pas de changement, il n'y a pas de frais d'essence.
+Ensuite, nous avons une fonction `retrieve` qui est publique et visible. Cela signifie qu'il peut être vu et appelé depuis l'extérieur du contrat. Il renvoie une valeur `uint256` et ne coûte PAS d'essence. C'est parce que cela ne change pas l'état de l'EVM (Ethereum Virtual Machine). Puisqu'il n'y a pas de changement, il n'y a pas de frais d'essence.
 
 Ensuite, nous avons une fonction `addPerson` qui est publique. Il prend deux paramètres `_name` et `_favoriteNumber` de type `string` et `uint256`. Maintenant, la première ligne à l'intérieur de cette fonction, ` people.push(People(_favoriteNumber, _name));`, fait ce qui suit : elle prend les paramètres et crée une struct People avec eux et pousse cette nouvelle struct People dans l'array people.
 
@@ -139,3 +139,49 @@ La prochaine et dernière fonction de ce contrat, `sfGet` ("sf" pour "storageFac
 
 
 ```
+
+Dis donc, si j'ai ouvert l'IDE Remix, compilé et déployé le contrat `StorageFactory.sol`, puis j'ai appelé la fonction `sfGet`, puis crée un ensemble de contrats à l'aide de la fonction `createSimpleStorageContract`, et dites, appelé le `sfStore ` avec les paramètres `0,22` puis appelé la fonction `sfGet` avec le paramètre `0`, j'obtiendrais `22` comme numéro favori. Si j'appelais la fonction `sfStore` avec les paramètres `2,378` et que j'appelais ensuite la fonction `sfGet` avec le paramètre `2`, j'obtiendrais `378` comme numéro favori.
+
+C'est ça. Maintenant, nous avons encore une chose à apprendre dans ce post, l'héritage.
+
+## Héritage
+
+Dans le tutoriel, Patrick nous montre comment on peut créer une copie d'un contrat et même le remplacer de telle ou telle manière. Pour cela, nous devons créer un nouveau contrat appelé `ExtraStorage.sol`. Maintenant, si nous importons le contrat `SimpleStorage.sol` dans ce nouveau contrat `ExtraStorage.sol` et le définissons comme `contract ExtraStorage is SimpleStorage` au lieu de simplement déclarer `contract ExtraStorage` comme nous le ferions normalement, ce nouveau `ExtraStorage` contract aura toute la logique, les variables, les fonctions et tout dans le contrat `SimpleStorage`.
+
+Mais il va encore plus loin. Et si nous voulions changer certaines choses dans notre copie de `SimpleStorage` (qui est notre contrat `ExtraStorage`) et que nous voulions y ajouter plus de fonctionnalités ?
+
+Ensuite, nous aurions besoin de le remplacer (override). Vérifiez cet extrait de `ExtraStorage.sol` :
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.8;
+
+import "./SimpleStorage.sol";
+
+contract ExtraStorage is SimpleStorage {
+    function store(uint256 _favoriteNumber) public override {
+        favoriteNumber = _favoriteNumber + 5;
+    }
+}
+
+```
+
+Vous voyez, nous redéfinissons la fonction `store` dans le contrat `SimpleStorage.sol`. Ceci est fait par le mot-clé `override`. Nous ajoutons simplement le numéro 5 au numéro préféré de tout le monde à des fins heuristiques.
+
+Mais cela ne peut pas fonctionner tout seul. Cela ne remplacerait pas comme ça. Nous avons besoin d'une étape supplémentaire pour que cela fonctionne de manière transparente. Nous devons revenir à notre contrat `SimpleStorage.sol` d'origine et ajouter le mot-clé `virtual` à la fonction que nous voulons remplacer plus tard. Dans ce cas, il s'agit de la fonction `store` dans `SimpleStorage.sol`.
+
+Donc, nous ouvrons le contrat `SimpleStorage.sol` et changeons la fonction `store` en ceci :
+
+```solidity
+    function store(uint256 _favoriteNumber) public virtual {
+        favoriteNumber = _favoriteNumber;
+    }
+
+```
+
+Maintenant, cette fonction `store` est "remplaçable". Nous pouvons créer une copie de `SimpleStorage.sol` et remplacer sa fonction `store` comme nous voulions.
+
+C'est tout ! J'espère que vous avez apprécié cet article. J'espère continuer à publier mes notes si tout se passe comme prévu. Pourtant, je vous suggère fortement de consulter le tutoriel original sur la chaîne Youtube de Freecodecamp, il est phénoménal.
+
+Keep calm & happy coding!

@@ -43,18 +43,6 @@ Blockchains are deterministic systems that are closed to the outside world.
 
 "Blockchain Oracle: Any device that interacts with the off-chain world to provide external data or computation to smart contracts."
 
-```solidity
-//SPDX-License-Identifier: MIT
+We're going to use Chainlink Data Feeds
 
-pragma solidity ^0.8.0;
-
-contract FundMe{
-    function fund() public payable{
-            require(msg.value>1e18, "Didn't send enough!");
-
-    }
-
-   // function withdraw{}
-}
-
-```
+To test, we copy the code in the following link `https://docs.chain.link/docs/get-the-latest-price/` and run it on Injected on Remix. Injected, not London or Belin EVM. We deploy, it's deployed after a brief delay like all smart conracts, so it is shown on deployed contracts after a while, and from there we can see the price of ETH to USD.

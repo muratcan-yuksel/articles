@@ -77,3 +77,37 @@ Now, for that, we use interfaces. We go to the following link `https://github.co
 Now, for those interfaces to work, we either need to coyp-paste them into our contracts so that we can interact with them, or do something else. And since copy-pasting is not a beckoning way, we'll do that something else.
 
 Importing! We're going to import them directly from the GitHub repo. And the one we need to write is `import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";` (can be found on the following link => `https://docs.chain.link/docs/get-the-latest-price/`)
+
+Now, here we just added a `getVersion` function to demonstrate how things work. Here's a woring version of the code:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract FundMe{
+    function fund() public payable{
+        require(msg.value>1e18, "Didn't send enough!");
+    }
+
+    function getPrice () public{
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+    }
+
+    function getConversionRate () public{
+        //
+    }
+
+    function getVersion() public view returns (uint256){
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        return priceFeed.version();
+    }
+
+   // function withdraw{}
+}
+```
+
+### NB: I guess, in order to use them locally we might need to use npm. Like the following: `yarn add @chainlink/contracts` BUT I'm not sure OK?

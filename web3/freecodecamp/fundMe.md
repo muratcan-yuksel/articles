@@ -111,3 +111,36 @@ contract FundMe{
 ```
 
 ### NB: I guess, in order to use them locally we might need to use npm. Like the following: `yarn add @chainlink/contracts` BUT I'm not sure OK?
+
+Now, to explain the code snippet above: We create an AggregatorV3Interface variable called priceFeed that's equal to `AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e)`That address in the parenthesis is the one we got from the `Ethereum Data Feeds` section/goerli/ETH-USD.
+
+## Floating point math in solidity
+
+Now, our `getPrice` function needs some explaining:
+
+```solidity
+    function getPrice () public{
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (int256 price)= priceFeed.latestRoundDate();
+
+    }
+```
+
+Now, we already know ` AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);` is an AggregatorV3Interface variable named priceFeed that's equal to the AggregatorV3Interface contract called with göerli ETH/USD address. But, what about the ` (int price)= priceFeed.latestRoundDate();` part?
+
+Now, if we examine the snippet using AggregatorV3Interface in this page => `https://docs.chain.link/docs/get-the-latest-price/` we notice that their `priceFeed` variable returns the follwing when it calls `latestRoundDate()` function:
+
+```
+     /*uint80 roundID*/,
+            int price,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/
+```
+
+Here, `price` is `int` because sometimes the values can be negative. And I guess we only need the price at the moment, that's why our `getPrice` function above takes only `int price`.
+
+Nb! In the documentation, it's `int price`, we changed it to `int256 price` to make it flexible (whatever that means).

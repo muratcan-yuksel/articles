@@ -1,5 +1,10 @@
 # Lesson 4: Fund me
 
+# Useful links
+
+data.chain.link
+docs.chain.link
+
 We'll work with 2 contracts here. `FundMe.sol` and `PriceConverter.sol`. `FundMe.sol` will allow users to send ethereum, avalance, polygon, phantom or whatever blockchain native token into this contract and then some owner of the contract can withdraw these tokens and do whatever they want to do with them.
 
 We will learn about payable functions.
@@ -46,3 +51,22 @@ Blockchains are deterministic systems that are closed to the outside world.
 We're going to use Chainlink Data Feeds
 
 To test, we copy the code in the following link `https://docs.chain.link/docs/get-the-latest-price/` and run it on Injected on Remix. Injected, not London or Belin EVM. We deploy, it's deployed after a brief delay like all smart conracts, so it is shown on deployed contracts after a while, and from there we can see the price of ETH to USD.
+
+Since we cannot get a random number from the blockchain as it is deterministic, we're going to use Chainlink's verifiable randomness function.
+
+`Around 3.56 he gives an example of how to use Chainlink in depth.` I didn't give too much attention to that part yet, as it seems that we're going to go over them later on.
+
+## Interfaces & Price Feeds
+
+We create two public functions: `getPrice` and `getConversionRate`.
+We use Chainlink Data Feeds. We will integrage with the aggregator contract `AggregatorV3Interface`.
+
+When we interact with this Chainlink price feed, we actually rea from one of those contracts, like `AggregatorV3Interface` that has a function like `getLatestPrice`. We're interested in the `int price` that function returns.
+
+Since we're interacting with a contract outside of our contract, we'll need two things: `ABI` and `Address`.
+
+### getting the address
+
+To get the address, we go to `Ethereum Data Feeds` section under `Contract Addresses` section inside `Data Feeds` part of `docs.chain.link`. There, we'll find the `goerli` section and get the contract address associated with `ETH/USD`. The address there is `0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e`
+
+### getting the ABI

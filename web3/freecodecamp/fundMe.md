@@ -4,6 +4,7 @@
 
 data.chain.link
 docs.chain.link
+https://github.com/smartcontractkit/chainlink
 
 We'll work with 2 contracts here. `FundMe.sol` and `PriceConverter.sol`. `FundMe.sol` will allow users to send ethereum, avalance, polygon, phantom or whatever blockchain native token into this contract and then some owner of the contract can withdraw these tokens and do whatever they want to do with them.
 
@@ -67,6 +68,12 @@ Since we're interacting with a contract outside of our contract, we'll need two 
 
 ### getting the address
 
-To get the address, we go to `Ethereum Data Feeds` section under `Contract Addresses` section inside `Data Feeds` part of `docs.chain.link`. There, we'll find the `goerli` section and get the contract address associated with `ETH/USD`. The address there is `0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e`
+To get the address, we go to `Ethereum Data Feeds` section under `Contract Addresses` section inside `Data Feeds` part of `docs.chain.link`. There, we'll find the `goerli` section and get the contract address associated with `ETH/USD`. The address there is `0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e`. We'll need this address.
 
 ### getting the ABI
+
+Now, for that, we use interfaces. We go to the following link `https://github.com/smartcontractkit/chainlink/tree/develop/contracts/src/v0.8/interfaces` (I chose v.8 here) and there are different smart contracts there. We check the one named `AggregatorV3Interface` and its functions. It has some functions that seem to be returning something. To check the version for instance, we're going to use the `version` function.
+
+Now, for those interfaces to work, we either need to coyp-paste them into our contracts so that we can interact with them, or do something else. And since copy-pasting is not a beckoning way, we'll do that something else.
+
+Importing! We're going to import them directly from the GitHub repo. And the one we need to write is `import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";` (can be found on the following link => `https://docs.chain.link/docs/get-the-latest-price/`)

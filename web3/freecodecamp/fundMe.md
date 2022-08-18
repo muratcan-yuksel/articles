@@ -363,3 +363,52 @@ The two snippets above do the very same thing, in different compiler versions.
 So what's the use of this `unchecked` keyword? Well, it turns out it is more gas efficient. So, if you sure that your math won't round and cause problems, you can use this technique to make your contract more gas efficient.
 
 ## Basic Solidity For Loop
+
+Now we'll write the `withdraw` function. This function will loop through the `funders` array and set the amount of money sent by an individual number to 0 in `addressToAmountFunded` mapping.
+
+This is the `withdraw` function:
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+        //create a funder address variable that's equal to the current index in the funders array
+            address funder= funders[funderIndex];
+        //set the amount of money sent by the funder found in addressToAmountFunded mapping to 0
+            addressToAmountFunded[funder]= 0;
+        }
+    }
+```
+
+Now we need to do 2 more things: Reset the `funders` array, and actually withdraw the funds.
+
+### Resetting an array
+
+We reset the `funders` array by writing this piece of code => ` funders= new address[](0);`
+
+Now, `withdraw` function with the above line added to it:
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+            address funder= funders[funderIndex];
+            addressToAmountFunded[funder]= 0;
+        }
+        //reset the array
+        funders= new address[](0);
+        //actually withdraw the funds
+    }
+```
+
+### Sending ETH from a contract
+
+There are 3 different ways: `transfer`, `send`, and `call`.
+
+#### transfer
+
+We can write the following line => `payable(msg.sender).transfer(address(this).balance)
+
+Now, normally `msg.sender` is of type `address`. What we're doing when we add `payable` in front of it here is we're `typecasting` like we did with ints and uints earlier. We are doing this because in Solidity native tokens can only be sent to `payable` addresses.
+
+`this` keyword here refers to the whole contract, i.e. `FundMe.sol`.

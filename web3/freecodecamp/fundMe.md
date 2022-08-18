@@ -220,9 +220,14 @@ msg.sender is the addresss of whoever calls the `fund` function
 
 Now that we have our funders, we might want to check how much money they're sending by using `mapping`s.
 
-First off, we create this: `mapping(address => uint256) public addressToAmountFunded;`. Then, we add ` addressToAmountFunded[msg.sender] = msg.value;` to our `fund` function to assign the amount of money sent to the address who sent it in our `addressToAmountFunded` mapping, so now our `fund` function looks like this :
+First off, we create this: `mapping(address => uint256) public addressToAmountFunded;`. Then, we add ` addressToAmountFunded[msg.sender] = msg.value;` to our `fund` function to assign the amount of money sent to the address who sent it in our `addressToAmountFunded` mapping, so now our `fund` function alongside with the variables coming before it looks like this :
 
 ```solidity
+
+    uint256 public minimumUsd= 50 * 1e18;
+    address[] public funders;
+    mapping(address => uint256) public addressToAmountFunded;
+
     function fund() public payable{
     require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
     funders.push(msg.sender);
@@ -230,3 +235,90 @@ First off, we create this: `mapping(address => uint256) public addressToAmountFu
 
     }
 ```
+
+Now, to the next part of the lesson.
+
+## Libraries
+
+`starts around 4.25`
+
+`Now, libraries are like contracts. But they enable us to give functions to uint256, like msg.value. So that we can call, say getConversionRate on msg.value for instance, like so => msg.value.getConversionRate();`
+
+To start, we create a new solidity file named `PriceConverter.sol`.
+
+Now, libraries can't have state variables, can't send ether, and all the functions in the library are going to be internal.
+
+Now we cut the following functions from `FundMe.sol` and paste them into `PriceConverter.sol`: `getPrice`, `getVersion`, and `getConversionRate`. We're going to do the same for our `AggregatorV3Interface` import since we're not using it anymore in `FundMe.sol`. So we remove/add this => `import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";` Lastly, we'll make all the functions inside our library `internal`.
+
+Now, as I've mentioned above, we're going to make this libraries functions usable for `uint256`. In order to do that, we'll import this library into our contract, and then add `using PriceConverter for uint256;` inside our `FundMe` contract. Now, we can change the require statement from this ` require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");` to this => ` require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough!");`
+
+How this works is, after creating our library, the functions which normally expect a variable passed into them (such as `function getConversionRate (uint256 ethAmount) internal view returns (uint256)` is expecting an `uint256 ethAmount`) will regard `msg.value` as their first variable. "So, `msg.value` will be considered as the first parameter for any of these library functions."
+
+If we wanted to pass a 2nd variable to that function (`getConversionRate` in our case), like, if was like this => `function getConversionRate (uint256 ethAmount, uint256 somethingElse) internal view returns (uint256)` that `uint256 somethingElse` would be passed like a normal function call. Like so: `msg.value.getConversionRate(123);` where `123` is the 2nd parameter.
+
+But we're not gonna do that.
+
+Now, this is our `PriceConverter.sol` file so far:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+library PriceConverter{
+        function getPrice () internal view returns(uint256){
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (,int256 price,,,)= priceFeed.latestRoundData();
+        //ETH in terms of USD
+        //3000.00000000
+        return uint256(price * 1e10);
+    }
+
+    function getConversionRate (uint256 ethAmount) internal view returns (uint256){
+        //this is the function that takes the ethAmount and returns the amount in terms of USD
+        uint ethPrice= getPrice();
+        uint256 ethAmountInUSD= (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUSD;
+    }
+
+    function getVersion() internal view returns (uint256){
+        // an AggregatorV3Interface variable called priceFeed
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        return priceFeed.version();
+    }
+}
+```
+
+And this is our `FundMe.sol` file:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "./PriceConverter.sol";
+contract FundMe{
+    using PriceConverter for uint256;
+
+    uint256 public minimumUsd= 50 * 1e18;
+    address[] public funders;
+    mapping(address => uint256) public addressToAmountFunded;
+
+    function fund() public payable{
+         require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough!");
+        funders.push(msg.sender);
+        addressToAmountFunded[msg.sender] = msg.value;
+
+    }
+
+
+
+   // function withdraw{}
+}
+```
+
+## SafeMath, Overflow Checking, and the "unchecked" keyword

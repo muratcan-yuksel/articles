@@ -144,3 +144,38 @@ Now, if we examine the snippet using AggregatorV3Interface in this page => `http
 Here, `price` is `int` because sometimes the values can be negative. And I guess we only need the price at the moment, that's why our `getPrice` function above takes only `int price`.
 
 Nb! In the documentation, it's `int price`, we changed it to `int256 price` to make it flexible (whatever that means).
+
+Now, this part is confusing a bit. When returning the price, we first need to convert it from `int256` to `uint256` (a practice that's called `typecasting`). Now, for some reason, Solidity doesn't work well with decimals, so we need to convert them. Eth in terms of Wei has 18 decimals. But, the USD price returned has 8 decimals (in the tutorial it's `3000.00000000`). So, to convert them we write as such: ` return uint256(price * 1e10)`, `1e10` meaning `1**10`. This is the latest version of our `getPrice` function.
+
+```solidity
+
+    function getPrice () public view returns(uint256){
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (int256 price)= priceFeed.latestRoundDate();
+        //ETH in terms of USD
+        //3000.00000000
+        return uint256(price * 1e10)
+    }
+```
+
+Let's look at the next function now.
+
+### getConversionRate
+
+Check out this snippet:
+
+```solidity
+
+    function getConversionRate (uint256 ethAmount) public view returns (uint256){
+        //this is the function that takes the ethAmount and returns the amount in terms of USD
+        uint ethPrice= getPrice();
+        uint256 ethAmountInUSD= (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUSD;
+    }
+```
+
+This function takes some value in eth form, and spits it out in usd form.
+`uint ethPrice` calls the previous `getPrice` function, and then we multiply it by the ethAmount. Then we divide it to `1e18` to get rid of the decimals so that it'll be converted to usd form. We return `ethAmountInUSD`.

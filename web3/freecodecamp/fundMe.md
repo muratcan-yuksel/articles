@@ -442,9 +442,15 @@ The line `call.{value: address(this).balance}` works as such: You know there's t
 
 This call function actually returns 2 variables. And when a function returns two variables, we can show that by placing them into parenthesis on the left-hand side. The first variable that's returned is `bool callSuccess` and the second is `bytes dataReturned`. The second one is the data returned if we were calling a function. And `bytes` objects are arrays, that's why we wrote them in `memory` in the beginning like so `bytes memory dataReturned`.
 
-But, since we're not calling any function with our `call` method, we do not need this second variable. We used this syntax before in `getPrice` function. We just delete the 2nd parameter but leave the comma intact to tell Solidity "yea we know there's a second variable but we don't need it". So we write it like this in the end:
+But, since we're not calling any function with our `call` method, we do not need this second variable. We used this syntax before in `getPrice` function. We just delete the 2nd parameter but leave the comma intact to tell Solidity "yea we know there's a second variable but we don't need it". We also add a require statement. So we write it like this in the end:
 
 ```solidity
 //notice that the comma is there
 (bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+require(callSuccess, "Call failed");
+
 ```
+
+For the most part, `call` is recommended. Most, I say.
+
+## Basic solidity constructor

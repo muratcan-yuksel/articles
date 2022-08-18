@@ -37,7 +37,6 @@ What follows in require statement is the error message. It reverts the transacti
 ```solidity
     function fund() public payable{
         require(msg.value>1e18, "Didn't send enough!");
-
     }
 ```
 
@@ -179,3 +178,19 @@ Check out this snippet:
 
 This function takes some value in eth form, and spits it out in usd form.
 `uint ethPrice` calls the previous `getPrice` function, and then we multiply it by the ethAmount. Then we divide it to `1e18` to get rid of the decimals so that it'll be converted to usd form. We return `ethAmountInUSD`.
+
+`Around 4.18 he goes through the math of the situation above. `
+
+Now, since we can convert from eth to usd, we can go all the way back to the top and our first function, `fund()` and change it accordingly so that it would be a function that really checks for the amount of usd sent:
+
+```solidity
+
+contract fundMe{
+uint256 public minimumUsd= 50;
+function fund() public payable{
+require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+}
+//...
+//...
+}
+```

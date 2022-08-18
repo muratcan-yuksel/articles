@@ -322,3 +322,44 @@ contract FundMe{
 ```
 
 ## SafeMath, Overflow Checking, and the "unchecked" keyword
+
+Now, OpenZeppelin's SafeMath contract was paramount before the solidity version 0.8, and now it's almost nonexistent. So, in order to test it, we create a `SafeMathTester.sol` file and use any version BELOW 0.8.0.
+
+Now, before solidity version 0.8.0, numbers were "unchecked". What does that mean? Consider the following code:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
+
+contract SafeMathTester{
+    uint8 public bigNumber = 255; // unchecked
+
+    function add() public{
+        bigNumber= bigNumber + 1;
+    }
+}
+```
+
+Now, first off, ` uint8 public bigNumber = 255;` because `256` is the biggest number an `uint8` variable can contain. So, if we deployed this contract using a compiler between 0.6 and 0.8, and tried to add `1` to it, it would overflow, i.e. revert back to `0` instead of `256` . SafeMath seems to be dealing with this unexpected problem. After 0.8.0, numbers are checked, so this problem doesn't occur. Although, we can use the `unchecked` keyword to make solidity follow the same behavior. Check this out:
+
+```solidity
+//SPDX-License-Identifier: MIT
+// upgraded the compiler version
+pragma solidity ^0.8.0;
+
+contract SafeMathTester{
+    uint8 public bigNumber = 255; // unchecked
+
+    function add() public{
+        //unchecked keyword makes the number go to 0 if it's bigger than 255 now
+        unchecked{bigNumber= bigNumber + 1;}
+    }
+}
+```
+
+The two snippets above do the very same thing, in different compiler versions.
+
+So what's the use of this `unchecked` keyword? Well, it turns out it is more gas efficient. So, if you sure that your math won't round and cause problems, you can use this technique to make your contract more gas efficient.
+
+## Basic Solidity For Loop

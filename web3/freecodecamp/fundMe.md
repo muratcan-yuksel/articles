@@ -405,10 +405,46 @@ Now, `withdraw` function with the above line added to it:
 
 There are 3 different ways: `transfer`, `send`, and `call`.
 
-#### transfer
+Now, for reference, this link is quite useful => `https://solidity-by-example.org/sending-ether/`
+
+### transfer
 
 We can write the following line => `payable(msg.sender).transfer(address(this).balance)
 
 Now, normally `msg.sender` is of type `address`. What we're doing when we add `payable` in front of it here is we're `typecasting` like we did with ints and uints earlier. We are doing this because in Solidity native tokens can only be sent to `payable` addresses.
 
 `this` keyword here refers to the whole contract, i.e. `FundMe.sol`.
+
+The thing with `transfer` method is that its gas cost is capped at `2300 gas`, if it requires more gas cost, then it reverts the function and throws an error.
+
+### send
+
+`send` method is also capped at 2300 gas limit, but instead of an error, it returns a boolean. So, we write it as follows to revert it in case of an error (because it gives a boolean, it wouldn't revert by itself)
+
+```solidity
+bool sendSuccess= payable(msg.sender).send(address(this).balance);
+require(sendSuccess, "Couldn't send the funds");
+```
+
+### call
+
+Call is one of the lower level commands in Solidity. It's really powerful. We can use it to virtually call any function in Ethereum- without even having to have the ABI.
+
+Check this snippet out:
+
+```solidity
+(bool callSuccess, bytes memory dataReturned)= payable(msg.sender).call{value: address(this).balance}("");
+```
+
+Now, let's explain that. the parenthesis after balance is empty. Normally, when we call a function, we put any function information or any information about the function we wanna call in some other contract. We actually don't wanna call a function, so we're gonna leave this one blank. And to tell Solidity that we leave it blank, we write is as such `("")`.
+
+The line `call.{value: address(this).balance}` works as such: You know there's this `Value` part in Remix IDE where we enter the amount we want to pay, it works like that.
+
+This call function actually returns 2 variables. And when a function returns two variables, we can show that by placing them into parenthesis on the left-hand side. The first variable that's returned is `bool callSuccess` and the second is `bytes dataReturned`. The second one is the data returned if we were calling a function. And `bytes` objects are arrays, that's why we wrote them in `memory` in the beginning like so `bytes memory dataReturned`.
+
+But, since we're not calling any function with our `call` method, we do not need this second variable. We used this syntax before in `getPrice` function. We just delete the 2nd parameter but leave the comma intact to tell Solidity "yea we know there's a second variable but we don't need it". So we write it like this in the end:
+
+```solidity
+//notice that the comma is there
+(bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+```

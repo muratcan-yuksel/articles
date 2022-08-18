@@ -198,3 +198,18 @@ require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
 ```
 
 Now, you realize that `minimumUsd` variable equals to `50 * 1e18`. The reason for it that, getConversionRate returns the number with 18 zeroes after the decimal point, so we upgrade the `minimumUsd` to `50 * 1e18`.
+
+## Basic Solidity arrays & structs
+
+Now we want to keep track of all the people who sent us money. To do that, we'll reate a dynamic array of addresses called `funders` like so => `address[] public funders;`
+
+And in our `fund` function we'll push the msg.sender, i.e. the address of the person or entity who's calling the function, to the `funders` array of addresses like so=> `funders.push(msg.sender);`
+
+Now, the latest version of our `fund` function is as follows:
+
+```solidity
+function fund() public payable{
+    require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+    funders.push(msg.sender);
+}
+```

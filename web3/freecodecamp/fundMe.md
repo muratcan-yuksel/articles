@@ -213,3 +213,20 @@ function fund() public payable{
     funders.push(msg.sender);
 }
 ```
+
+To reiterate:
+msg.value stands for how much ethereum or how much native blockchain currency is sent
+msg.sender is the addresss of whoever calls the `fund` function
+
+Now that we have our funders, we might want to check how much money they're sending by using `mapping`s.
+
+First off, we create this: `mapping(address => uint256) public addressToAmountFunded;`. Then, we add ` addressToAmountFunded[msg.sender] = msg.value;` to our `fund` function to assign the amount of money sent to the address who sent it in our `addressToAmountFunded` mapping, so now our `fund` function looks like this :
+
+```solidity
+    function fund() public payable{
+    require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+    funders.push(msg.sender);
+    addressToAmountFunded[msg.sender] = msg.value;
+
+    }
+```

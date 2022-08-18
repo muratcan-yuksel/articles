@@ -123,14 +123,16 @@ Now, our `getPrice` function needs some explaining:
         //ABI
         //Adress
         AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
-        (int256 price)= priceFeed.latestRoundDate();
+        (,int256 price,,,)= priceFeed.latestRoundData();
 
     }
 ```
 
-Now, we already know ` AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);` is an AggregatorV3Interface variable named priceFeed that's equal to the AggregatorV3Interface contract called with göerli ETH/USD address. But, what about the ` (int price)= priceFeed.latestRoundDate();` part?
+Firstly, do not sweat over why ` (,int256 price,,,)` is written like that. I guess it's because it returns other variables, so we want to pass them as empty, or something like that. The important thing is, you HAVE TO write it like this, otherwise it gives error on compilation.
 
-Now, if we examine the snippet using AggregatorV3Interface in this page => `https://docs.chain.link/docs/get-the-latest-price/` we notice that their `priceFeed` variable returns the follwing when it calls `latestRoundDate()` function:
+Now, we already know ` AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);` is an AggregatorV3Interface variable named priceFeed that's equal to the AggregatorV3Interface contract called with göerli ETH/USD address. But, what about the ` (int price)= priceFeed.latestRoundData();` part?
+
+Now, if we examine the snippet using AggregatorV3Interface in this page => `https://docs.chain.link/docs/get-the-latest-price/` we notice that their `priceFeed` variable returns the follwing when it calls `latestRoundData()` function:
 
 ```
      /*uint80 roundID*/,
@@ -153,7 +155,7 @@ Now, this part is confusing a bit. When returning the price, we first need to co
         //ABI
         //Adress
         AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
-        (int256 price)= priceFeed.latestRoundDate();
+        (,int256 price,,,)= priceFeed.latestRoundData();
         //ETH in terms of USD
         //3000.00000000
         return uint256(price * 1e10)
@@ -186,7 +188,7 @@ Now, since we can convert from eth to usd, we can go all the way back to the top
 ```solidity
 
 contract fundMe{
-uint256 public minimumUsd= 50;
+uint256 public minimumUsd= 50 * 1e18;
 function fund() public payable{
 require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
 }
@@ -194,3 +196,5 @@ require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
 //...
 }
 ```
+
+Now, you realize that `minimumUsd` variable equals to `50 * 1e18`. The reason for it that, getConversionRate returns the number with 18 zeroes after the decimal point, so we upgrade the `minimumUsd` to `50 * 1e18`.

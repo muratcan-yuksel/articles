@@ -453,4 +453,59 @@ require(callSuccess, "Call failed");
 
 For the most part, `call` is recommended. Most, I say.
 
+Here's the last version of `withdraw` function :
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+            address funder= funders[funderIndex];
+            addressToAmountFunded[funder]= 0;
+        }
+        //reset the array
+        funders= new address[](0);
+        //actually withdraw the funds
+        (bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
+```
+
 ## Basic solidity constructor
+
+There's a BIG problem with our contract right now. That is, with the latest `withdraw` function we wrote, ANYBODY can withdraw the funds. We do not want that. To make sure only the person who deployed the contract can withdraw the funds we're gonna make use of `constructor`s.
+
+So we want to make sure that whomever deploys this contract will be the owner of the contract, and only the owner can withdraw funds.
+
+Constructors get called immediately with the contract being deployed.
+
+Now, in order to make sure only the owner can call certain functions, such as the `withdraw` function, we'll create an `address` variable of `owner` and set it to `msg.sender` in our `constructor`. Check these out=>
+
+```solidity
+    address public owner;
+
+    constructor(){
+        owner= msg.sender;
+    }
+```
+
+But, in order for these to work, we need require statements in our functions, or better, a modifier. Before writing the modifier, let's see how we'd write the require statement: ` require(msg.sender == owner, "You are not the owner!");`. This line goes inside the `withdraw` function, in the 1st line of that function. And Patrick here points out the difference between `=` and `==`. So, a single equal sign (`=`) means it is `setting` something to something. Whereas a double (`==`) means it is `checking` something against something.
+
+Now let's write our `modifier` named `onlyOwner`=>
+
+```solidity
+    modifier onlyOwner{
+        require(msg.sender == owner, "You are not the owner!");
+        _;
+    }
+```
+
+The `underscore` means that "execute the rest of the code in the function that this modifier was attached to ". Now we need to attach this modifier into the function(s) we need to have this modifier. In our case, it is the `withdraw` function and we do it like this:
+
+```solidity
+     function withdraw() public onlyOwner{
+//...
+//...
+}
+```
+
+## Testnet demo

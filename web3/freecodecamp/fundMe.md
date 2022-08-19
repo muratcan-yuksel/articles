@@ -371,7 +371,7 @@ This is the `withdraw` function:
 ```solidity
     function withdraw() public{
 
-        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
         //create a funder address variable that's equal to the current index in the funders array
             address funder= funders[funderIndex];
         //set the amount of money sent by the funder found in addressToAmountFunded mapping to 0
@@ -391,7 +391,7 @@ Now, `withdraw` function with the above line added to it:
 ```solidity
     function withdraw() public{
 
-        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
             address funder= funders[funderIndex];
             addressToAmountFunded[funder]= 0;
         }
@@ -458,7 +458,7 @@ Here's the last version of `withdraw` function :
 ```solidity
     function withdraw() public{
 
-        for (uint256 funderIndex= 0; funderIndex < funderIndex.length; funderIndex++){
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
             address funder= funders[funderIndex];
             addressToAmountFunded[funder]= 0;
         }

@@ -454,5 +454,3 @@ require(callSuccess, "Call failed");
 For the most part, `call` is recommended. Most, I say.
 
 ## Basic solidity constructor
-
-deneme

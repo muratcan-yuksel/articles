@@ -622,3 +622,7 @@ To finish it up, let's add those `receive()` and `fallback()` functions to our c
         fund();
     }
 ```
+
+Now, if somebody accidentally sends us money without calling our `fund` function, they'll get routed to the `fund` function automatically.
+
+This costs a bit more gas though.

@@ -509,3 +509,116 @@ The `underscore` means that "execute the rest of the code in the function that t
 ```
 
 ## Testnet demo
+
+Remember, in order to really test it, we need to use injected.
+
+`around 5.06 he warns that the following content is advanced. `
+
+## advanced solidity: immutable & constant
+
+In this section, we're gonna make this contract a bit more professional. More gas efficient for instance. We'll start by 2 keywords: `constant` and `immutable`.
+
+Now, our ` uint256 public minimumUsd= 50 * 1e18;` is fired once the contract is deployed, like the constructor, and never changes. We can make this variable more gas efficient by adding the `constant` keyword like so:
+
+` uint256 public constant minimumUsd= 50 * 1e18;`
+
+With `constant` keyword added, this `minimumUsd` variable does not take a storage spot, and is much easier to read.
+
+Now, `constant` have a naming convention. Instead of writing the variable name with camelCase, we generally write them in pascal_case and wit hmajuscule letters. So, `minimumUsd` becomes `MINIMUM_USD`
+
+We can use the `immutable` keyword for variables we set for one time, ut outside the same line they're declared, opposed to our `MINIMUM_USD` for instace, we set the `owner` and use it in the `constructor`, so it's sued in 2 lines. The declaration convention with them is they start with `i_`, like, for our `owner` variable, it becomes `i_owner` like so => `address public immutable i_owner`
+
+## advanced solidity custom errors
+
+As of 0.8.4 version of solidity ,we can write custom errors for our reverts. This saves us lots of gas too. To work with them, we first define our errors OUTSIDE of the contract like so =>
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "./PriceConverter.sol";
+
+//realize that this error thingy is outside of the FundMe contract
+error NotOwner();
+
+contract FundMe{
+    //...
+```
+
+And in our contract, wherever we wish to use instead of the `require` statement, say, we want to use it in one of the modifiers, we do it such=>
+
+```solidity
+    modifier onlyOwner{
+        //comment this old way out
+        // require(msg.sender == i_owner, "You are not the owner!");
+        if(msg.sender != i_owner){ revert NotOwner(); }
+        _;
+    }
+```
+
+## advanced solidity receive & fallback
+
+Okay, problem: What if people send money to our contract without calling the `fund` function? Yes, they can do that, and we won't be able to track who sent us what in that case. SOlidity has 2 `special functions` for situations like that: `receive` and `fallback`.
+
+This link is useful => `https://docs.soliditylang.org/en/latest/contracts.html?highlight=special#special-functions`
+
+Now, say that we create a separate file called `FallbackExample.sol` and populate it with the following code:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract FallbackExample{
+    uint256 public result;
+
+    receive() external payable{
+        result= 1;
+    }
+}
+```
+
+NB! Notice that special functions such as the receive function do not have the "function" keyword in front of them. Similar examples are: fallback, constructor...
+
+Now, in Remix IDE, to send this contract money, all we need to do is to deploy it (we don't need to use Injected for this one, we can just use Javascript EVM for it) and after deployment, at the bottom we'll see `Low level interactions` that has some `CALLDATA` input field and then a `Transact` button. We can define the amount of money we want to send like usual with the `Value` field above, and when we hit transact, as the `receive` function suggests, the value of `result` should turn into `1` from `0`.
+
+What if we don't leave the `CALLDATA` section blank and add some data into it? Like say we entered `0x00` into the `CALLDATA` field. We'd get the following error `"Fallback" function is not defined` What happens here is that SOlidity says "oh, since you're sending some data you're not looking for the `receive`, you're looking for some function, so let me find that function for you. Mmm, I don't see any function that matches to `0x00` so I'm gonna look for your `fallback` function." Of course, since we don't have it, we get the above error.
+
+Now, let's add the `fallback` function like so:
+
+```solidity
+    fallback() external payable{
+        result= 2;
+    }
+```
+
+After adding the code above, if we'd done what we did above, i.e. send some transaction with data in it, so say, entering `0x00` into the `CALLDATA` field and hitting the `Transact` button, instead of getting an error, the transaction would pass successfully. Hwat happens here, since our contract is being called without a VALID function, Solidity realizes that we're doing this, i.e. calling the contract without a valid function, a function that it cannot find mostly because it doesn't exist, it returns and fires the `fallback` function, which turns the `result` into `2`.
+
+Here's a nice chart explaiing what to expect from Solidity in such cases:
+
+```
+    // Explainer from: https://solidity-by-example.org/fallback/
+    // Ether is sent to contract
+    //      is msg.data empty?
+    //          /   \
+    //         yes  no
+    //         /     \
+    //    receive()?  fallback()
+    //     /   \
+    //   yes   no
+    //  /        \
+    //receive()  fallback()
+```
+
+To finish it up, let's add those `receive()` and `fallback()` functions to our contract, so that if there's something wrong going on, these functions can in turn call the `fund` function so that our contract can function as we wished.
+
+```solidity
+
+    fallback() external payable {
+        fund();
+    }
+
+    receive() external payable {
+        fund();
+    }
+```

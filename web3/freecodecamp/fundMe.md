@@ -626,3 +626,106 @@ To finish it up, let's add those `receive()` and `fallback()` functions to our c
 Now, if somebody accidentally sends us money without calling our `fund` function, they'll get routed to the `fund` function automatically.
 
 This costs a bit more gas though.
+
+## Latest version of our contracts
+
+### FundMe.sol
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "./PriceConverter.sol";
+
+//realize that this error thingy is outside of the FundMe contract
+error NotOwner();
+
+contract FundMe{
+
+    using PriceConverter for uint256;
+
+    uint256 public constant MINIMUM_USD= 50 * 1e18;
+
+    address[] public funders;
+
+    mapping(address => uint256) public addressToAmountFunded;
+
+    address public immutable i_owner;
+
+    constructor(){
+        i_owner= msg.sender;
+    }
+
+
+    function fund() public payable{
+         require(msg.value.getConversionRate() >= MINIMUM_USD, "Didn't send enough!");
+        funders.push(msg.sender);
+        addressToAmountFunded[msg.sender] = msg.value;
+
+    }
+
+    function withdraw() public onlyOwner{
+        for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++){
+            address funder = funders[funderIndex];
+            addressToAmountFunded[funder] = 0;
+        }
+        //reset the array
+        funders= new address[](0);
+        //actually withdraw the funds
+        (bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
+
+    modifier onlyOwner{
+        // require(msg.sender == i_owner, "You are not the owner!");
+        if(msg.sender != i_owner){ revert NotOwner(); }
+        _;
+    }
+
+
+    fallback() external payable {
+        fund();
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+}
+```
+
+### PriceConverter.sol
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+library PriceConverter{
+        function getPrice () internal view returns(uint256){
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (,int256 price,,,)= priceFeed.latestRoundData();
+        //ETH in terms of USD
+        //3000.00000000
+        return uint256(price * 1e10);
+    }
+
+    function getConversionRate (uint256 ethAmount) internal view returns (uint256){
+        //this is the function that takes the ethAmount and returns the amount in terms of USD
+        uint ethPrice= getPrice();
+        uint256 ethAmountInUSD= (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUSD;
+    }
+
+    function getVersion() internal view returns (uint256){
+        // an AggregatorV3Interface variable called priceFeed
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        return priceFeed.version();
+    }
+}
+```

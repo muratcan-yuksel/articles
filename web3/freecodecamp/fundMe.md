@@ -61,7 +61,7 @@ Since we cannot get a random number from the blockchain as it is deterministic, 
 We create two public functions: `getPrice` and `getConversionRate`.
 We use Chainlink Data Feeds. We will integrage with the aggregator contract `AggregatorV3Interface`.
 
-When we interact with this Chainlink price feed, we actually rea from one of those contracts, like `AggregatorV3Interface` that has a function like `getLatestPrice`. We're interested in the `int price` that function returns.
+When we interact with this Chainlink price feed, we actually read from one of those contracts, like `AggregatorV3Interface` that has a function like `getLatestPrice`. We're interested in the `int price` that function returns.
 
 Since we're interacting with a contract outside of our contract, we'll need two things: `ABI` and `Address`.
 

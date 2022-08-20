@@ -251,6 +251,7 @@ And this is our `FundMe.sol` file:
 pragma solidity ^0.8.0;
 import "./PriceConverter.sol";
 contract FundMe{
+    //importing the PriceConverter library
     using PriceConverter for uint256;
 
     uint256 public minimumUsd= 50 * 1e18;
@@ -258,6 +259,7 @@ contract FundMe{
     mapping(address => uint256) public addressToAmountFunded;
 
     function fund() public payable{
+        //getConversionRate function became available for type uin256 (msg.value is type uint256)
          require(msg.value.getConversionRate() >= minimumUsd, "Didn't send enough!");
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
@@ -268,4 +270,159 @@ contract FundMe{
 
    // function withdraw{}
 }
+```
+
+## SafeMath, Overflow Checking, and the "unchecked" keyword
+
+This section is not directly related to the project at hand, but a handy piece of knowledge that Patrick presents to us so that we won't be surprised when we see such a thing.
+
+Now, OpenZeppelin's SafeMath contract was paramount before the solidity version 0.8, and now it's almost nonexistent. So, in order to test it, we create a `SafeMathTester.sol` file and use any version BELOW 0.8.0.
+
+Now, before solidity version 0.8.0, numbers were "unchecked". What does that mean? Consider the following code:
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
+
+contract SafeMathTester{
+    uint8 public bigNumber = 255; // unchecked
+
+    function add() public{
+        bigNumber= bigNumber + 1;
+    }
+}
+```
+
+Now, first off, ` uint8 public bigNumber = 255;` because `256` is the biggest number an `uint8` variable can contain. So, if we deployed this contract using a compiler between 0.6 and 0.8, and tried to add `1` to it, it would overflow, i.e. revert back to `0` instead of `256` . SafeMath seems to be dealing with this unexpected problem. After 0.8.0, numbers are checked, so this problem doesn't occur. Although, we can use the `unchecked` keyword to make solidity follow the same behavior. Check this out:
+
+```solidity
+//SPDX-License-Identifier: MIT
+// upgraded the compiler version
+pragma solidity ^0.8.0;
+
+contract SafeMathTester{
+    uint8 public bigNumber = 255; // unchecked
+
+    function add() public{
+        //unchecked keyword makes the number go to 0 if it's bigger than 255 now
+        unchecked{bigNumber= bigNumber + 1;}
+    }
+}
+```
+
+The two snippets above do the very same thing, in different compiler versions.
+
+So what's the use of this `unchecked` keyword? Well, it turns out it is more gas efficient. So, if you sure that your math won't round and cause problems, you can use this technique to make your contract more gas efficient.
+
+## Basic Solidity For Loop
+
+Now we'll write the `withdraw` function. This function will loop through the `funders` array and set the amount of money sent by an individual number to 0 in `addressToAmountFunded` mapping. It is no different from the `for loop` in Javascript.
+
+This is the `withdraw` function:
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
+        //create a funder address variable that's equal to the current index in the funders array
+            address funder= funders[funderIndex];
+        //set the amount of money sent by the funder found in addressToAmountFunded mapping to 0
+            addressToAmountFunded[funder]= 0;
+        }
+    }
+```
+
+Now we need to do 2 more things: Reset the `funders` array, and actually withdraw the funds.
+
+### Resetting an array
+
+We reset the `funders` array by writing this piece of code => ` funders= new address[](0);`
+
+We reset the array `funders` in the `withdraw` function because we were keeping track of who sent us money, and now since we've withdrawn the money, we don't need to keep track of them. And to think about it, when after withdrawing, if someone else sends us funds, we'd like to keep track of them and distinguish them from the ones who sent us money before we've withdrew the funds.
+
+Now, `withdraw` function with the above line added to it:
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
+            address funder= funders[funderIndex];
+            addressToAmountFunded[funder]= 0;
+        }
+        //reset the array
+        funders= new address[](0);
+        //actually withdraw the funds
+    }
+```
+
+Our next step is to actually withdraw the funds, i.e. send all the money in this contract to an address. But, how to send money from a contract?
+
+### Sending ETH from a contract
+
+There are 3 different ways: `transfer`, `send`, and `call`.
+
+For reference, this link is quite useful => `https://solidity-by-example.org/sending-ether/`
+
+### transfer
+
+We can write the following line => `payable(msg.sender).transfer(address(this).balance)
+
+Normally `msg.sender` is of type `address`. What we're doing when we add `payable` in front of it here is we're `typecasting` like we did with ints and uints earlier. We are doing this because in Solidity native tokens can only be sent to `payable` addresses. With this little tweak, our address can be sent money.
+
+`this` keyword here refers to the whole contract, i.e. `FundMe.sol`.
+
+The thing with `transfer` method is that its gas cost is capped at `2300 gas`, if it requires more gas cost, then it reverts the function and throws an error.
+
+### send
+
+`send` method is also capped at 2300 gas limit, but instead of an error, it returns a boolean. So, we write it as follows to revert it in case of an error (because it gives a boolean, it wouldn't revert by itself)
+
+```solidity
+bool sendSuccess= payable(msg.sender).send(address(this).balance);
+require(sendSuccess, "Couldn't send the funds");
+```
+
+### call
+
+Call is one of the lower level commands in Solidity. It's really powerful. We can use it to virtually call any function in Ethereum- without even having to have the ABI.
+
+Check this snippet out:
+
+```solidity
+(bool callSuccess, bytes memory dataReturned)= payable(msg.sender).call{value: address(this).balance}("");
+```
+
+Now, let's explain that. the parenthesis after balance is empty. Normally, when we call a function, we put any function information or any information about the function we wanna call in some other contract. We actually don't wanna call a function, so we're gonna leave this one blank. And to tell Solidity that we leave it blank, we write is as such `("")`.
+
+The line `call.{value: address(this).balance}` works as such: You know there's this `Value` part in Remix IDE where we enter the amount we want to pay, it works like that.
+
+This call function actually returns 2 variables. And when a function returns two variables, we can show that by placing them into parenthesis on the left-hand side. The first variable that's returned is `bool callSuccess` and the second is `bytes dataReturned`. The second one is the data returned if we were calling a function. And `bytes` objects are arrays, that's why we wrote them in `memory` in the beginning like so `bytes memory dataReturned`.
+
+But, since we're not calling any function with our `call` method, we do not need this second variable. We used this syntax before in `getPrice` function. We just delete the 2nd parameter but leave the comma intact to tell Solidity "yea we know there's a second variable but we don't need it". We also add a require statement. So we write it like this in the end:
+
+```solidity
+//notice that the comma is there
+(bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+require(callSuccess, "Call failed");
+
+```
+
+For the most part, `call` is recommended. Most, I say.
+
+Here's the last version of `withdraw` function :
+
+```solidity
+    function withdraw() public{
+
+        for (uint256 funderIndex= 0; funderIndex < funders.length; funderIndex++){
+            address funder= funders[funderIndex];
+            addressToAmountFunded[funder]= 0;
+        }
+        //reset the array
+        funders= new address[](0);
+        //actually withdraw the funds
+        (bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
 ```

@@ -393,9 +393,9 @@ Check this snippet out:
 (bool callSuccess, bytes memory dataReturned)= payable(msg.sender).call{value: address(this).balance}("");
 ```
 
-Now, let's explain that. the parenthesis after balance is empty. Normally, when we call a function, we put any function information or any information about the function we wanna call in some other contract. We actually don't wanna call a function, so we're gonna leave this one blank. And to tell Solidity that we leave it blank, we write is as such `("")`.
+Now, let's explain that. the parenthesis after `.balance` is empty. Normally, when we call a function, we put any function information or any information about the function we want to call in some other contract. We actually don't want to call a function, so we're going to leave this one blank. And to tell Solidity that we leave it blank, we write is as such `("")`.
 
-The line `call.{value: address(this).balance}` works as such: You know there's this `Value` part in Remix IDE where we enter the amount we want to pay, it works like that.
+The line `call.{value: address(this).balance}` works as such: You know there's this `Value` part in Remix IDE where we enter the amount we want to pay, it works like that. So it calls, or say, enters the amount of money in the address of `this` contract.
 
 This call function actually returns 2 variables. And when a function returns two variables, we can show that by placing them into parenthesis on the left-hand side. The first variable that's returned is `bool callSuccess` and the second is `bytes dataReturned`. The second one is the data returned if we were calling a function. And `bytes` objects are arrays, that's why we wrote them in `memory` in the beginning like so `bytes memory dataReturned`.
 
@@ -424,5 +424,85 @@ Here's the last version of `withdraw` function :
         //actually withdraw the funds
         (bool callSuccess,)= payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
+    }
+```
+
+## Basic solidity constructor
+
+There's a BIG problem with our contract right now. That is, with the latest `withdraw` function we wrote, ANYBODY can withdraw the funds. We do not want that. To make sure only the person who deployed the contract can withdraw the funds we're going to make use of `constructor`s.
+
+So we want to make sure that whomever deploys this contract will be the owner of the contract, and only the owner can withdraw funds.
+
+Constructors get called immediately with the contract being deployed.
+
+Now, in order to make sure only the owner can call certain functions, such as the `withdraw` function, we'll create an `address` variable of `owner` and set it to `msg.sender` in our `constructor`. Check these out=>
+
+```solidity
+    address public owner;
+
+    constructor(){
+        owner= msg.sender;
+    }
+```
+
+But, in order for these to work, we need require statements in our functions, or better, a modifier. Before writing the modifier, let's see how we'd write the require statement: ` require(msg.sender == owner, "You are not the owner!");`. This line goes inside the `withdraw` function, in the 1st line of that function. And Patrick here points out the difference between `=` and `==`. So, a single equal sign (`=`) means it is `setting` something to something. Whereas a double (`==`) means it is `checking` something against something.
+
+Now let's write our `modifier` named `onlyOwner`=>
+
+```solidity
+    modifier onlyOwner{
+        require(msg.sender == owner, "You are not the owner!");
+        _;
+    }
+```
+
+The `underscore` means that "execute the rest of the code in the function that this modifier was attached to ". Now we need to attach this modifier into the function(s) we need to have this modifier. In our case, it is the `withdraw` function and we do it like this:
+
+```solidity
+     function withdraw() public onlyOwner{
+//...
+//...
+}
+```
+
+## advanced solidity: immutable & constant
+
+In this section, we're going to make this contract a bit more professional. More gas efficient for instance. We'll start by 2 keywords: `constant` and `immutable`.
+
+Now, our ` uint256 public minimumUsd= 50 * 1e18;` is fired once the contract is deployed, like the constructor, and never changes. We can make this variable more gas efficient by adding the `constant` keyword like so:
+
+` uint256 public constant minimumUsd= 50 * 1e18;`
+
+With `constant` keyword added, this `minimumUsd` variable does not take a storage spot, and is much easier to read.
+
+Now, `constant` have a naming convention. Instead of writing the variable name with camelCase, we generally write them in pascal_case and with majuscule letters. So, `minimumUsd` becomes `MINIMUM_USD`
+
+We can use the `immutable` keyword for variables we set for one time, but outside the same line they're declared, opposed to our `MINIMUM_USD` for instace, we set the `owner` and use it in the `constructor`, so it's sued in 2 lines. The declaration convention with them is they start with `i_`, like, for our `owner` variable, it becomes `i_owner` like so => `address public immutable i_owner`
+
+## advanced solidity custom errors
+
+As of 0.8.4 version of solidity ,we can write custom errors for our reverts. This saves us lots of gas too. To work with them, we first define our errors OUTSIDE of the contract like so =>
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "./PriceConverter.sol";
+
+//realize that this error thingy is outside of the FundMe contract
+error NotOwner();
+
+contract FundMe{
+    //...
+```
+
+And in our contract, wherever we wish to use instead of the `require` statement, say, we want to use it in one of the modifiers, we do it such=>
+
+```solidity
+    modifier onlyOwner{
+        //comment this old way out
+        // require(msg.sender == i_owner, "You are not the owner!");
+        if(msg.sender != i_owner){ revert NotOwner(); }
+        _;
     }
 ```

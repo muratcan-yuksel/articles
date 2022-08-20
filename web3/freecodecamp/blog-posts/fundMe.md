@@ -40,10 +40,149 @@ Now if you go to the following link => `https://docs.chain.link/docs/get-the-lat
 
 If we wanted to inspect this `AggregatorV3Interface` aggregator contract, we could go to the following link and check it out => `https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol` As you can see, it has some functions like `version`, `getRoundData`, `latestRoundData` and so on. The thing is, we can import this aggrgator contract in our smart contract and actually use those functions in our smart contract.
 
-In order to interact with an outside contract, we need the contract ABI (application binary interface) and the address. And we need the address for `goerli` network because the others are discontinued now.
-
-Now, let's chill a bit and write some code, things will be clear by the end of this section.
+In order to interact with an outside contract, we need the contract ABI (application binary interface) and the address. And we need the address for `goerli` network because the others are deprecated now.
 
 We need two public functions, `getPrice` and `getConversionRate`.
 
 The ABI here is the aggregator contract `AggregatorV3Interface`, but we also need the `address`. To get the address that we'll make use of in our call, we'll go to the following link => `https://docs.chain.link/docs/ethereum-addresses/`, find the section for `Goerli Testnet` and copy the address related to `ETH/USD` because that's what we want to do: We want to convert between ether and usd. The address we're looking for is the following => ` 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e`
+
+Now, let's chill a bit and write some code, things will be clear by the end of this section.
+
+```solidity
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract FundMe{
+    function fund() public payable{
+        require(msg.value>1e18, "Didn't send enough!");
+    }
+
+    function getPrice () public{
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (,int256 price,,,)= priceFeed.latestRoundData();
+    }
+
+    function getConversionRate () public{
+        //
+    }
+
+
+   // function withdraw{}
+}
+```
+
+As you can see, after the usual License identifier and indicating the Solidity compiler, we're importing something with the line `import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";`. That's our aggregator contract `AggregatorV3Interface`, now since we've imported it, we can use its functions inside our contract! And that's what we're doing in our `getPrice` function.
+
+We are creating a variable named `priceFeed` with the type of `AggregatorV3Interface` we've just imported, and set it to the `AggregatorV3Interface` contract called with göerli ETH/USD address. But, what about the ` (,int256 price,,,)= priceFeed.latestRoundData();` part? It has too many commas, right? That's not a mistake.
+
+Now, if we examine the snippet using AggregatorV3Interface in this page => `https://docs.chain.link/docs/get-the-latest-price/` we notice that their `priceFeed` variable returns the following when it calls `latestRoundData()` function:
+
+```
+     /*uint80 roundID*/,
+            int price,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/
+```
+
+But we do not need all of them. We don't need `roundID`, `startedAt`, `timeStamp` and `answeredInRound`, we only need `int price`. But if we omitted them, the Solidity compiler would give an error. It's like we're saying that okay okay we know, we realize and notice that you return those things too, but since we're not going to use them, we're going to pass them as blanks.
+
+Nb! In the documentation, it's `int price`, we changed it to `int256 price` to make it flexible.
+
+Now, this part is confusing a bit. When returning the price, we first need to convert it from `int256` to `uint256` (a practice that's called `typecasting`). Now, for some reason, Solidity doesn't work well with decimals, so we need to convert them. Eth in terms of Wei has 18 decimals. But, the USD price returned has 8 decimals (in the tutorial it's `3000.00000000`). So, to convert them we write as such: ` return uint256(price * 1e10)`, `1e10` meaning `1**10`. This is the latest version of our `getPrice` function.
+
+```solidity
+
+    function getPrice () public view returns(uint256){
+        //the function that we take the price in terms of USD
+        //ABI
+        //Adress
+        AggregatorV3Interface priceFeed= AggregatorV3Interface(0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e);
+        (,int256 price,,,)= priceFeed.latestRoundData();
+        //ETH in terms of USD
+        //3000.00000000
+        return uint256(price * 1e10)
+    }
+```
+
+Please be aware that things have changed since the tutorial was recorded. Now ETH worths less than that, but I'm not changing anything as this part was quite mind boggling in my opinion (not a CS major you see).
+
+Now let's check the `getConversionRate` function.
+
+### getConversionRate function
+
+Check out this snippet:
+
+```solidity
+
+    function getConversionRate (uint256 ethAmount) public view returns (uint256){
+        //this is the function that takes the ethAmount and returns the amount in terms of USD
+        uint ethPrice= getPrice();
+        uint256 ethAmountInUSD= (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUSD;
+    }
+```
+
+This function takes some value in eth form, and spits it out in usd form.
+
+`uint ethPrice` calls the previous `getPrice` function, and then we multiply it by the ethAmount. Then we divide it to `1e18` to get rid of the decimals so that it'll be converted to usd form. We return `ethAmountInUSD`.
+
+Now, since we can convert from eth to usd, we can go all the way back to the top and our first function, `fund()` and change it accordingly so that it would be a function that really checks for the amount of usd sent:
+
+```solidity
+
+contract fundMe{
+uint256 public minimumUsd= 50 * 1e18;
+function fund() public payable{
+require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+}
+//...
+//...
+}
+```
+
+Now, you realize that `minimumUsd` variable equals to `50 * 1e18`. The reason for it that, getConversionRate returns the number with 18 zeroes after the decimal point, so we upgrade the `minimumUsd` to `50 * 1e18`.
+
+## Basic Solidity arrays & structs
+
+Now we want to keep track of all the people who sent us money. To do that, we'll reate a dynamic array of addresses called `funders` like so => `address[] public funders;`
+
+And in our `fund` function we'll push the msg.sender, i.e. the address of the person or entity who's calling the function, to the `funders` array of addresses like so=> `funders.push(msg.sender);`
+
+Now, the latest version of our `fund` function is as follows:
+
+```solidity
+function fund() public payable{
+    require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+    funders.push(msg.sender);
+}
+```
+
+To reiterate:
+msg.value stands for how much ethereum or how much native blockchain currency is sent
+msg.sender is the addresss of whoever calls the `fund` function
+
+Now that we have our funders, we might want to check how much money they're sending by using `mapping`s.
+
+First off, we create this: `mapping(address => uint256) public addressToAmountFunded;`. Then, we add ` addressToAmountFunded[msg.sender] = msg.value;` to our `fund` function to assign the amount of money sent to the address who sent it in our `addressToAmountFunded` mapping, so now our `fund` function alongside with the variables coming before it looks like this :
+
+```solidity
+
+    uint256 public minimumUsd= 50 * 1e18;
+    address[] public funders;
+    mapping(address => uint256) public addressToAmountFunded;
+
+    function fund() public payable{
+    require(getConversionRate(msg.value)>= minimumUsd, "Didn't send enough!");
+    funders.push(msg.sender);
+    addressToAmountFunded[msg.sender] = msg.value;
+
+    }
+```
+
+Now, to the next part of the lesson.

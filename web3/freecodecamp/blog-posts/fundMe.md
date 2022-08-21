@@ -383,8 +383,10 @@ The thing with `transfer` method is that its gas cost is capped at `2300 gas`, i
 `send` method is also capped at 2300 gas limit, but instead of an error, it returns a boolean. So, we write it as follows to revert it in case of an error (because it gives a boolean, it wouldn't revert by itself)
 
 ```solidity
-bool sendSuccess= payable(msg.sender).send(address(this).balance);
-require(sendSuccess, "Couldn't send the funds");
+
+        bool sendSuccess= payable(msg.sender).send(address(this).balance);
+        require(sendSuccess, "Couldn't send the funds");
+
 ```
 
 ### call

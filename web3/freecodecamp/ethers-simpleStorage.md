@@ -243,3 +243,14 @@ and enter `node deploy.js` on the terminal, we'll get a response like this => `B
 
 Now, let's update this number by calling the `store` function in our smart contact like so => ` const transactionResponse = await contract.store("7");`
 Note that we can pass the number as string like we've just done, or as a number without the quotation marks. But, it is advised to use the quotation marks and pass them as strings so JS won't get confused had we were to use a bigger number.
+
+We also wait 1 block for the transaction receipt. With the above line, it'll be like this =>
+
+```javascript
+//update favorite number
+const transactionResponse = await contract.store("7");
+//wait 1 block
+const transactionReceipt = await transactionResponse.wait(1);
+```
+
+Now, when we call a function on a contract, we get a transactionResponse, and when we wait for the transactionResponse to finish, we get the `transactionReceipt`

@@ -253,4 +253,105 @@ const transactionResponse = await contract.store("7");
 const transactionReceipt = await transactionResponse.wait(1);
 ```
 
-Now, when we call a function on a contract, we get a transactionResponse, and when we wait for the transactionResponse to finish, we get the `transactionReceipt`
+Now, when we call a function on a contract, we get a `transactionResponse`, and when we wait for the `transactionResponse` to finish, we get the `transactionReceipt`
+
+Now if we create a new variable called `updatedFavoriteNumber` and console log it, we'll get the value `7` as response.. Let's check what we've added about this favorite number so far:
+
+```javascript
+//interacting with the contract
+//get favorite number
+const currentFavoriteNumber = await contract.retrieve();
+console.log(`Current favorite number is ${currentFavoriteNumber.toString()}`);
+//update favorite number
+const transactionResponse = await contract.store("7");
+//wait 1 block
+const transactionReceipt = await transactionResponse.wait(1);
+//get updated number
+const updatedFavoriteNumber = await contract.retrieve();
+console.log(`Updated favorite number is ${updatedFavoriteNumber.toString()}`);
+```
+
+## Environment variables
+
+Start by installing `dotenv` package by entering `yarn add dotenv` and adding it into our `deploy.js` file like so => `require("dotenv").config(); `
+
+We create a `.env` file and put our environment variables inside it. For `PRIVATE_KEY` we're going to use our private key from the one we got from our Ganache wallet. NOTE THAT IT IS HIGHLY ADVISED TO PUT `0x` IN FRONT OF THE WALLET PRIVATE KEY AS SOME TOOLS MIGHT LOOK FOR IT, ALTHOUGH ETHERS AND HARDHAT ARE SMART ENOUGH TO NOT NEED IT. WE'RE GOING TO PUT IT THOUGH.
+
+```
+PRIVATE_KEY=0xbb331a0d7783f9a5e03324ce2221efed2461ab18ee8e3c2d08e59be7aee70dc9
+```
+
+In JS, you can access environment variables with `process.env.VARIABLE_NAME`.
+
+Now we want to replace our exposed key in our `deploy.js` with environment variable. Like so => ` const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);`
+
+Now, our `RPC SERVER `is not something we really need to secure, but to be on the safe side, let's do that too.
+
+Now this is our .env file =>
+
+```
+PRIVATE_KEY=0xbb331a0d7783f9a5e03324ce2221efed2461ab18ee8e3c2d08e59be7aee70dc9
+RPC_URL= http://127.0.0.1:7545
+```
+
+and the respective variables in `main` function in`deploy.js` file =>
+
+```javascript
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+```
+
+Now he adds a `.gitignore` file. He shows that.
+
+## Better private key management
+
+If you're really paranoid, you can define your env variables on the console like so =>
+
+In the terminal
+
+```
+PRIVATE_KEY=0xbb331a0d7783f9a5e03324ce2221efed2461ab18ee8e3c2d08e59be7aee70dc9 RPC_URL=http://127.0.0.1:7545 node deploy.js
+```
+
+`BUT IT DOESN'T WORK IN MY SETUP. IT MIGHT BE BECAUSE OF FISH TERMINAL IDK. `
+
+## MORE MORE SECURE WAY WITH ENCRYPTION
+
+Now if you're REALLY REALLY PARANOID, or just really professional, you can encrypt your keys. Let's start by creating a `encryptKey.js` file.
+
+The thing is, once we set it up, we can run this file once and then we can remove our keys from our workspace for good.
+
+We start our `encryptKey.js` file quite smilar to our `deploy.js` file =>
+
+```javascript
+const ethers = require("ethers");
+const fs = require("fs-extra");
+require("dotenv").config();
+
+async function main() {}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+
+Now, inside our `main` function, we're going to create a wallet with the following line => ` const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);`
+then, we'll create an `encryptedJsonKey` variable like so => ` const encryptedJsonKey = await wallet.encrypt();` Now, this `encrypt` function will create an encrypted json key that we can store locally and only decrypt with a password. It takes 2 parameters: a private key password, and a private key. So, in our `.env` file we're going to create the following variable JUST FOR NOW `PRIVATE_KEY_PASSWORD=password` (yes, we put `password` as our password lol)
+
+Now we're going to pass the `PRIVATE_KEY_PASSWORD` as the first parameter to our `encrypt` function in `encryptedJsonKey` variable, and our `PRIVATE_KEY` variable as our second parameter. Like so =>
+
+```javascript
+async function main() {
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
+  const encryptedJsonKey = await wallet.encrypt(
+    process.env.PRIVATE_KEY_PASSWORD,
+    process.env.PRIVATE_KEY
+  );
+  console.log(encryptedJsonKey);
+}
+```
+
+If we run this by `node encryptKey.js` we get a json oject, which is the encrypted version of our keys. If someone were to get into our system and see that object, they'd need the password to decrypt it.

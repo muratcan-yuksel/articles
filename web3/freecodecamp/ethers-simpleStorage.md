@@ -386,4 +386,36 @@ NB! If someone hacked into your computer, they can enter the `history` command o
 
 ## optional prettier formatting
 
-In this part, we're installing this package `https://github.com/prettier-solidity/prettier-plugin-solidity` to make sure that whomever wants to use our code after we pus it to somewhere can get the same formatting as we've useed to avoid confusion. I'm not going to get into that.
+In this part, we're installing this package `https://github.com/prettier-solidity/prettier-plugin-solidity` to make sure that whomever wants to use our code after we push it to somewhere can get the same formatting as we've useed to avoid confusion.
+
+We install it like so => `prettier prettier-plugin-solidity`
+
+Then we create a `.prettierrc` file and populate it with =>
+
+```
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": false
+}
+```
+
+## Deploying to a testnet or mainnet
+
+We go to `Alchemy`, create a new project, and get the `HTTP` key there. We will use this instead of the RPC we got from ganache. This will be our RPC URL that connects to the testnet.
+
+So we copy the `HTTP KEY` and replace our `RPC URL` variable in our `.env` file.
+
+We also change the private key we've entered with our real Metamask private key.
+
+Before deployment, we add the following in our `deploy.js` file after we wait for a block to get the address of our contract. So, we write it under `await contract.deployTransaction.wait(1);` . I commented it out because I didn't deploy to a testnet.
+
+```javascript
+await contract.deployTransaction.wait(1);
+//console.log(`Contract Address: ${contract.address}`);
+```
+
+## verifying and publishing
+
+We can go to etherscan and publish our code. It is pretty straightforward, we just need to copy-paste our solidity code there. That's so that anybody can read our contract.

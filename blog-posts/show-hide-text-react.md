@@ -124,4 +124,12 @@ const Text = ({ body, id }) => {
 export default Text;
 ```
 
-I start by importing the props with their key names given in the API, this way leaves less room for confusion in my opinion.
+I start by importing the props with their key names given in the API like so => `const Text = ({ body, id }) => {`, this way leaves less room for confusion in my opinion. I know it's `body` I'm looking for. I give id to each individual div, and then with the line
+
+```react
+   {readMore ? body : `${body.substring(0, 80)}...`}
+```
+
+I tell the browser to first check if `readMore` state variable is true, if it is, display the whole test coming from `body`; if it's false, show only the first 80 characters of the text. Since `readMore` state variable is set to false at the beginning, when I open the page, I'll see the shortened text. I have three dots following the shortened text. Then I put a button which sets the `readMore` state variable to its opposite. Inside the button there's a text that shows "show less" if the `readMore` state variable is `true`, and "read more" if it's `false`. With this, I'll be able to click on the button to expand and shrink the text.
+
+That's it.

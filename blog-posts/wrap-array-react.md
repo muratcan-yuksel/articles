@@ -95,6 +95,10 @@ The function `nextItem` sets the state to `plus` one of whatever it is. Now, sin
 
 The reason `wrapItems` function exist is that if it weren't, whenever we reach to the last item in the data array, which is the 5th item because I only put 5 items in the array, which means the 4th index as indexes start at 0, the `nextItem` would continue to update the state to plus one, which would make the index 5, and our application would crash. It would crash because we don't have any item at the index 5 of our data array. Hell, we don't have the index 5 at all. The same would happen with the `previousItem` function obviously, the app would crash at index -1. `wrapItems` function fixes that problem.
 
-Now, `wrapItems` function takes a number and does the following=>
+Now, `wrapItems` function takes a number and probably is interpreted like so=>
 
-- If the given number, which is the index coming from the state,
+- If the given number, which is the index coming from the state, is bigger than the last index of the data array (which is 4, as there are 5 items and indexes start at 0), return 0 so that we'd start from the beginning.
+- If the index is smaller than 0, which means we're at the first index, which also means we might fall into the world of negative numbers that'll crash our app, let's update the state to the last index of the data array, so that when we fire the `previousItem` function by clicking the appropriate button when we're at the first item, we'd be presented with the last item and not a crashed app.
+- else, things are fine, do not do anything.
+
+That's all. Cheers!

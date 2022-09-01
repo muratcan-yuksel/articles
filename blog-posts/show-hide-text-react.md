@@ -17,6 +17,7 @@ To start wil, this is my App.js file =>
 ## App component
 
 ```react
+//App.js
 import { React, useState, useEffect } from "react";
 import axios from "axios";
 import Texts from "./Texts";
@@ -70,6 +71,7 @@ Let's check the Texts component.
 ## Texts component
 
 ```react
+//Texts.js
 import { React, useState } from "react";
 import "./styles/texts.css";
 import Text from "./Text";
@@ -96,6 +98,7 @@ I map the data I've got from the parent, and create a `Text` component with each
 I send the props in the following way `{...mappedProps}` to get individual key titles in the child component so that I can just import what's returned from the API like so =>
 
 ```react
+//Text.js
 const Text = ({ body, id }) => {
     ...)}
 ```
@@ -103,6 +106,7 @@ const Text = ({ body, id }) => {
 ## Text component
 
 ```react
+//Text.js
 import { React, useState } from "react";
 import "./styles/texts.css";
 
@@ -130,6 +134,16 @@ I start by importing the props with their key names given in the API like so => 
    {readMore ? body : `${body.substring(0, 80)}...`}
 ```
 
-I tell the browser to first check if `readMore` state variable is true, if it is, display the whole test coming from `body`; if it's false, show only the first 80 characters of the text. Since `readMore` state variable is set to false at the beginning, when I open the page, I'll see the shortened text. I have three dots following the shortened text. Then I put a button which sets the `readMore` state variable to its opposite. Inside the button there's a text that shows "show less" if the `readMore` state variable is `true`, and "read more" if it's `false`. With this, I'll be able to click on the button to expand and shrink the text.
+I tell the browser to first check if `readMore` state variable is true, if it is, display the whole test coming from `body`; if it's false, show only the first 80 characters of the text. Since `readMore` state variable is set to false at the beginning, when I open the page, I'll see the shortened text. I have three dots following the shortened text. Then I put a button with the following snippet =>
+
+```react
+    <button className="btn" onClick={() => setReadMore(!readMore)}>
+     {readMore ? "show less" : "  read more"}
+    </button>
+```
+
+which sets the `readMore` state variable to its opposite. Inside the button there's a text that shows "show less" if the `readMore` state variable is `true`, and "read more" if it's `false`. With this, I'll be able to click on the button to expand and shrink the text.
 
 That's it.
+
+Happy coding!

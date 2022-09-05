@@ -31,7 +31,6 @@ and in my `navbar.css` I add the following classes =>
 ```
 .navbarComp {
   background: #ffe01b ;
-  /* border-bottom: 2px dashed black; */
   transition: 0.3s;
 }
 
@@ -48,4 +47,31 @@ Then I go back to my `Navbar.js` component and add a ternary statement on these 
 
 ```
 
-I'm almost done. There is one more thing I should consider. In my application I had some layout problems I fixed by adding ` overflow-x: hidden;` css class to my whole App component. That was a mistake. When you give ` overflow-x: hidden;` to the whole App component, then the `window.scrollY` always stays at `0`
+I'm almost done. There is one more thing I should consider. In my application I had some layout problems I fixed by adding ` overflow-x: hidden;` css class to my whole App component. That was a mistake. When you give ` overflow-x: hidden;` to the whole App component, then the `window.scrollY` always stays at `0`. To fix that issue, I found that if you'd add a wrapper div inside the App component and hide the overflow there everything works well. I'm talking about doing this in `App.js`=>
+
+```react
+const App = () => {
+  return (
+    <div className="App">
+      <div className="wrapper">
+         ...
+      </div>
+    </div>
+  );
+};
+```
+
+and in my `app.css`
+
+```
+.App {
+    //or whatever you give I guess
+  height: 100vh;
+  width: 100vw;
+}
+.wrapper {
+  overflow-x: hidden;
+}
+```
+
+That's all folks!

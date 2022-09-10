@@ -1,4 +1,4 @@
-#EthersJs Simple Storage
+# EthersJs Simple Storage
 
 These are my notes from the 5th lesson of Freecodecamp's web3/Blockchain development course. You can read the notes for the previous lesson here => // ADD LINK TO THE LESSON 4
 
@@ -204,3 +204,223 @@ and enter `node deploy.js` on the terminal, we'll get a response like this => `B
 Now, let's update this number by calling the `store` function in our smart contact like so => ` const transactionResponse = await contract.store("7");`
 
 Note that we can pass the number as string like we've just done, or as a number without the quotation marks. But, it is advised to use the quotation marks and pass them as strings so JS won't get confused had we were to use a bigger number.
+
+We also wait 1 block for the transaction receipt. With the above line, it'll be like this =>
+
+```javascript
+//update favorite number
+const transactionResponse = await contract.store("7");
+//wait 1 block
+const transactionReceipt = await transactionResponse.wait(1);
+```
+
+Now, when we call a function on a contract, we get a `transactionResponse`, and when we wait for the `transactionResponse` to finish, we get the `transactionReceipt`
+
+Now if we create a new variable called `updatedFavoriteNumber` and console log it, we'll get the value `7` as response.. Let's check what we've added about this favorite number so far:
+
+```javascript
+//interacting with the contract
+//get favorite number
+const currentFavoriteNumber = await contract.retrieve();
+console.log(`Current favorite number is ${currentFavoriteNumber.toString()}`);
+//update favorite number
+const transactionResponse = await contract.store("7");
+//wait 1 block
+const transactionReceipt = await transactionResponse.wait(1);
+//get updated number
+const updatedFavoriteNumber = await contract.retrieve();
+console.log(`Updated favorite number is ${updatedFavoriteNumber.toString()}`);
+```
+
+## Encrypting keys with Encrypt.js file
+
+Now, about our sensitive data, keys etc., if you're REALLY REALLY PARANOID, or just really professional, you can encrypt your keys. Let's start by creating a `encryptKey.js` file.
+
+The thing is, once we set it up, we can run this file once and then we can remove our keys from our workspace for good.
+
+We start our `encryptKey.js` file quite smilar to our `deploy.js` file =>
+
+```javascript
+const ethers = require("ethers");
+const fs = require("fs-extra");
+require("dotenv").config();
+
+async function main() {}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+
+Now, inside our `main` function, we're going to create a wallet with the following line => ` const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);`
+then, we'll create an `encryptedJsonKey` variable like so => ` const encryptedJsonKey = await wallet.encrypt();` Now, this `encrypt` function will create an encrypted json key that we can store locally and only decrypt with a password. It takes 2 parameters: a private key password, and a private key. So, in our `.env` file we're going to create the following variable JUST FOR NOW `PRIVATE_KEY_PASSWORD=password` (yes, we put `password` as our password lol)
+
+Now we're going to pass the `PRIVATE_KEY_PASSWORD` as the first parameter to our `encrypt` function in `encryptedJsonKey` variable, and our `PRIVATE_KEY` variable as our second parameter. Like so =>
+
+```javascript
+async function main() {
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
+  const encryptedJsonKey = await wallet.encrypt(
+    process.env.PRIVATE_KEY_PASSWORD,
+    process.env.PRIVATE_KEY
+  );
+  console.log(encryptedJsonKey);
+}
+```
+
+If we run this by `node encryptKey.js` we get a json oject, which is the encrypted version of our keys. If someone were to get into our system and see that object, they'd need the password to decrypt it. To reiterate, this is our private key, encrypted. In order to access the key, you need to know the private key password that you've entered into your `.env` file.
+
+Now since we've created our key, let's save it by adding this line into our `encryptKey.js` file => `fs.writeFileSync("./.encryptedKey.json", encryptedJsonKey);` NOTICE THAT THERE IS A DOT IN FRONT OF THE FILE NAME. and run `node encryptKey.js ` again. This will create a `.encryptedKey.json` file. Now we'd want to add this new `.encryptedKey.json` file to our `.gitignore` file like we do with `.env` files if we hadn't done so.
+
+We'd also go to our `.env` file and remove the `PRIVATE_KEY` as well as `PRIVATE_KEY_PASSWORD` variables. We don't need them anymore.
+
+Now that we have our encrypted key, we can go to `deploy.js` and change the way how we get to our wallet. We start by commenting out or deleting the following like ` const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);` and add the lines below =>
+
+```javascript
+//const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf-8");
+let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+  encryptedJson,
+  process.env.PRIVATE_KEY_PASSWORD
+);
+wallet = await wallet.connect(provider);
+```
+
+Now, in the first line, `readFileSync` reads from the `.encryptedKey.json` file. We then pass that variable into `fromEncryptedJsonSync` function, which takes 2 parameters: the encrypted json key, and the password. We then connect our wallet to our provider. This `fromEncryptedJsonSync` and many more can be found on the `ethers` documentation.
+
+After we entered these lines, we need to run it. But, since we've deleted the `PRIVATE_KEY_PASSWORD` variable from our `.env` file, we need to write it manually in the terminal like so => `PRIVATE_KEY_PASSWORD=password node deploy.js` (as we gave `password` as our password lol). If everything goes alright, we get the following response =>
+
+```
+Deploying, please wait...
+Current favorite number is 0
+Updated favorite number is 7
+```
+
+NB! If someone hacked into your computer, they can enter the `history` command on the terminal and see your password there. So, you might want to run `history -c` after doing all these stuff.
+
+This is the latest version of `encryptKey.js` =>
+
+```javascript
+const ethers = require("ethers");
+const fs = require("fs-extra");
+require("dotenv").config();
+
+async function main() {
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
+  const encryptedJsonKey = await wallet.encrypt(
+    process.env.PRIVATE_KEY_PASSWORD,
+    process.env.PRIVATE_KEY
+  );
+  console.log(encryptedJsonKey);
+  fs.writeFileSync("./.encryptedKey.json", encryptedJsonKey);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+
+## optional prettier formatting
+
+In this part, we're installing this package `https://github.com/prettier-solidity/prettier-plugin-solidity` to make sure that whomever wants to use our code after we push it to somewhere can get the same formatting as we've useed to avoid confusion.
+
+We install it like so => `prettier prettier-plugin-solidity`
+
+Then we create a `.prettierrc` file and populate it with =>
+
+```
+{
+  "tabWidth": 4,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": false
+}
+```
+
+## Deploying to a testnet or mainnet
+
+We go to `Alchemy`, create a new project, and get the `HTTP` key there. We will use this instead of the RPC we got from ganache. This will be our RPC URL that connects to the testnet.
+
+So we copy the `HTTP KEY` and replace our `RPC URL` variable in our `.env` file.
+
+We also change the private key we've entered with our real Metamask private key.
+
+Before deployment, we add the following in our `deploy.js` file after we wait for a block after deploying the contract to get the address of our contract.
+
+```javascript
+...
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+  console.log("Deploying, please wait...");
+  const contract = await contractFactory.deploy(); //await keyword says STOP HERE, wait for the contract to be deployed
+  //wait one block for the transaction receipt
+  //we comment this out for now as we're not gonna use transactionReceipt now
+  // const transactionReceipt = await contract.deployTransaction.wait(1);
+  //we wait 1 block for that transaction to finish
+  await contract.deployTransaction.wait(1);
+  console.log(`Contract Address: ${contract.address}`);
+  ...
+```
+
+## verifying and publishing
+
+We can go to etherscan and publish our code. It is pretty straightforward, we just need to copy-paste our solidity code there. That's so that anybody can read our contract.
+
+## deploy.js in full
+
+This is the last version of our deploy.js
+
+```javascript
+const ethers = require("ethers");
+const fs = require("fs-extra");
+require("dotenv").config();
+
+async function main() {
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+
+  const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf-8");
+  let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+    encryptedJson,
+    process.env.PRIVATE_KEY_PASSWORD
+  );
+  wallet = await wallet.connect(provider);
+  const abi = fs.readFileSync("SimpleStorage_sol_SimpleStorage.abi", "utf-8");
+  const binary = fs.readFileSync(
+    "SimpleStorage_sol_SimpleStorage.bin",
+    "utf-8"
+  );
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+  console.log("Deploying, please wait...");
+  const contract = await contractFactory.deploy(); //await keyword says STOP HERE, wait for the contract to be deployed
+  //wait one block for the transaction receipt
+  //we comment this out for now as we're not gonna use transactionReceipt now
+  // const transactionReceipt = await contract.deployTransaction.wait(1);
+  //we wait 1 block for that transaction to finish
+  await contract.deployTransaction.wait(1);
+  console.log(`Contract Address: ${contract.address}`);
+
+  //interacting with the contract
+  //get favorite number
+  const currentFavoriteNumber = await contract.retrieve();
+  console.log(`Current favorite number is ${currentFavoriteNumber.toString()}`);
+  //update favorite number
+  const transactionResponse = await contract.store("7");
+  //wait 1 block
+  const transactionReceipt = await transactionResponse.wait(1);
+  //get updated number
+  const updatedFavoriteNumber = await contract.retrieve();
+  console.log(`Updated favorite number is ${updatedFavoriteNumber.toString()}`);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```

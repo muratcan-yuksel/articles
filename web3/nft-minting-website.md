@@ -104,6 +104,7 @@ contract RoboPunksNFT is ERC721, Ownable {
             uint256 newTokenId = totalSupply + 1;
             totalSupply++;
             //_safeMint exists in ERC721 contract
+            //the reason it comes after the above line is to prevent reentrancy attacks...
             _safeMint(msg.sender, newTokenId);
         }
     }
@@ -190,6 +191,14 @@ Now if we go back to etherscan, we can see our smart contract.
 
 #### getting contract abi
 
-Now we go to `artifacts/RoboPunksNFT.json` and copy all the contents inside. Then, we create a `RoboPunksNFT.json` file IN `src` folder and paste everything into it.
+Now we go to `artifacts/RoboPunksNFT.json` and copy all the contents inside. Then, we create a `RoboPunksNFT.json` file IN `src/contract` folder and paste everything into it.
 
 ## Coding the frontend
+
+We add `MainMint.js` and `Navbar.js` into a new folder `src/components` and import them into `App.js`
+
+## important note
+
+After finishing the app, you can't mint. Because we se isPublicMintEnabled to false in our contract. To change that, you go to the etherscan, to where your contract is, click to write contract, CONNECT WITH THE WALLET THAT DEPLOYED THE CONTEACT, and write `true` on `_isPublidMintEnabled (bool)` function.
+
+Although I got an error. Maybe I used a different address to deploy the contract, as I have 2 disposable wallets. I don't know. But the idea is cool.

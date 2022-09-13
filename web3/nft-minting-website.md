@@ -149,6 +149,8 @@ Then I go to `hardhat.config.js` and add the following import and initialize it.
 ```javascript
 //final version
 require("@nomicfoundation/hardhat-toolbox");
+//we add this in the following section
+require("@nomiclabs/hardhat-etherscan");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -167,3 +169,27 @@ module.exports = {
   },
 };
 ```
+
+After that, I run the following commands on the terminal to compile and deploy =>
+
+```
+- npx hardhat clean
+- npx hardhat compile
+- npx hardhat run scripts/deploy.js --network goerli
+```
+
+### Verifying our contract
+
+We get the deployed contract address from the terminal message and go to goerli.etherscan.io, look it up, choose `contract` section and see the non-human readable bytecode. We want to verify.
+
+To do this, we need to install the following package => `npm i -D @nomiclabs/hardhat-etherscan`
+
+Then, we run the following command => `npx hardhat verify --network goerli deployedContactAddress`
+
+Now if we go back to etherscan, we can see our smart contract.
+
+#### getting contract abi
+
+Now we go to `artifacts/RoboPunksNFT.json` and copy all the contents inside. Then, we create a `RoboPunksNFT.json` file IN `src` folder and paste everything into it.
+
+## Coding the frontend

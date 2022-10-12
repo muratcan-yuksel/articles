@@ -80,3 +80,39 @@ ctx.lineWidth = 1;
 ctx.strokeStyle = "orange";
 ctx.strokeText("Hello world", 400, 100);
 ```
+
+# Paths
+
+Now, let's say we want to start by drawing a line.
+
+We'll begin the path by calling `ctx.beginPath()`
+
+Then move this path to 50 x and 50 y by calling `ctx.moveTo(50,50)`
+
+Then, draw a line to 150 x axis and 50 y axis (y stays the same in this case) by `ctx.lineTo(150,50)`
+and fill the stroke by `ctx.stroke()`
+
+### creating a triangle by drawing lines
+
+```javascript
+ctx.beginPath();
+ctx.moveTo(50, 50);
+ctx.lineTo(150, 50);
+//middle of the triangle is 100 in our case.
+ctx.lineTo(100, 100);
+ctx.lineTo(50, 50);
+//or ctx.closePath();
+// ctx.fillStyle = "purple";
+// ctx.fill();
+ctx.stroke();
+```
+
+\*Instead of stroke, the commented out lines can be used.
+
+You can create multiple paths. I mean, you can begin with different places and draw from there.
+
+### on lines
+
+Here, each `ctx.lineTo` takes up from where it was left off. What does that mean? In the example above, since we start with `ctx.moveTo(50,50)`, the line `ctx.lineTo(150, 50); `will start drawing from 50x to 150x (total 100 pixels of line drawn then) and from 50y to 50y, which means it'll be on the same y axis, i.e. this will result in a horizontal line.
+
+Then, if I wrote `ctx.lineTo(100, 100); ` this time it won't start from the beginning, but from 150x/50y. So, when it draws a line to 100x (from 150x), it'll go to the left. And since it draws from 50y to 100y, it'll go downwards.

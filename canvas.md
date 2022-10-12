@@ -62,3 +62,21 @@ ctx.strokeRect(100, 200, 150, 100);
 ## clearRect
 
 clears a part of the canvas. If I write `ctx.clearRect(20, 20, 100, 50); ` it'll work exactly like `fillRect` but instead of drawing a rectangle, it'll erase the coordinates given.
+
+## fillText
+
+creates a text. Takes 3 parameters: the text, x and y coordinates.
+
+```javascript
+ctx.fillStyle = "purple";
+ctx.font = "30px Arial";
+ctx.fillText("Hello world", 400, 50);
+```
+
+## strokeText
+
+```javascript
+ctx.lineWidth = 1;
+ctx.strokeStyle = "orange";
+ctx.strokeText("Hello world", 400, 100);
+```

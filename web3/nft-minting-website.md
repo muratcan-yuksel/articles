@@ -202,3 +202,9 @@ We add `MainMint.js` and `Navbar.js` into a new folder `src/components` and impo
 After finishing the app, you can't mint. Because we se isPublicMintEnabled to false in our contract. To change that, you go to the etherscan, to where your contract is, click to write contract, CONNECT WITH THE WALLET THAT DEPLOYED THE CONTEACT, and write `true` on `_isPublidMintEnabled (bool)` function.
 
 Although I got an error. Maybe I used a different address to deploy the contract, as I have 2 disposable wallets. I don't know. But the idea is cool.
+
+Yeap, that's the reason. I used a different wallet to deploy.
+
+---
+
+I won't post all the app here. You can check it out later. The thing to get is using background images like that is better than how I was doing it.

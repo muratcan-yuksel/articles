@@ -153,7 +153,9 @@ function drawCircle() {
 }
 ```
 
-to draw a smiley face =>
+Note that if you wanted to make a half circle, you wouldn't multiply Math.PI with 2.
+
+to draw a smiley face (from the docs)=>
 
 ```javascript
 function draw() {
@@ -173,3 +175,98 @@ function draw() {
   }
 }
 ```
+
+Although, we can customize it, make it bigger for instance. And can use variables to do so.
+
+```javascript
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const draw = () => {
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, 200, 0, Math.PI * 2);
+  //move to mouth
+  ctx.moveTo(centerX + 100, centerY);
+  //draw mouth
+  ctx.arc(centerX, centerY, 100, 0, Math.PI, false);
+  //move to left eye
+  ctx.moveTo(centerX - 60, centerY - 80);
+  //draw left eye
+  ctx.arc(centerX - 80, centerY - 80, 20, 0, Math.PI * 2);
+  //move to right eye
+  ctx.moveTo(centerX + 100, centerY - 80);
+  //draw right eye
+  ctx.arc(centerX + 80, centerY - 80, 20, 0, Math.PI * 2);
+  ctx.stroke();
+};
+
+draw();
+```
+
+## Animations
+
+Now, we will build a circle that bounces in the canvas. To do that, we first define a `circle` object=>
+
+```javascript
+const circle = {
+  x: 200,
+  y: 200,
+  size: 30,
+  //increment in terms of the x axis
+  dx: 5,
+  //increment in terms of the y axis
+  dy: 4,
+};
+```
+
+Then, we write a function to draw a circle with the properties above =>
+
+```javascript
+function drawCircle() {
+  ctx.beginPath();
+  ctx.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2);
+  ctx.fillStyle = "purple";
+  ctx.fill();
+}
+```
+
+Now the fun part. We will create an `animate` function, and this function will use a native method called `requestAnimationFrame` which takes a fallback function, that is the function it's been called in (the animate function). It might sound confusing from my wording, but it is not. It just calles the animate function that it's in like so => ` requestAnimationFrame(animate);` This method redraws the canvas over and over again, that's why we're calling it.
+
+Now, I'll post the whole snippet of the animate function and explain what we're doing line by line =>
+
+```javascript
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawCircle();
+  //change position
+  circle.x += circle.dx;
+  circle.y += circle.dy;
+  //detect side walls
+  if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
+    //multiply the incerement by -1 to reverse the direction
+    circle.dx *= -1;
+  }
+  //detect top and bottom walls
+  if (circle.y + circle.size > canvas.height || circle.y - circle.size < 0) {
+    circle.dy *= -1;
+  }
+
+  requestAnimationFrame(animate);
+}
+```
+
+With the first line ` ctx.clearRect(0, 0, canvas.width, canvas.height);` we're clearing the canvas on each frame. If we didn't do that, our circle would just draw like a pencil.
+
+Then we call the `drawCircle()` function to draw our circle.
+
+To change position, ` circle.x += circle.dx;` and the following for y axis are doing this: at each frame, change the position of the circle such that it will be plus dx of itself (we've defined in our object).
+
+Now, if we stopped here, the circle would just go outside of the canvas. To hinder that behavior, we write the functions for collision detection.
+
+```javascript
+if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
+  //multiply the incerement by -1 to reverse the direction
+  circle.dx *= -1;
+}
+```
+
+and the following for the y axis are doing this: if the circle tries to go outside of the cnavas, i.e. collides with the borders, multiply the incerement by -1 to reverse the direction.

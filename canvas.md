@@ -270,3 +270,5 @@ if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
 ```
 
 and the following for the y axis are doing this: if the circle tries to go outside of the cnavas, i.e. collides with the borders, multiply the incerement by -1 to reverse the direction.
+
+## Animating by key presses

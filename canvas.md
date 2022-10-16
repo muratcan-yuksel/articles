@@ -116,3 +116,60 @@ You can create multiple paths. I mean, you can begin with different places and d
 Here, each `ctx.lineTo` takes up from where it was left off. What does that mean? In the example above, since we start with `ctx.moveTo(50,50)`, the line `ctx.lineTo(150, 50); `will start drawing from 50x to 150x (total 100 pixels of line drawn then) and from 50y to 50y, which means it'll be on the same y axis, i.e. this will result in a horizontal line.
 
 Then, if I wrote `ctx.lineTo(100, 100); ` this time it won't start from the beginning, but from 150x/50y. So, when it draws a line to 100x (from 150x), it'll go to the left. And since it draws from 50y to 100y, it'll go downwards.
+
+## daring a rectangle with paths
+
+We again start with `ctx.beginPath();`
+
+But we dont need a `ctx.moveTo` as the thing we will use, `ctx.rect` takes 4 parameters and the first 2 is the x and y axis.
+
+so we do this for instance `ctx.rect(300,50,150, 100)`
+
+e.g.
+
+```javascript
+ctx.beginPath();
+ctx.rect(300, 50, 150, 100);
+ctx.fillStyle = "teal";
+ctx.fill();
+```
+
+## arc (circles)
+
+we start with `ctx.beginPath()` as usual.
+
+But arc is a bit different, as it's a circle. Check this out from the documentation => `arc(x, y, radius, startAngle, endAngle, counterclockwise)`
+
+The last one, `counterclockwise` is a boolean value. If it's true, it'll true it'll draw counterclockwise, if it's false it'll draw clockwise.
+
+To draw a perfect circle =>
+
+```javascript
+function drawCircle() {
+  ctx.beginPath();
+  ctx.arc(100, 300, 50, 0, Math.PI * 2);
+  ctx.fillStyle = "coral";
+  ctx.fill();
+}
+```
+
+to draw a smiley face =>
+
+```javascript
+function draw() {
+  const canvas = document.getElementById("canvas");
+  if (canvas.getContext) {
+    const ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+    ctx.arc(100, 300, 50, 0, Math.PI * 2, true); // Outer circle
+    ctx.moveTo(110, 300);
+    ctx.arc(100, 300, 35, 0, Math.PI, false); // Mouth (clockwise)
+    ctx.moveTo(65, 65);
+    ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
+    ctx.moveTo(95, 65);
+    ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
+    ctx.stroke();
+  }
+}
+```

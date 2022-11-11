@@ -271,4 +271,52 @@ if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
 
 and the following for the y axis are doing this: if the circle tries to go outside of the cnavas, i.e. collides with the borders, multiply the incerement by -1 to reverse the direction.
 
-## Animating by key presses
+### tips
+
+To make the canvas as big as the screen itself =>
+
+```javascript
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+```
+
+# Building a drawing app
+
+```javascript
+window.addEventListener("load", function () {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  //resizing
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  //variables
+  let painting = false;
+
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+  }
+  function finishedPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+  function draw(e) {
+    if (!painting) return;
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "blue";
+
+    ctx.lineTo(e.clientX, e.clientY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX, e.clientY);
+  }
+
+  //event listeners
+  canvas.addEventListener("mousedown", startPosition);
+  canvas.addEventListener("mouseup", finishedPosition);
+  canvas.addEventListener("mousemove", draw);
+});
+```

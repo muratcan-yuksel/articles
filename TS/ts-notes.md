@@ -48,3 +48,122 @@ console.log(getFullName("John", "Smith"));
 ```
 
 ## interfaces
+
+### creating objects
+
+Now, this code will throw an error:
+
+```ts
+const user: { name: string; age: number } = {
+  name: "moster",
+  age: 18,
+};
+
+const user2: { name: string; age: number } = {
+  name: "jack",
+};
+```
+
+because we specify that the object should have a name and an age. But we didn't specify the age for the second object.
+
+But we also don't want to specify the type of the object each time we create it. So we can create an interface:
+
+```ts
+interface UserInterface {
+  name: string;
+  age: number;
+}
+```
+
+and so, we can write the above user objects as such:
+
+```ts
+const user: UserInterface = {
+  name: "moster",
+  age: 18,
+};
+
+const user2: UserInterface = {
+  name: "jack",
+};
+```
+
+which would again throw an error because we didn't specify the age on the second object.
+
+### making non-mandatory interface properties
+
+Consider the same example but like this=>
+
+```ts
+interface UserInterface {
+  name: string;
+  //this is the non-mandatory property bcs of the interrogation mark
+  age?: number;
+}
+
+const user: UserInterface = {
+  name: "moster",
+  age: 18,
+};
+
+const user2: UserInterface = {
+  name: "jack",
+};
+```
+
+Now this code won't throw an error as age is not mandatory.
+
+## functions in interfaces
+
+```ts
+interface UserInterface {
+  name: string;
+  age?: number;
+  getMessage(): string;
+}
+
+const user: UserInterface = {
+  name: "moster",
+  age: 18,
+  getMessage() {
+    return "hello " + this.name + this.age;
+  },
+};
+
+const user2: UserInterface = {
+  name: "jack",
+  getMessage() {
+    return "hello " + this.name;
+  },
+};
+
+//console.log(user.age);
+```
+
+## types and unions
+
+we can specify that a variable can be of a certain type or another type. e.g.
+
+```ts
+//equals to the default value
+let pageName: string | number = "1";
+```
+
+So pageName can accept either a string or a number.
+Like, we can use this unions with error messages, as we don't know if we'll get one or not at the start. Like so =>
+
+```ts
+//equals to the default value
+let errorMessage: string | null = null;
+```
+
+## type aliases
+
+Consider the following example:
+
+```ts
+type PopularTag = string;
+const popularTags: PopularTag[] = ["dragon", "coffee"];
+```
+
+What's happening here is, similar to Solidity, after creating a type of PopularTag that's a string, we specify that popularTags consists of an array of PopularTag, which is a string. The reason we're doing this is to make our code more readable & understandable.

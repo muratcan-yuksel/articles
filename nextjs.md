@@ -90,3 +90,75 @@ export default MyApp;
 ```
 
 Now, each and every page will use the styles from layout, and show that "hello" I've put there. Also, now you can see why we added the `children` prop to the layout component. It's because it will be used to wrap the contents of each page.
+
+## creating routing links, i.e. navbar
+
+Very easy. I create a new file in the `components` folder called `Nav.js` and popoulate it. Now, the only thing I need to do is to `import Link from "next/link"; ` and use it as such:
+
+```jsx
+import React from "react";
+import Link from "next/link";
+const Nav = () => {
+  return (
+    <div>
+      <Link href="/"> Home </Link>
+      <Link href="/about"> About </Link>
+    </div>
+  );
+};
+
+export default Nav;
+```
+
+Now, I go back to my `Layout.js` file and import the `Nav` component and use it as such:
+
+```jsx
+import React from "react";
+import styles from "../styles/Layout.module.css";
+import Nav from "./Nav";
+
+const Layout = ({ children }) => {
+  return (
+    <>
+      <Nav />
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <h1>hello</h1>
+          {children}
+        </main>
+      </div>
+    </>
+  );
+};
+
+export default Layout;
+```
+
+## styling in jsx
+
+WOW, I didn't know that. Check this out!
+
+```jsx
+import Head from "next/head";
+
+export default function Home() {
+  const x = 5;
+  return (
+    <div>
+      <Head>
+        <title>Webdev newz</title>
+        <meta name="keywords" content="web development, programming" />
+      </Head>
+      <h1 className="title">welcome to next</h1>
+      {/*  this is how you style in jsx : curly braces, backticks*/}
+      <style jsx>
+        {`
+          h1 {
+            color: ${x > 3 ? "red" : "blue"};
+          }
+        `}
+      </style>
+    </div>
+  );
+}
+```

@@ -162,3 +162,79 @@ export default function Home() {
   );
 }
 ```
+
+## data fetching
+
+### getStaticProps
+
+#### fetch data at build time
+
+`getStaticProps` works in an idiosyncratic way. Consider the whole of my `index.js` file in the `pages` folder for reference=>
+
+```jsx
+import Head from "next/head";
+
+export default function Home({ articles }) {
+  console.log(articles);
+  const x = 5;
+  return (
+    <div>
+      <Head>
+        <title>Webdev newz</title>
+        <meta name="keywords" content="web development, programming" />
+      </Head>
+      <h1 className="title">welcome to next</h1>
+      {/*  this is how you style in jsx : curly braces, backticks*/}
+      <style jsx>
+        {`
+          h1 {
+            color: ${x > 3 ? "red" : "blue"};
+          }
+        `}
+      </style>
+    </div>
+  );
+}
+
+export const getStaticProps = async () => {
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_limit=6`
+  );
+  const articles = await res.json();
+  //returns a props object
+  return {
+    props: {
+      articles,
+    },
+  };
+};
+```
+
+Now, let's start with the `getStaticProps` function. It's an async function, so it returns a promise. And it's a named export, so it's not the default export. It's a named export. And it's a function that takes no arguments. And it returns an object with a `props` key, which is an object that contains the data that we want to pass to the component. So, in this case, I'm passing the `articles` key, which is an array of objects, to the component.
+
+Then I go back to the top of the page, to the `Home` component itself. I pass the `articles` prop to it, and I can use it as such:
+
+```jsx
+export default function Home({ articles }) {
+  console.log(articles);
+  const x = 5;
+  return (
+    <div>
+      <Head>
+        <title>Webdev newz</title>
+        ...
+          ...
+
+```
+
+### getServerSideProps
+
+on evey request (thus a little slower)
+
+### getStaticPaths
+
+dynamically generate paths based on the data we're fethcings
+
+```
+
+```

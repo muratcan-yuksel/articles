@@ -180,3 +180,36 @@ HOW COOL IS THAT?
 ## creating sanity client
 
 Then, we need to create a sanity client so that we can connect to sanity backend.
+
+First, we create a `lib` folder in root. And inside of it, a `client.js` file. In this file, we'll create a sanity client and export it.
+
+We need to get some infor from our sanity project, so we go to sanity folder and run `sanity manage`.
+
+In the dashboard, first we copy the project ID, then we click the `Datasets` button and see we have `production`, thus enter it. We can enter our apiVersion whatever we wish.
+
+T get the token, we go to `API` and `tokens` and create a new token.We name it development, and give it `editor` i.e. read and write access.
+
+Instead of pasting the token, we use .env files.
+
+Then, we need to use image builder and so on.
+
+This is what I have in client.js so far =>
+
+```javascript
+import { SanityClient } from "@sanity/client";
+import { ImageUrlBuilder } from "next-sanity-image";
+
+export const client = SanityClient({
+  projectId: "xay4pkrb",
+  dataset: "production",
+  useCdn: true,
+  apiVersion: "2022-11-28",
+  token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
+});
+
+const builder = ImageUrlBuilder(client);
+
+export const urlFor = (source) => builder.image(source);
+```
+
+NOW we go back to the main index.js and import the client we've created as such => `import { client } from "../lib/client"; `

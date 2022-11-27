@@ -226,21 +226,94 @@ Now, if were using React, we'd use useEffect hook to get and display the data. I
 So, still in our index.js, we create the following async function =>
 
 ```javascript
-export const getServersideProps = async () => {
-  //groq language
-  const query = `*[_type == "product"]`;
+export const getServerSideProps = async () => {
+  //groq query
+  const query = '*[_type == "product"]';
   const products = await client.fetch(query);
 
-  bannerQuery = `*[_type == "banner"]`;
+  const bannerQuery = '*[_type == "banner"]';
   const bannerData = await client.fetch(bannerQuery);
 
   return {
-    props: {
-      products,
-      bannerData,
-    },
+    props: { products, bannerData },
   };
 };
 ```
 
 We add the code above just before we export the Home component. I'll paste the whole component in a minute.
+
+IF we first go to the sanity studio and create a banner, now with the below code, we'll get the banner object logged on the console. This is index.js so far =>
+
+```javascript
+import React from "react";
+import { Product, FooterBanner, HeroBanner } from "../components";
+import { client } from "../lib/client";
+
+const Home = ({ product, bannerData }) => (
+  <div>
+    <HeroBanner heroBanner={bannerData.length && bannerData[0]} />
+    {console.log(bannerData)}
+    <div className="products-heading">
+      <h2>Best Seller Products</h2>
+      <p>speaker There are many variations passages</p>
+    </div>
+
+    <div className="products-container">
+      {["Product 1, two, three"].map((product) => product)}
+    </div>
+    <FooterBanner />
+  </div>
+);
+
+export const getServerSideProps = async () => {
+  const query = '*[_type == "product"]';
+  const products = await client.fetch(query);
+
+  const bannerQuery = '*[_type == "banner"]';
+  const bannerData = await client.fetch(bannerQuery);
+
+  return {
+    props: { products, bannerData },
+  };
+};
+
+export default Home;
+```
+
+Now since I've passed the data as props, I can go back to components/HeroBanner.js and use the data as such =>
+
+```javascript
+import React from "react";
+import Link from "next/link";
+
+import { urlFor } from "../lib/client";
+
+const HeroBanner = ({ heroBanner }) => {
+  return (
+    <div className="hero-banner-container">
+      <div>
+        <p className="beats-solo">{heroBanner.smallText}</p>
+        <h3>{heroBanner.midText}</h3>
+        <h1>{heroBanner.largeText1}</h1>
+        <img
+          src={urlFor(heroBanner.image)}
+          alt="headphones"
+          className="hero-banner-image"
+        />
+
+        <div>
+          <Link href={`/product/${heroBanner.product}`}>
+            <button type="button">{heroBanner.buttonText}</button>
+          </Link>
+          <div className="desc">
+            <h5>Description</h5>
+            <p>{heroBanner.desc}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HeroBanner;
+```

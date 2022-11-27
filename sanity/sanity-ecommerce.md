@@ -196,20 +196,51 @@ Then, we need to use image builder and so on.
 This is what I have in client.js so far =>
 
 ```javascript
-import { SanityClient } from "@sanity/client";
-import { ImageUrlBuilder } from "next-sanity-image";
+import SanityClient from "@sanity/client";
+import ImageUrlBuilder from "next-sanity-image";
+import createImageUrlBuilder from "@sanity/image-url";
 
 export const client = SanityClient({
   projectId: "xay4pkrb",
   dataset: "production",
   useCdn: true,
-  apiVersion: "2022-11-28",
+  apiVersion: "2022-03-10",
   token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
 });
 
-const builder = ImageUrlBuilder(client);
+const builder = createImageUrlBuilder(client);
 
 export const urlFor = (source) => builder.image(source);
 ```
 
+#### ON BUGS
+
+LISTEN, in the tutorial it's different. He imports them like nemd imports, e.g. `import {SanityClient} from "@sanity/client"; ` => This doesn't work anymore. And he uses `ImageUrlBuilder` instead of `createImageUrlBuilder`. My version is the correct one.
+
 NOW we go back to the main index.js and import the client we've created as such => `import { client } from "../lib/client"; `
+
+### NB!
+
+Now, if were using React, we'd use useEffect hook to get and display the data. In NextJS, we need to use `getServerSideProps` function. We use this function whenever we're fetching data from an API or a CMS.
+
+So, still in our index.js, we create the following async function =>
+
+```javascript
+export const getServersideProps = async () => {
+  //groq language
+  const query = `*[_type == "product"]`;
+  const products = await client.fetch(query);
+
+  bannerQuery = `*[_type == "banner"]`;
+  const bannerData = await client.fetch(bannerQuery);
+
+  return {
+    props: {
+      products,
+      bannerData,
+    },
+  };
+};
+```
+
+We add the code above just before we export the Home component. I'll paste the whole component in a minute.

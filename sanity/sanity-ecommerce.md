@@ -12,7 +12,7 @@ In your root, if you're using next js, you got and enter npm run dev, and then y
 
 ## package.json dependencies
 
-Here are the dependencies the tuto uses, you can copy paste them in your package.json and run ` pm i --legacy-peer-deps` if you want to use the old packages, or more conveniently, you can search for the names of the packages in the npm registry and install them one by one.
+Here are the dependencies the tuto uses, you can copy paste them in your package.json and run ` npm i --legacy-peer-deps` if you want to use the old packages, or more conveniently, you can search for the names of the packages in the npm registry and install them one by one.
 
 ```json
 {
@@ -106,3 +106,77 @@ export default createSchema({
 ```
 
 After doing that, if I open sanity studio on localhost 3333, I'll see the schemas I've added just now.
+
+## some maybe unnecessary config
+
+He does the following, though I doN't know if I need to do it, because I'm not getting the error he's getting. He creates a `.babelrc` file in root and populates it with =>
+
+```json
+{
+  //preset-react bcs I did get an error when omitted
+  "presets": ["next/babel", "@babel/preset-react"]
+}
+```
+
+Then he goes to `.eslintrc.json` file in root (not in sanity folder!) and adds the following =>
+
+```json
+{
+  "extends": [
+    "next/babel",
+    "next/core-web-vitals",
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ]
+}
+```
+
+# Important note
+
+For all of these to work, you need to import react in each component.
+
+## Interesting export method
+
+Now, we have our schemas, and our app is working with all the babelrc definitions and all, react preset etc, he creates a components folder in the root, and adds the components individually. BUT, while all the other components are in jsx extension, he creates an `index.js` file and populates it as such =>
+
+```javascript
+export { default as Footer } from "./Footer";
+export { default as Layout } from "./Layout";
+export { default as Navbar } from "./Navbar";
+export { default as Product } from "./Product";
+export { default as HeroBanner } from "./HeroBanner";
+export { default as FooterBanner } from "./FooterBanner";
+export { default as Cart } from "./Cart";
+```
+
+Now, we can import all of those components using this index.js file as a base.
+
+Then, he goes back to the pages/index.js (this is the main index.js file) and populates it as such =>
+
+```javascript
+import React from "react";
+import { Product, FooterBanner, HeroBanner } from "../components";
+
+const Home = () => (
+  <div>
+    <HeroBanner />
+    <div className="products-heading">
+      <h2>Best Seller Products</h2>
+      <p>speaker There are many variations passages</p>
+    </div>
+
+    <div className="products-container">
+      {["Product 1, two, three"].map((product) => product)}
+    </div>
+    <FooterBanner />
+  </div>
+);
+
+export default Home;
+```
+
+HOW COOL IS THAT?
+
+## creating sanity client
+
+Then, we need to create a sanity client so that we can connect to sanity backend.

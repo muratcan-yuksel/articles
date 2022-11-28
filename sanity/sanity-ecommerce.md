@@ -317,3 +317,114 @@ const HeroBanner = ({ heroBanner }) => {
 
 export default HeroBanner;
 ```
+
+## Product.jsx
+
+Now I'll do the same for Product.jsx
+
+I change the relevant part in index.js as such =>
+
+````javascript
+    <div className="products-container">
+      {products.map((product) => (
+        <Product key={product._id} product={product} />
+      ))}
+    </div>
+    ```
+````
+
+and go to Product.jsx file to populate it as such =>
+
+```jsx
+import React from "react";
+import Link from "next/link";
+
+import { urlFor } from "../lib/client";
+
+const Product = ({ product: { image, name, slug, price } }) => {
+  return (
+    <div>
+      <Link href={`/product/${slug.current}`}>
+        <div className="product-card">
+          <img
+            src={urlFor(image && image[0])}
+            width={250}
+            height={250}
+            className="product-image"
+          />
+          <p className="product-name">{name}</p>
+          <p className="product-price">${price}</p>
+        </div>
+      </Link>
+    </div>
+  );
+};
+
+export default Product;
+```
+
+### NB ! hard reload
+
+in order to see snaity changes, clearing cache and hard reload is necessary. It's done by `ctrl + shift + r`.
+
+## Layout.jsx
+
+Let's create the layout =>
+
+```jsx
+import React from "react";
+import Head from "next/head";
+
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+// this children is coming from _app.js, the       <Component {...pageProps} />
+//  part
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Head>
+        <title>JS Mastery Store</title>
+      </Head>
+      <header>
+        <Navbar />
+      </header>
+      {/* see, it's the one from _app.js */}
+      <main className="main-container">{children}</main>
+      <footer>
+        <Footer />
+      </footer>
+    </div>
+  );
+};
+
+export default Layout;
+```
+
+## \_app.js
+
+In order for this layout to work, we need to add it in our \_app.js file in pages folder.
+We'll wrap the component into layout
+
+```jsx
+import React from "react";
+import { Toaster } from "react-hot-toast";
+
+import { Layout } from "../components";
+import "../styles/globals.css";
+import { StateContext } from "../context/StateContext";
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <StateContext>
+      <Layout>
+        <Toaster />
+        <Component {...pageProps} />
+      </Layout>
+    </StateContext>
+  );
+}
+
+export default MyApp;
+```
+
+## Product details logic

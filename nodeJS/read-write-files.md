@@ -23,3 +23,77 @@ console.log(os.homedir());
 console.log(\_\_dirname); => gives us the path to the current directory
 
 console.log(\_\_filename); => gives us the path to the current file
+
+#### path
+
+```js
+const path = require("path");
+
+console.log(path.dirname(__filename));
+
+console.log(path.basename(__filename));
+
+console.log(path.extname(__filename)); // extension name
+
+console.log(path.parse(__filename)); //returns an object
+
+//returns this object =>
+
+{
+  root: '/',
+  dir: '/home/sirius/coding/practice/nodeJS/1-lesson',
+  base: 'server.js',
+  ext: '.js',
+  name: 'server'
+}
+
+```
+
+## Importing a module
+
+Let's say we create a `math.js` file in the same root and populated it as such =>
+
+```js
+const add = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+const multiply = (a, b) => a * b;
+const divide = (a, b) => a / b;
+
+module.exports = {
+  add,
+  subtract,
+  multiply,
+  divide,
+};
+```
+
+Now I can go back to my `server.js` file and import the `math.js` file and use it as such =>
+
+```js
+const math = require("./math");
+
+console.log(math.add(2, 3)); //will return 5
+```
+
+### destructuring modules
+
+Instead of importing the whole `math`, I can destructure it and import only the functions I need as such =>
+
+```js
+const { add } = require("./math");
+
+console.log(add(2, 3)); //still returns 5
+```
+
+### another way of exporting modules
+
+Instead of defining constants, we can export functions as such =>
+
+```js
+//math.js
+exports.add = (a, b) => a + b;
+exports.subtract = (a, b) => a - b;
+exports.multiply = (a, b) => a * b;
+exports.divide = (a, b) => a / b;
+//see, no module.exports going on here
+```

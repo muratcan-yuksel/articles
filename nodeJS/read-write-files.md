@@ -97,3 +97,166 @@ exports.multiply = (a, b) => a * b;
 exports.divide = (a, b) => a / b;
 //see, no module.exports going on here
 ```
+
+##### NB! NodeJS misses some JS APIs like "fetch"
+
+## File system
+
+Say I have the following structure:
+
+-files
+--lorem.txt
+--starter.txt
+-index.js
+
+I want to read what's in starter.txt (which says, Hi, my name is Murat). I go to index.js and
+
+```js
+const fs = require("fs");
+
+//path, then a callback function
+fs.readFile("./files/starter.txt", (err, data) => {
+  if (err) throw err;
+  console.log(data.toString());
+});
+```
+
+Now, there's another way to see the data as string.
+
+```js
+const fs = require("fs");
+//path, encoding, callback
+fs.readFile("./files/starter.txt", "utf8", (err, data) => {
+  if (err) throw err;
+  //see, no toString()
+  console.log(data);
+});
+```
+
+### exit on uncaught errors
+
+```js
+const fs = require("fs");
+//there' no hello.txt file so it'll throw an error
+fs.readFile("./files/hello.txt", "utf8", (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+
+//exit on uncaught errors
+
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+```
+
+### NodeJS is async! e.g.
+
+```js
+const fs = require("fs");
+
+fs.readFile("./files/starter.txt", "utf8", (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+//check this out
+console.log("Hello...");
+
+//exit on uncaught errors
+
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+```
+
+The above code, when called with `node index` on the terminal, will return the following because of its asynchronous nature:
+
+Hello...
+Hi, my name is Murat
+
+## using path instead of hard coding the file path
+
+```js
+const fs = require("fs");
+const path = require("path");
+//we can use path.join instead of hard coding the path
+fs.readFile(
+  path.join(__dirname, "files", "starter.txt"),
+  "utf8",
+  (err, data) => {
+    if (err) throw err;
+    console.log(data);
+  }
+);
+```
+
+## Writing files
+
+```js
+const fs = require("fs");
+const path = require("path");
+
+console.log("Hello...");
+
+//instead of read, we use writeFile
+fs.writeFile(
+  //no need for encoding, it's by default
+  //path, file to be created, text to be written, callback
+  path.join(__dirname, "files", "reply.txt"),
+  "Nice to meet you!",
+
+  (err) => {
+    if (err) throw err;
+    console.log("write complete");
+  }
+);
+```
+
+If I run the above code, it'll create a reply.txt file in the files folder and write "Nice to meet you!" in it.
+
+### appending to a file
+
+```js
+fs.appendFile(
+  path.join(__dirname, "files", "test.txt"),
+  "Testing text",
+
+  (err) => {
+    if (err) throw err;
+    console.log("append complete");
+  }
+);
+```
+
+This will append and modify a file. It will also create the file if it does not exist. With the code above, we're creating a new `text.txt` file for instance.
+
+### appending for real
+
+Check the following snippet out =>
+
+```js
+fs.writeFile(
+  path.join(__dirname, "files", "reply.txt"),
+  "Nice to meet you!",
+
+  (err) => {
+    if (err) throw err;
+    console.log("write complete");
+    //appendFile is inside of the callback of writeFile
+    fs.appendFile(
+      //appending to reply.txt
+      path.join(__dirname, "files", "reply.txt"),
+      "/n/nYes, it is!",
+
+      (err) => {
+        if (err) throw err;
+        console.log("append complete");
+      }
+    );
+  }
+);
+```

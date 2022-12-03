@@ -468,3 +468,18 @@ if (!fs.existsSync("./new")) {
   });
 }
 ```
+
+## deleting the directory
+
+We can also delete the directory. Check this out =>
+
+```js
+//no exclamation mark at the beginning
+if (fs.existsSync("./new")) {
+  //not mkdir but rmdir
+  fs.rmdir("./new", (err) => {
+    if (err) throw err;
+    console.log("directory created");
+  });
+}
+```

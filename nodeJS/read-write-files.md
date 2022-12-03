@@ -260,3 +260,108 @@ fs.writeFile(
   }
 );
 ```
+
+## renaming a file
+
+First off, I guess this is what they call a callback hell. Check this out =>
+
+```js
+fs.writeFile(
+  path.join(__dirname, "files", "reply.txt"),
+  "Nice to meet you!",
+
+  (err) => {
+    if (err) throw err;
+    console.log("write complete");
+
+    fs.appendFile(
+      path.join(__dirname, "files", "reply.txt"),
+      "/n/nYes, it is!",
+
+      (err) => {
+        if (err) throw err;
+        console.log("append complete");
+        //using rename instead of appendFile
+        //file, new name, callback
+        fs.rename(
+          path.join(__dirname, "files", "reply.txt"),
+          path.join(__dirname, "files", "newReply.txt"),
+          //see, no new text whatsoever
+
+          (err) => {
+            if (err) throw err;
+            console.log("rename complete");
+          }
+        );
+      }
+    );
+  }
+);
+```
+
+## async await with nodeJS => fsPromises
+
+In order to avoid the callback hell, we can use the async await pattern. But to do that, we need to require not just fs, but fs.promises. Check this out =>
+
+```js
+const fsPromises = require("fs").promises;
+const path = require("path");
+
+const fileOps = async () => {
+  try {
+    //I don't need a callback anymore
+    const data = await fsPromises.readFile(
+      path.join(__dirname, "files", "starter.txt"),
+      "utf8"
+    );
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+//but I need to call the function
+fileOps();
+```
+
+We can add more `await`s in the try block. Check this out =>
+
+```js
+const fileOps = async () => {
+  try {
+    const data = await fsPromises.readFile(
+      path.join(__dirname, "files", "starter.txt"),
+      "utf8"
+    );
+    console.log(data);
+    //writing the data from starter.txt to promiseWrite.txt
+    await fsPromises.writeFile(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      data
+    );
+    //appending a new string to promiseWrite.txt
+    await fsPromises.appendFile(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      "/n/nNice to meet you!"
+    );
+
+    //rename the above file
+    await fsPromises.rename(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      path.join(__dirname, "files", "promiseCompleted.txt"),
+      "/n/nNice to meet you!"
+    );
+
+    //create a new data file with the renamed promiseCompleted file
+    const newData = await fsPromises.readFile(
+      path.join(__dirname, "files", "promiseCompleted.txt"),
+      "utf8"
+    );
+    //console log it
+    console.log(newData);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+fileOps();
+```

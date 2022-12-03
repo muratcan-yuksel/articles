@@ -365,3 +365,106 @@ const fileOps = async () => {
 
 fileOps();
 ```
+
+## unlink
+
+If I add an `unlink` after reading the file and before writing to it, it will create a promiseCompleted.txt file, but delete starter.txt file.
+
+```js
+const fsPromises = require("fs").promises;
+const path = require("path");
+
+const fileOps = async () => {
+  try {
+    const data = await fsPromises.readFile(
+      path.join(__dirname, "files", "starter.txt"),
+      "utf8"
+    );
+    console.log(data);
+    //adding unlink here
+    await fsPromises.unlink(path.join(__dirname, "files", "starter.txt"));
+
+    await fsPromises.writeFile(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      data
+    );
+
+    await fsPromises.appendFile(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      "/n/nNice to meet you!"
+    );
+
+    await fsPromises.rename(
+      path.join(__dirname, "files", "promiseWrite.txt"),
+      path.join(__dirname, "files", "promiseCompleted.txt"),
+      "/n/nNice to meet you!"
+    );
+
+    const newData = await fsPromises.readFile(
+      path.join(__dirname, "files", "promiseCompleted.txt"),
+      "utf8"
+    );
+
+    console.log(newData);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+fileOps();
+//exit on uncaught errors
+
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+```
+
+## streams
+
+We create a new file called `stream.js`. The idea with streams is I guess is for efficiency. Instead of getting all the data at once, it gets chunk by chunk. Check this out =>
+
+```js
+const fs = require("fs");
+
+const rs = fs.createReadStream("./files/lorem.txt", { encoding: "utf-8" });
+
+const ws = fs.createWriteStream("./files/lorem-copy.txt");
+
+// rs.on("data", (chunk) => {
+//   console.log("-----NEW CHUNK-----");
+//   console.log(chunk);
+//   ws.write("\nNEW CHUNK\n");
+//   ws.write(chunk);
+// });
+
+//we can use this command instead of the above commented out one
+rs.pipe(ws);
+```
+
+## creating a directory
+
+I create a new `dir.js` file, add the following code to create a directory called `new` and run `node dir` =>
+
+```js
+const fs = require("fs");
+
+fs.mkdir("./new", (err) => {
+  if (err) throw err;
+  console.log("directory created");
+});
+```
+
+We can also put a check so that we won't create or overwrite a directory if it already exists. Like so =>
+
+```js
+const fs = require("fs");
+//starts with an exclamation mark you see
+if (!fs.existsSync("./new")) {
+  fs.mkdir("./new", (err) => {
+    if (err) throw err;
+    console.log("directory created");
+  });
+}
+```

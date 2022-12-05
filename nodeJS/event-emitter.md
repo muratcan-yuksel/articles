@@ -59,3 +59,5 @@ myEmitter.emit("log", "This is a log message");
 ```
 
 whenever I run `nodemon index` , I'll get a message like this on the console => `20221203        22:20:13        5e168c83-4ba9-4367-bcb0-4d1192f13700    This is a log message`
+
+Also, a `logs` folder with `eventLog.txt` file in it will be created having the same message as above on each save.

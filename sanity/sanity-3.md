@@ -64,6 +64,32 @@ module.exports = {
 
 ## Sanity setup
 
+#### new instructions
+
+EDIT! I've been having troubles installing sanity, and after reinstalling sanity cli, I got this message on sanity init =>
+
+```
+ Welcome to Sanity! Looks like you're following instructions for Sanity Studio v2,  ║
+║    but the version you have installed is the latest, Sanity Studio v3.                ║
+║    In Sanity Studio v3, new projects are created with [npm create sanity@latest].     ║
+║                                                                                       ║
+║    Learn more about Sanity Studio v3: https://www.sanity.io/help/studio-v2-vs-v3
+```
+
+So, instead of the instructions below, use the instructions above.
+
+## Instead of sanity start, use the following
+
+```
+ ⚠  IMPORTANT: You're running Sanity Studio v3, and in this version        ║
+║    the [start] command is used to preview static builds. To               ║
+║    run a development server, use the [npm run dev] command instead.       ║
+║                                                                           ║
+║    For more information go to https://www.sanity.io/help/studio-v2-vs-v3
+```
+
+#### old instructions - DO NOT USE SANITY INIT
+
 I have a coupon to install (init) Sanity, I don't need to use it though.
 
 ```

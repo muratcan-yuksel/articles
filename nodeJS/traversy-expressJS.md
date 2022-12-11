@@ -79,6 +79,8 @@ To see this in action, I go to postman, and send a get request to the following 
 
 ## Middleware
 
+When someone visits your site, their web-browser sends a request to your server. Express takes that request and passes it through all of the middleware functions that you have defined and used in your project.
+
 Now, conside the previous example, but instead of having the members inside the index.js, I've created a Members.js file and exported it to index.js.
 
 I also open Postman and send a get request to http://localhost:5000/api/members

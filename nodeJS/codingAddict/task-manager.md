@@ -439,3 +439,143 @@ app.use(notFound);
 ```
 
 Now, whenever I want to go to a route that doesn't exist, I will get the message `Route not found`
+
+## async wrappers
+
+We'll create a middleware function that will wrap all the async functions in our controllers so that we don't have to write try/catch blocks in every single function. This is a good practice. There are npm packages to do this but I'm going to do it manually this time.
+
+I create `async.js` in middleware folder and put this function in it
+
+```js
+const asyncWrapper = (fn) => {
+  return async (req, res, next) => {
+    try {
+      await fn(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+};
+
+module.exports = asyncWrapper;
+```
+
+The idea is basically, instead of writing the try/catch block in each controller function, we can just wrap the function in this asyncWrapper function and it will do the same thing.
+
+Then I go to my controllers/tasks.js and import it and wrap getallTasks function with it.
+
+Then I change my getAllTasks function
+
+```js
+const asyncWrapper = require("../middleware/async");
+
+//Old version
+// const getAllTasks = async (req, res) => {
+//   // res.send("Get all tasks");
+
+//   try {
+//     //this .find({}) is a mongoose method
+//     //it gives all the docs bcs it is empty
+//     const tasks = await Task.find({});
+//     res.status(200).json({ tasks });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+//new version
+const getAllTasks = asyncWrapper(async (req, res) => {
+  const tasks = await Task.find({});
+  res.status(200).json({ tasks });
+});
+```
+
+Then I do the same with all the other functions so that my controllers/tasks.js looks like this
+
+```js
+const Task = require("../models/Task");
+const { createCustomError } = require("../errors/custom-error");
+const asyncWrapper = require("../middleware/async");
+
+const getAllTasks = asyncWrapper(async (req, res) => {
+  const tasks = await Task.find({});
+  res.status(200).json({ tasks });
+});
+
+const createTask = asyncWrapper(async (req, res) => {
+  const task = await Task.create(req.body);
+  res.status(201).json({ task });
+});
+
+const getTask = asyncWrapper(async (req, res, next) => {
+  const { id: taskID } = req.params;
+  const task = await Task.findOne({ _id: taskID });
+  if (!task) {
+    return next(createCustomError(`No task with id : ${taskID}`, 404));
+  }
+
+  res.status(200).json({ task });
+});
+
+const updateTask = asyncWrapper(async (req, res, next) => {
+  //this is a mongoose method
+  //it takes 3 arguments
+  //1st is the id of the task
+  //2nd is the data that we want to update
+  //3rd is an object that has some options
+  //the options are new: true and runValidators: true
+  //new: true means that it will return the new updated task
+  //runValidators: true means that it will run the validators that we have defined in the model
+
+  const { id: taskID } = req.params;
+
+  const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!task) {
+    return next(createCustomError(`No task with id : ${taskID}`, 404));
+  }
+
+  res.status(200).json({ task });
+});
+
+const deleteTask = asyncWrapper(async (req, res, next) => {
+  const { id: taskID } = req.params;
+  const task = await Task.findOneAndDelete({ _id: taskID });
+  if (!task) {
+    return next(createCustomError(`No task with id : ${taskID}`, 404));
+  }
+  res.status(200).json({ task });
+});
+
+module.exports = {
+  getAllTasks,
+  createTask,
+  getTask,
+  updateTask,
+  deleteTask,
+};
+```
+
+## custom errors
+
+As you'd realize, there are custom errors in above example. Let's create them.
+
+I create a new folder and file => errors/custom-error.js
+
+```js
+class CustomAPIError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+const createCustomError = (msg, statusCode) => {
+  return new CustomAPIError(msg, statusCode);
+};
+
+module.exports = { createCustomError, CustomAPIError };
+```

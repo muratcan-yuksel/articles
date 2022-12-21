@@ -314,10 +314,14 @@ module.exports = mongoose.model("Task", TaskSchema);
 As you can see, this is a key/value pair I've created. Quite straight forward.
 Now that I've created and exported my schema, I need to go back to my controllers/tasks.js and import it.
 
+This is the latest version so far. I have all the CRUD operations completed and working fine. Just don't forget to specify it's JSON when patching and posting, otherwise it won't work of course.
+
 ```js
 const Task = require("../models/Task");
 
 const getAllTasks = async (req, res) => {
+  // res.send("Get all tasks");
+
   try {
     //this .find({}) is a mongoose method
     //it gives all the docs bcs it is empty
@@ -336,8 +340,70 @@ const createTask = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-...
-  ...
+
+const getTask = async (req, res) => {
+  try {
+    // res.json({ id: req.params.id });
+    const { id: taskID } = req.params;
+    //this _id is how id's are defined in mongoDB database so that's why I'm using it here without creating a const or whatever
+    const task = await Task.findOne({ _id: taskID });
+    //if there is no task with that id
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" + taskID });
+    }
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateTask = async (req, res) => {
+  try {
+    //this is a mongoose method
+    //it takes 3 arguments
+    //1st is the id of the task
+    //2nd is the data that we want to update
+    //3rd is an object that has some options
+    //the options are new: true and runValidators: true
+    //new: true means that it will return the new updated task
+    //runValidators: true means that it will run the validators that we have defined in the model
+
+    const { id: taskID } = req.params;
+
+    const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" + taskID });
+    }
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteTask = async (req, res) => {
+  // res.send("Delete task");
+  try {
+    const { id: taskID } = req.params;
+    const task = await Task.findOneAndDelete({ _id: taskID });
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" + taskID });
+    }
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  getAllTasks,
+  createTask,
+  getTask,
+  updateTask,
+  deleteTask,
+};
 ```
 
 To test this, I go back to postman and send a post request to `{{URL}}/tasks` with the following body
@@ -350,3 +416,26 @@ To test this, I go back to postman and send a post request to `{{URL}}/tasks` wi
 ```
 
 I should get the response.
+
+## custom unknown message/page
+
+We create a new folder and file => middleware/not-found.js
+
+```js
+const notFound = (req, res) => {
+  res.status(404).send("Route not found");
+};
+
+module.exports = notFound;
+```
+
+Then I go back to app.js and add the following code under `app.use("/api/v1/tasks", tasks);`
+
+```js
+... ...
+app.use("/api/v1/tasks", tasks);
+//not found middleware
+app.use(notFound);
+```
+
+Now, whenever I want to go to a route that doesn't exist, I will get the message `Route not found`

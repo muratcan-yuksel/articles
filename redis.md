@@ -62,3 +62,17 @@ are like objects to some sense.
 `hset person age 31` will add the key/value pair `age: 31` to the hash `person`.
 `hdel person age` will delete the key/value pair `age: 31` from the hash `person`.
 `hexists person age` will return 1 if the key/value pair exists, 0 if it doesn't.
+
+# In nodeJS app
+
+`npm i redis`
+
+`const redis = require('redis')`
+
+`const client = redis.createClient()`
+//if you're pushing to the production, you should use the redis url
+`const client = redis.createClient(process.env.REDIS_URL)`
+
+inside the app,
+`client.set('name', 'murat')` will set the key/value pair `name: murat` to the redis server.
+ 
